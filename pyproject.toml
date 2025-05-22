@@ -1,0 +1,35 @@
+[tool.poetry]
+name = "propcorn-ratelimiter"
+version = "0.1.0"
+description = ""
+authors = ["Istvan Peter Jaray <istvanpeterjaray@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.115.12"
+redis = "^6.1.0"
+httpx = "^0.28.1"
+limits = "^5.2.0"
+coredis = "^4.22.0"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.5"
+pytest-asyncio = "^0.26.0"
+pytest-cov = "^6.1.1"
+uvicorn = "^0.34.2"
+matplotlib = "^3.10.3"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+asyncio_mode = "auto"
+addopts = "--cov=src/propcorn_ratelimiter --cov-report=term-missing"
+pythonpath = ["src"]

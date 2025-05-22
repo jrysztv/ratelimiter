@@ -1,0 +1,32 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Poetry
+RUN curl -sSL https://install.python-poetry.org | python3 - \
+    && ln -s /root/.local/bin/poetry /usr/local/bin/poetry
+
+# Copy poetry files
+COPY pyproject.toml poetry.lock ./
+COPY README.md ./
+
+# Configure poetry to not create a virtual environment
+RUN poetry config virtualenvs.create false
+
+# Install dependencies
+RUN poetry install --no-root --no-interaction --no-ansi
+
+# Copy source code
+COPY src/ ./src/
+COPY tests/ ./tests/
+
+# Expose port
+EXPOSE 8000
+
+# Command to run the application
+CMD ["sh", "-c", "PYTHONPATH=/app/src poetry run uvicorn propcorn_ratelimiter.main:app --host 0.0.0.0 --port 8000 --reload"] 
