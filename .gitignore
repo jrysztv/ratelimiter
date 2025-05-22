@@ -69,11 +69,17 @@ Thumbs.db
 
 # Test Results and Generated Files
 results/
+# Exception: Allow the visualization test results
+!results/2025-05-23_01-40/
+!results/2025-05-23_01-40/**/*
 *.png
 *.jpg
 *.jpeg
 *.gif
 *.svg
+# Exception: Allow test result images
+!results/2025-05-23_01-40/**/*.png
+!results/2025-05-23_01-40/**/*.json
 
 # Logs
 *.log

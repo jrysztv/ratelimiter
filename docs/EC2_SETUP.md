@@ -18,12 +18,7 @@ This guide will walk you through setting up an EC2 instance to deploy the Propco
 5. **Instance Type**: t2.micro (for development) or t3.small (for production)
 6. **Key Pair**: Create a new key pair named `propcorn-ratelimiter-key` and download the `.pem` file
 
-### 1.2 Configure Security Group
-Create a security group with the following rules:
-- **SSH (22)**: Your IP address
-- **HTTP (80)**: 0.0.0.0/0 (if using reverse proxy)
-- **Custom TCP (8000)**: 0.0.0.0/0 (for direct app access)
-- **Redis (6379)**: Only from within security group (internal only)
+### 1.2 Configure Security GroupCreate a security group with the following rules:- **SSH (22)**: Your IP address  - **HTTP (80)**: 0.0.0.0/0 (Nginx reverse proxy)- **HTTPS (443)**: 0.0.0.0/0 (for SSL in future)- **Redis (6379)**: Only from within security group (internal only)**Note**: We do NOT expose port 8000 directly - Nginx handles all external traffic
 
 ### 1.3 Storage
 - **Root Volume**: 20 GB gp3 (minimum)
@@ -150,18 +145,7 @@ Before setting up automated deployment, test manual deployment:
 ```bash
 cd /opt/propcorn-ratelimiter
 
-# Build and start services
-docker-compose -f docker-compose.prod.yml build
-docker-compose -f docker-compose.prod.yml up -d
-
-# Check if services are running
-docker-compose -f docker-compose.prod.yml ps
-
-# Test health endpoint
-curl http://localhost:8000/health
-
-# View logs if needed
-docker-compose -f docker-compose.prod.yml logs
+# Build and start services with Nginxdocker-compose -f docker-compose.prod-nginx.yml builddocker-compose -f docker-compose.prod-nginx.yml up -d# Check if services are runningdocker-compose -f docker-compose.prod-nginx.yml ps# Test health endpoint (through Nginx on port 80)curl http://localhost/health# Test API endpoint (through Nginx)curl -H "X-API-Key: test_key" http://localhost/api/endpoint# View logs if neededdocker-compose -f docker-compose.prod-nginx.yml logs
 ```
 
 ## Step 8: Firewall Configuration (Optional but Recommended)

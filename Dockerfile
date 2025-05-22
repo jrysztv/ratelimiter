@@ -19,7 +19,7 @@ COPY README.md ./
 
 # Configure poetry and install dependencies
 RUN poetry config virtualenvs.create false \
-    && poetry install --only=main --no-interaction --no-ansi
+    && poetry install --only=main --no-root --no-interaction --no-ansi
 
 # Production stage
 FROM python:3.11-slim as production
@@ -53,6 +53,4 @@ EXPOSE 8000
 
 # Set Python path
 ENV PYTHONPATH=/app/src
-
-# Command to run the application
-CMD ["uvicorn", "propcorn_ratelimiter.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "4"] 
+ 

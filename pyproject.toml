@@ -12,13 +12,13 @@ redis = "^6.1.0"
 httpx = "^0.28.1"
 limits = "^5.2.0"
 coredis = "^4.22.0"
+uvicorn = "^0.34.2"
 
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.5"
 pytest-asyncio = "^0.26.0"
 pytest-cov = "^6.1.1"
-uvicorn = "^0.34.2"
 matplotlib = "^3.10.3"
 
 [build-system]
