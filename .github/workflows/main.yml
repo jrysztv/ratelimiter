@@ -213,7 +213,18 @@ jobs:
             echo "Health check attempt $i..."
             if curl -f -s http://localhost/health > /dev/null 2>&1; then
               echo "✅ Health check passed!"
-              curl http://localhost/health
+              # Use a safer approach for displaying the health check response
+              set +e  # Temporarily disable exit on error
+              HEALTH_RESPONSE=$(curl -s http://localhost/health 2>/dev/null)
+              CURL_EXIT_CODE=$?
+              set -e  # Re-enable exit on error
+              
+              if [ $CURL_EXIT_CODE -eq 0 ] && [ ! -z "$HEALTH_RESPONSE" ]; then
+                echo "$HEALTH_RESPONSE"
+              else
+                echo '{"status":"healthy","note":"response_display_failed"}'
+              fi
+              
               echo ""
               echo "✅ Deployment completed successfully!"
               SUCCESS=true
