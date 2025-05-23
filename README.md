@@ -12,13 +12,94 @@ This project compares in-memory vs Redis-based rate limiting across two strategi
 
 ### 📊 Performance Analysis
 
+**What do these numbers mean?** Each array represents requests allowed per 1-second window during our 4-second test:
+
 **Sliding Window Results:**
 - **Memory Storage**: [11, 10, 10, 4] - High variance, significant drop in final window
+  - Window 1: 11 requests allowed
+  - Window 2: 10 requests allowed  
+  - Window 3: 10 requests allowed
+  - Window 4: 4 requests allowed (rate limiter kicked in)
 - **Redis Storage**: [10, 10, 11, 8] - More consistent performance across time windows
+  - Window 1: 10 requests allowed
+  - Window 2: 10 requests allowed
+  - Window 3: 11 requests allowed  
+  - Window 4: 8 requests allowed (more predictable limiting)
 
 **Fixed Window Results:**
 - **Memory Storage**: [10, 10, 10, 10] - Appears consistent but lacks persistence
 - **Redis Storage**: [10, 10, 10, 10] - Consistent with cross-process reliability
+
+### 🔄 How Sliding Window Rate Limiting Works
+
+Think of a sliding window like a **moving time frame** that follows each request:
+
+```
+Time:    0s----1s----2s----3s----4s
+Limit:   10 requests per second
+
+Sliding Window Movement:
+┌─────────────────┐
+│ Window 1 (0-1s) │ → 11 requests allowed
+└─────────────────┘
+     ┌─────────────────┐
+     │ Window 2 (1-2s) │ → 10 requests allowed  
+     └─────────────────┘
+          ┌─────────────────┐
+          │ Window 3 (2-3s) │ → 10 requests allowed
+          └─────────────────┘
+               ┌─────────────────┐
+               │ Window 4 (3-4s) │ → 4 requests allowed
+               └─────────────────┘
+```
+
+**Key Concept**: Every second, the window "slides" forward by 1 second. At each position, the rate limiter checks: "How many requests happened in the last 1 second?" If it's ≤10, allow the request. If >10, block it.
+
+**Why the numbers differ:**
+- **Memory Storage [11, 10, 10, 4]**: The first window allows 11 requests (slight overage), then the rate limiter becomes more aggressive, causing a dramatic drop to 4 in the final window
+- **Redis Storage [10, 10, 11, 8]**: More consistent enforcement, with only small variations around the 10 req/sec limit
+
+### 🎯 Test Parameters Explained
+
+Our visualization tests use different acceptable bounds for each storage type:
+
+**Memory Storage Bounds**: 8-16 requests/window (wider tolerance)
+- More volatile performance due to in-process limitations
+- Higher variance in race conditions and timing issues
+- Acceptable range reflects real-world memory storage behavior
+
+**Redis Storage Bounds**: 8-14 requests/window (tighter tolerance)  
+- More predictable performance due to atomic Redis operations
+- Better consistency across concurrent requests
+- Tighter bounds reflect Redis's superior reliability
+
+**Expected Rate**: 10 requests/second in all tests
+**Test Duration**: 4 seconds with 30 requests/second attempted
+**Result**: The arrays show how many requests were actually allowed in each 1-second window
+
+### 📋 Fixed vs Sliding Window Comparison
+
+**Fixed Window** (resets at exact intervals):
+```
+Time:     0s----1s----2s----3s----4s
+Windows:  [────1────][────2────][────3────][────4────]
+Resets:        ↑           ↑           ↑           ↑
+```
+- Window 1: Count requests from 0-1s, reset at 1s
+- Window 2: Count requests from 1-2s, reset at 2s  
+- Result: [10, 10, 10, 10] - exactly 10 per window
+
+**Sliding Window** (moves continuously):
+```
+Time:     0s----1s----2s----3s----4s  
+Windows:  [──1──]
+               [──2──]
+                    [──3──]
+                         [──4──]
+```
+- Each window looks at the "last 1 second" from that point
+- More complex calculation, but smoother rate limiting
+- Result: [11, 10, 10, 4] - varies based on request timing
 
 ## 📈 Visualization Results
 
@@ -83,16 +164,59 @@ API_KEYS = {
 ### Supported Strategies
 
 **Fixed Window**: Requests counted in fixed time intervals (e.g., 10 requests per minute starting at :00 seconds)
-- Simple implementation
-- Predictable reset times  
-- Potential for traffic bursts at window boundaries
+- **Algorithm**: Reset counter every N seconds, increment on each request
+- **Pros**: Simple implementation, predictable reset times, efficient memory usage
+- **Cons**: Potential for traffic bursts at window boundaries (100% of limit in first few milliseconds)
+- **Use case**: When you need simple, predictable rate limiting with clear reset points
 
-**Sliding Window**: Rolling time window that moves with each request
-- Smoother rate distribution
-- More complex calculation
-- Better user experience under load
+**Sliding Window**: Rolling time window that moves with each request  
+- **Algorithm**: Check request count in the "last N seconds" from current time
+- **Pros**: Smoother rate distribution, better user experience under load, prevents boundary bursts
+- **Cons**: More complex calculation, higher memory/CPU usage, requires timestamp tracking
+- **Use case**: When you need smooth, consistent rate limiting without traffic spikes
 
 Each strategy uses Redis for distributed storage, ensuring rate limits work across multiple server instances.
+
+### 🧮 Technical Implementation Details
+
+**Fixed Window Algorithm:**
+```python
+# Pseudo-code for fixed window
+def is_allowed_fixed(key, limit, window_seconds):
+    current_window = int(time.time() // window_seconds)
+    count = redis.get(f"{key}:{current_window}") or 0
+    
+    if count < limit:
+        redis.incr(f"{key}:{current_window}")
+        redis.expire(f"{key}:{current_window}", window_seconds)
+        return True
+    return False
+```
+
+**Sliding Window Algorithm:**
+```python
+# Pseudo-code for sliding window  
+def is_allowed_sliding(key, limit, window_seconds):
+    now = time.time()
+    cutoff = now - window_seconds
+    
+    # Remove old requests outside the window
+    redis.zremrangebyscore(key, 0, cutoff)
+    
+    # Count current requests in window
+    count = redis.zcard(key)
+    
+    if count < limit:
+        redis.zadd(key, {str(uuid4()): now})
+        redis.expire(key, window_seconds)
+        return True
+    return False
+```
+
+**Why Redis vs Memory?**
+- **Persistence**: Redis survives application restarts, memory doesn't
+- **Distribution**: Redis works across multiple app instances, memory is per-process
+- **Consistency**: Redis provides atomic operations, memory can have race conditions
 
 ## 🚀 Production Setup
 
