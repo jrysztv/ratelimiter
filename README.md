@@ -28,6 +28,17 @@ The test suite generates detailed visualizations showing:
 - Cumulative request tracking
 - Window-by-window analysis
 
+### Generated Charts
+
+![Fixed Window Comparison](results/2025-05-23_01-40/fixed_window/fixed_comparison.png)
+*Fixed Window strategy comparison shows Redis and Memory storage performing similarly with consistent 10 req/sec windows.*
+
+![Sliding Window Comparison](results/2025-05-23_01-40/sliding_window/sliding_comparison.png)
+*Sliding Window comparison reveals Redis superior consistency - Memory storage drops to 4 req/sec in final window while Redis maintains 8 req/sec.*
+
+![Redis Sliding Window Detail](results/2025-05-23_01-40/sliding_window/redisstorage_plot.png)
+*Individual Redis sliding window analysis demonstrates smooth rate limiting with consistent window-to-window performance and predictable cumulative growth.*
+
 Results are saved to timestamped directories in `results/` with both raw JSON data and PNG visualizations.
 
 ## 🌦️ Weather API Usage
