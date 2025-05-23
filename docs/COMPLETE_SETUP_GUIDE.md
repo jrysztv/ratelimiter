@@ -25,7 +25,6 @@ This guide walks you through setting up a production rate limiter service with a
 
 ### 1.2 Connect and Install Dependencies
 
-
 ```bash
 # Connect to your instance
 ssh -i ~/.ssh/your-key.pem ubuntu@YOUR-EC2-IP
