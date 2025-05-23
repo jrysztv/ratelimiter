@@ -53,4 +53,7 @@ EXPOSE 8000
 
 # Set Python path
 ENV PYTHONPATH=/app/src
+
+# Start the application
+CMD ["uvicorn", "propcorn_ratelimiter.main:app", "--host", "0.0.0.0", "--port", "8000"]
  
