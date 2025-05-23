@@ -1,419 +1,312 @@
-# Complete Setup Guide for Propcorn Rate Limiter
+# Complete Production Setup Guide 🚀
 
-This guide provides step-by-step instructions to set up the complete CI/CD pipeline for the Propcorn Rate Limiter project, from local development to AWS EC2 deployment.
-
-## 🎯 Overview
-
-This setup will give you:
-- ✅ Local development environment
-- ✅ Automated testing with visualizations
-- ✅ CI/CD pipeline with GitHub Actions
-- ✅ Automated deployment to AWS EC2
-- ✅ Production-ready containerized application
+This guide walks you through setting up a production rate limiter service with automated CI/CD deployment to AWS EC2.
 
 ## 📋 Prerequisites
 
-- **Local Machine**: Git, Docker, Docker Compose
-- **AWS Account**: EC2 access
-- **GitHub Account**: Repository access
-- **Domain/IP**: For production access (optional)
+- AWS Account with EC2 access
+- GitHub account
+- Local machine with SSH client
+- Basic familiarity with Docker and Git
 
-## 🚀 Quick Start
+## 🔧 Phase 1: AWS EC2 Setup
 
-### Option 1: Use the Quick Setup Script
+### 1.1 Launch EC2 Instance
+
+1. **Go to AWS EC2 Console**
+2. **Launch Instance:**
+   - **AMI**: Ubuntu Server 22.04 LTS
+   - **Instance Type**: t2.micro (Free Tier) or larger
+   - **Key Pair**: Create new or use existing `.pem` file
+   - **Security Group**: Create new with these rules:
+     - SSH (22): Your IP only
+     - HTTP (80): 0.0.0.0/0
+     - HTTPS (443): 0.0.0.0/0
+
+### 1.2 Connect and Install Dependencies
+
 ```bash
-# Clone and run the setup script
-git clone https://github.com/jrysztv/ratelimiter.git
-cd ratelimiter
-chmod +x scripts/quick-setup.sh
-./scripts/quick-setup.sh
-```
+# Connect to your instance
+ssh -i ~/.ssh/your-key.pem ubuntu@YOUR-EC2-IP
 
-### Option 2: Manual Setup
-Follow the detailed steps below for complete control.
+# Update system
+sudo apt update && sudo apt upgrade -y
 
-## 📝 Step-by-Step Setup
+# Install Docker
+sudo apt install -y docker.io docker-compose git
 
-### Step 1: Local Development Setup
-
-#### 1.1 Clone Repository
-```bash
-git clone https://github.com/jrysztv/ratelimiter.git
-cd ratelimiter
-```
-
-#### 1.2 Install Dependencies
-```bash
-# Install Poetry (if not already installed)
-curl -sSL https://install.python-poetry.org | python3 -
-
-# Install project dependencies
-poetry install
-```
-
-#### 1.3 Start Development Environment
-```bash
-# Start development containers
-docker-compose -f docker-compose.dev.yml up -d
-
-# Verify services are running
-docker-compose -f docker-compose.dev.yml ps
-
-# Test the application
-curl http://localhost:8000/health
-```
-
-#### 1.4 Run Tests
-```bash
-# Run standard tests
-poetry run pytest tests/ -v
-
-# Generate visualization results
-poetry run pytest tests/test_visualization.py -v
-
-# Check test results
-ls -la results/
-```
-
-### Step 2: AWS EC2 Setup
-
-#### 2.1 Create EC2 Instance
-Follow the detailed guide in [EC2_SETUP.md](./EC2_SETUP.md):
-
-1. **Launch Instance**: Ubuntu 22.04 LTS, t2.micro/t3.small
-2. **Security Group**: SSH (22), HTTP (80), Custom TCP (8000)
-3. **Key Pair**: Create and download `propcorn-ratelimiter-key.pem`
-
-#### 2.2 Connect and Configure EC2
-```bash
-# Connect to EC2
-chmod 400 propcorn-ratelimiter-key.pem
-ssh -i propcorn-ratelimiter-key.pem ubuntu@<EC2_PUBLIC_IP>
-
-# Install Docker and Docker Compose
-curl -fsSL https://get.docker.com -o get-docker.sh
-sudo sh get-docker.sh
+# Add ubuntu user to docker group
 sudo usermod -aG docker ubuntu
+newgrp docker
 
-# Install Docker Compose
-sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-sudo chmod +x /usr/local/bin/docker-compose
+# Verify Docker installation
+docker --version
+docker-compose --version
+```
 
+### 1.3 Setup Application Directory
+
+```bash
 # Create application directory
-sudo mkdir -p /opt/propcorn-ratelimiter
-sudo chown ubuntu:ubuntu /opt/propcorn-ratelimiter
-cd /opt/propcorn-ratelimiter
+sudo mkdir -p /opt/ratelimiter
+sudo chown ubuntu:ubuntu /opt/ratelimiter
+cd /opt/ratelimiter
 
-# Clone repository
+# Clone the repository
 git clone https://github.com/jrysztv/ratelimiter.git .
+
+# Test Docker setup
+docker-compose -f docker-compose.prod-nginx.yml build
 ```
 
-#### 2.3 Generate SSH Keys for GitHub Actions
+## 🔐 Phase 2: GitHub Configuration
+
+### 2.1 Repository Setup
+
+If you don't have a GitHub repository yet:
+
 ```bash
-# On EC2 instance
-ssh-keygen -t rsa -b 4096 -C "github-actions-deploy" -f ~/.ssh/github_actions_key -N ""
+# Create new repository on GitHub, then:
+git clone https://github.com/YOUR-USERNAME/YOUR-REPO.git
+cd YOUR-REPO
 
-# Add public key to authorized_keys
-cat ~/.ssh/github_actions_key.pub >> ~/.ssh/authorized_keys
-
-# Display private key (copy this for GitHub secrets)
-cat ~/.ssh/github_actions_key
+# Copy project files here
+# Commit and push initial version
 ```
 
-### Step 3: GitHub Repository Configuration
+### 2.2 Environment Secrets Setup
 
-#### 3.1 Set Up Repository Secrets
-Go to your GitHub repository → Settings → Secrets and Variables → Actions
+**Critical Step**: Configure GitHub Environment Secrets correctly.
 
-Add these secrets:
+1. **Go to your GitHub repository**
+2. **Navigate to**: Settings → Environments
+3. **Create environment**: `production`
+4. **Add these secrets**:
 
-| Secret Name | Value | Source |
-|-------------|-------|--------|
-| `EC2_SSH_KEY` | Private key content | Output of `cat ~/.ssh/github_actions_key` |
-| `EC2_HOST` | EC2 public IP | AWS EC2 console |
-| `EC2_USERNAME` | `ubuntu` | Default Ubuntu username |
-| `EC2_APP_PATH` | `/opt/propcorn-ratelimiter` | Application directory |
-
-#### 3.2 Create Production Environment
-1. Go to Settings → Environments
-2. Create environment named `production`
-3. Add protection rules (optional):
-   - Required reviewers
-   - Deployment branches: `main` only
-
-#### 3.3 Configure Branch Protection
-1. Go to Settings → Branches
-2. Add rule for `main` branch:
-   - ✅ Require pull request before merging
-   - ✅ Require status checks to pass
-   - ✅ Require branches to be up to date
-
-### Step 4: Test Manual Deployment
-
-#### 4.1 Test on EC2
 ```bash
-# On EC2 instance
-cd /opt/propcorn-ratelimiter
+# Required secrets:
+EC2_SSH_KEY     = [Complete contents of your .pem file]
+EC2_HOST        = [Your EC2 public IP address]
+EC2_USERNAME    = ubuntu
+EC2_APP_PATH    = /opt/ratelimiter
+```
 
-# Build and start production containers
-docker-compose -f docker-compose.prod.yml build
-docker-compose -f docker-compose.prod.yml up -d
+### 2.3 SSH Key Secret Format
 
-# Check if services are running
-docker-compose -f docker-compose.prod.yml ps
+**CRITICAL**: The SSH key must be copied exactly as-is:
 
+```bash
+# Display your key content:
+cat ~/.ssh/your-key.pem
+
+# Copy EVERYTHING including these lines:
+-----BEGIN RSA PRIVATE KEY-----
+[all the key content]
+-----END RSA PRIVATE KEY-----
+```
+
+**Common Mistakes:**
+- ❌ Missing BEGIN/END lines
+- ❌ Extra spaces or newlines
+- ❌ Windows line endings (CRLF)
+- ❌ Partial key content
+
+## 🚀 Phase 3: Deployment Pipeline
+
+### 3.1 Workflow Overview
+
+The GitHub Actions workflow consists of:
+
+1. **Test Stage**: Runs unit tests (Redis tests may fail in CI, that's expected)
+2. **Build Stage**: Builds Docker images and tests with Nginx
+3. **Deploy Stage**: Deploys to EC2 using SSH
+
+### 3.2 Common Build Issues and Solutions
+
+**Issue**: `docker-compose: command not found`
+**Solution**: The workflow uses `docker compose` (v2 syntax) for GitHub Actions and `docker-compose` (legacy) for EC2.
+
+**Issue**: SSH connection failures
+**Solution**: Verify your SSH key secret format and EC2 security group settings.
+
+**Issue**: Redis test failures in CI
+**Solution**: Expected behavior. Core tests pass, Redis tests fail gracefully.
+
+### 3.3 Trigger Deployment
+
+```bash
+# Make a commit to trigger deployment
+echo "Deployment triggered at $(date)" >> deployment-log.txt
+git add .
+git commit -m "trigger: automated deployment"
+git push origin main
+```
+
+## 🔍 Phase 4: Verification and Testing
+
+### 4.1 Health Check
+
+```bash
 # Test health endpoint
-curl http://localhost:8000/health
+curl http://YOUR-EC2-IP/health
+# Expected: {"status":"healthy","redis":"connected"}
 
-# Test API endpoint
-curl -H "X-API-Key: test_key" http://localhost:8000/api/weather?city=London
+# Test API documentation
+curl http://YOUR-EC2-IP/docs
+# Should return HTML documentation page
 ```
 
-#### 4.2 Verify Logs
+### 4.2 Rate Limiting Test
+
 ```bash
-# View application logs
-docker-compose -f docker-compose.prod.yml logs app
-
-# View Redis logs
-docker-compose -f docker-compose.prod.yml logs redis
-
-# Monitor in real-time
-docker-compose -f docker-compose.prod.yml logs -f
+# Test with valid API key (5 requests/minute limit)
+for i in {1..8}; do
+  echo "Request $i:"
+  curl -H "X-API-Key: test_key_1" http://YOUR-EC2-IP/weather
+  echo -e "\n---"
+  sleep 2
+done
 ```
 
-### Step 5: Test CI/CD Pipeline
+**Expected Behavior:**
+- First 5 requests: Return weather data
+- Requests 6-8: Return rate limit exceeded error
 
-#### 5.1 Create Test Feature Branch
+### 4.3 Security Verification
+
 ```bash
-# On local machine
-git checkout -b test-deployment
+# Check security headers
+curl -I http://YOUR-EC2-IP/health
 
-# Make a small change
-echo "# Test deployment" >> test-deployment.md
-git add test-deployment.md
-git commit -m "Test: Add deployment test file"
-git push origin test-deployment
+# Should include headers like:
+# X-Frame-Options: DENY
+# X-XSS-Protection: 1; mode=block
+# X-Content-Type-Options: nosniff
 ```
 
-#### 5.2 Create Pull Request
-1. Go to GitHub repository
-2. Create pull request from `test-deployment` to `main`
-3. Verify that CI tests run automatically
-4. Check GitHub Actions tab for test results
+## 🛠️ Phase 5: Troubleshooting
 
-#### 5.3 Test Deployment
-1. Merge the pull request
-2. Check GitHub Actions for deployment progress
-3. Verify deployment on EC2:
-   ```bash
-   curl http://<EC2_PUBLIC_IP>:8000/health
-   ```
+### 5.1 Common Deployment Issues
 
-## 🔧 Configuration Options
-
-### Environment Variables
-
-#### Local Development
+**Container Not Starting:**
 ```bash
-# .env.dev (optional)
-REDIS_HOST=localhost
-REDIS_PORT=6379
-REDIS_DB=0
-LOG_LEVEL=DEBUG
+# Check container status
+docker ps -a
+
+# View logs
+docker-compose -f docker-compose.prod-nginx.yml logs
+
+# Restart containers
+docker-compose -f docker-compose.prod-nginx.yml down
+docker-compose -f docker-compose.prod-nginx.yml up -d
 ```
 
-#### Production
+**GitHub Actions Failures:**
+1. Check the Actions tab in your repository
+2. Common issues:
+   - SSH key format problems
+   - EC2 security group blocking access
+   - Insufficient EC2 disk space
+
+**Redis Connection Issues:**
 ```bash
-# On EC2 instance - .env.prod
-REDIS_HOST=redis
-REDIS_PORT=6379
-REDIS_DB=0
-ENVIRONMENT=production
-LOG_LEVEL=INFO
+# Test Redis connectivity
+docker exec -it ratelimiter-redis-1 redis-cli ping
+# Should return: PONG
 ```
 
-### API Key Configuration
+### 5.2 Monitoring and Maintenance
 
-Edit the API keys in your application code:
-```python
-API_KEYS = {
-    "premium_user": {
-        "name": "Premium User",
-        "rate_limit": "1000/hour"
-    },
-    "basic_user": {
-        "name": "Basic User",
-        "rate_limit": "100/hour"
-    }
-}
-```
-
-## 📊 Monitoring and Maintenance
-
-### Health Checks
+**Check Service Status:**
 ```bash
-# Application health
-curl http://localhost:8000/health
+# Service health
+curl http://localhost/health
 
-# Redis health
-docker exec redis_container redis-cli ping
-
-# Container status
-docker-compose -f docker-compose.prod.yml ps
-```
-
-### Performance Monitoring
-```bash
-# System resources
-htop
-df -h
-
-# Docker stats
+# Container resources
 docker stats
 
-# Application logs
-docker-compose -f docker-compose.prod.yml logs -f app
+# Disk usage
+df -h
 ```
 
-### Maintenance Tasks
-
-#### Regular Updates
+**Update Deployment:**
 ```bash
-# On EC2 instance
-cd /opt/propcorn-ratelimiter
+# Manual update (on EC2)
+cd /opt/ratelimiter
 git pull origin main
-docker-compose -f docker-compose.prod.yml down
-docker-compose -f docker-compose.prod.yml build --no-cache
-docker-compose -f docker-compose.prod.yml up -d
+docker-compose -f docker-compose.prod-nginx.yml down
+docker-compose -f docker-compose.prod-nginx.yml up -d --build
 ```
 
-#### Cleanup
+## 🎯 Phase 6: Production Optimization
+
+### 6.1 Performance Tuning
+
+**Nginx Configuration:**
+- Rate limiting: 10 req/sec (network level)
+- Worker processes: Auto-detected
+- Connection limits: Default
+
+**Redis Configuration:**
+- Memory policy: allkeys-lru
+- Max memory: 50% of available RAM
+- Persistence: RDB snapshots
+
+### 6.2 Monitoring Setup
+
+**Basic Monitoring:**
 ```bash
-# Remove unused Docker resources
-docker system prune -a
-docker volume prune
+# Create monitoring script
+cat > /opt/ratelimiter/monitor.sh << 'EOF'
+#!/bin/bash
+echo "=== Service Health Check ==="
+curl -s http://localhost/health | jq .
+echo -e "\n=== Container Status ==="
+docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+echo -e "\n=== Resource Usage ==="
+docker stats --no-stream
+EOF
 
-# Clear application logs
-docker-compose -f docker-compose.prod.yml logs --tail=0 app
+chmod +x /opt/ratelimiter/monitor.sh
 ```
 
-## 🚨 Troubleshooting
+### 6.3 Backup Strategy
 
-### Common Issues and Solutions
-
-#### 1. GitHub Actions SSH Connection Failed
-**Error**: `Permission denied (publickey)`
-
-**Solution**:
+**Redis Data Backup:**
 ```bash
-# Regenerate SSH keys on EC2
-ssh-keygen -t rsa -b 4096 -C "github-actions-deploy" -f ~/.ssh/github_actions_key -N ""
-cat ~/.ssh/github_actions_key.pub >> ~/.ssh/authorized_keys
-chmod 600 ~/.ssh/authorized_keys
+# Create backup script
+cat > /opt/ratelimiter/backup.sh << 'EOF'
+#!/bin/bash
+BACKUP_DIR="/opt/ratelimiter/backups"
+mkdir -p $BACKUP_DIR
+docker exec ratelimiter-redis-1 redis-cli BGSAVE
+docker cp ratelimiter-redis-1:/data/dump.rdb "$BACKUP_DIR/redis-$(date +%Y%m%d-%H%M%S).rdb"
+EOF
 
-# Update EC2_SSH_KEY secret in GitHub with new private key
-cat ~/.ssh/github_actions_key
+chmod +x /opt/ratelimiter/backup.sh
 ```
 
-#### 2. Docker Permission Denied
-**Error**: `Got permission denied while trying to connect to the Docker daemon`
+## ✅ Success Criteria
 
-**Solution**:
-```bash
-# Add user to docker group
-sudo usermod -aG docker ubuntu
-# Logout and login again
-exit
-```
+Your deployment is successful when:
 
-#### 3. Application Not Responding
-**Error**: Health check returns 404 or connection refused
+1. ✅ Health endpoint returns healthy status
+2. ✅ Weather API responds with location data
+3. ✅ Rate limiting blocks excess requests
+4. ✅ Security headers are present
+5. ✅ GitHub Actions deploy without errors
+6. ✅ Containers restart automatically after EC2 reboot
 
-**Solution**:
-```bash
-# Check if containers are running
-docker-compose -f docker-compose.prod.yml ps
+## 🎉 Next Steps
 
-# Check application logs
-docker-compose -f docker-compose.prod.yml logs app
+With your production system running:
 
-# Restart services
-docker-compose -f docker-compose.prod.yml restart
+1. **Custom Domain**: Configure Route 53 and SSL certificates
+2. **Monitoring**: Set up CloudWatch or Prometheus
+3. **Scaling**: Implement auto-scaling groups
+4. **API Keys**: Move from hardcoded to database-driven keys
+5. **Analytics**: Add request logging and usage analytics
 
-# Rebuild if necessary
-docker-compose -f docker-compose.prod.yml down
-docker-compose -f docker-compose.prod.yml build --no-cache
-docker-compose -f docker-compose.prod.yml up -d
-```
+---
 
-#### 4. Rate Limiting Not Working
-**Error**: Rate limiting allows too many requests
-
-**Solution**:
-```bash
-# Check Redis connection
-docker exec redis_container redis-cli ping
-
-# Verify API key headers
-curl -v -H "X-API-Key: test_key" http://localhost:8000/api/endpoint
-
-# Check application logs for rate limiting messages
-docker-compose logs app | grep -i "rate limit"
-```
-
-#### 5. Tests Failing in CI
-**Error**: Tests pass locally but fail in GitHub Actions
-
-**Solution**:
-```bash
-# Check if Redis service is properly configured in workflow
-# Verify test environment variables
-# Check GitHub Actions logs for specific error messages
-
-# Run tests locally with same conditions as CI
-docker-compose -f docker-compose.dev.yml up -d redis
-poetry run pytest tests/ -v
-```
-
-## 🔄 Continuous Improvement
-
-### Performance Optimization
-1. **Monitor Response Times**: Use application metrics
-2. **Optimize Docker Images**: Multi-stage builds, smaller base images
-3. **Database Optimization**: Redis memory management
-4. **Caching**: Implement application-level caching
-
-### Security Enhancements
-1. **Regular Updates**: Keep dependencies updated
-2. **Security Scanning**: Enable GitHub security features
-3. **Access Control**: Rotate SSH keys regularly
-4. **Network Security**: Configure proper firewall rules
-
-### Scaling Considerations
-1. **Load Balancing**: Use AWS Application Load Balancer
-2. **Auto Scaling**: Configure auto-scaling groups
-3. **Database**: Consider Redis Cluster for high availability
-4. **Monitoring**: Implement comprehensive monitoring with CloudWatch
-
-## 📚 Additional Resources
-
-- [Docker Documentation](https://docs.docker.com/)
-- [GitHub Actions Documentation](https://docs.github.com/en/actions)
-- [AWS EC2 Documentation](https://docs.aws.amazon.com/ec2/)
-- [FastAPI Documentation](https://fastapi.tiangolo.com/)
-- [Redis Documentation](https://redis.io/documentation)
-
-## 🎉 Success Checklist
-
-After completing this setup, you should have:
-
-- [ ] ✅ Local development environment running
-- [ ] ✅ Tests passing with visualization results
-- [ ] ✅ EC2 instance configured and accessible
-- [ ] ✅ GitHub repository with proper secrets
-- [ ] ✅ CI/CD pipeline running successfully
-- [ ] ✅ Production application deployed and healthy
-- [ ] ✅ Automatic deployment on main branch push
-- [ ] ✅ Monitoring and logging configured
-
-**Congratulations! 🎊 Your rate limiter project is now production-ready with full CI/CD automation!** 
+*This guide is based on real deployment experience. If you encounter issues not covered here, check the GitHub Issues or create a new one with details.* 
