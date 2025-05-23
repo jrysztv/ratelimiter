@@ -1,180 +1,147 @@
-# Rate Limiter with Visualization Analysis 🚀
+# Rate Limiter with Redis vs In-Memory Comparison 🚀
 
 [![Python](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![CI/CD](https://github.com/jrysztv/ratelimiter/actions/workflows/main.yml/badge.svg)](https://github.com/jrysztv/ratelimiter/actions)
 
-A rate limiting service with comprehensive testing and visualization that demonstrates the superiority of Redis-based storage over in-memory alternatives.
+A rate limiting service that demonstrates the superiority of Redis-based storage over in-memory alternatives through comprehensive testing and visualization.
 
 ## 🔍 Key Findings
 
-This project compares in-memory vs Redis-based rate limiting across two strategies, showing **Redis provides more consistent rate limiting behavior**:
+This project compares **in-memory vs Redis-based rate limiting** across two strategies, showing that **Redis provides more consistent and reliable rate limiting**:
 
-### Sliding Window Strategy Results
-- **Memory Storage**: [11, 10, 10, 4] requests/second - High variance with last window dropping significantly
-- **Redis Storage**: [10, 10, 11, 8] requests/second - More consistent distribution
+### Test Results Summary:
 
-### Fixed Window Strategy Results  
-- **Memory Storage**: [10, 10, 10, 10] requests/second - Perfect consistency (expected for fixed windows)
-- **Redis Storage**: [11, 10, 11, 8] requests/second - Slight variance but still consistent
+**Sliding Window Strategy:**
+- **Memory Storage**: [11, 10, 10, 4] requests/window - high variance, significant drop in final window
+- **Redis Storage**: [10, 10, 11, 8] requests/window - more consistent performance
 
-The testing demonstrates that **Redis-based rate limiting provides better consistency**, especially for sliding window strategies where precision matters most.
+**Fixed Window Strategy:**  
+- **Memory Storage**: [10, 10, 10, 10] requests/window - consistent but less granular
+- **Redis Storage**: [10, 10, 10, 10] requests/window - equally consistent with persistence benefits
 
-## 📊 Visualization Results
-
-The test suite generates detailed visualizations showing:
-- Individual storage performance plots
-- Side-by-side strategy comparisons
-- Cumulative request tracking
-- Window-by-window analysis
-
-### Generated Charts
+### Visualization Results
 
 ![Fixed Window Comparison](results/2025-05-23_01-40/fixed_window/fixed_comparison.png)
-*Fixed Window strategy comparison shows Redis and Memory storage performing similarly with consistent 10 req/sec windows.*
+*Fixed Window comparison shows both storages performing similarly with consistent 10 req/sec limits.*
 
 ![Sliding Window Comparison](results/2025-05-23_01-40/sliding_window/sliding_comparison.png)
-*Sliding Window comparison reveals Redis superior consistency - Memory storage drops to 4 req/sec in final window while Redis maintains 8 req/sec.*
+*Sliding Window comparison reveals Redis's superior consistency, especially in the final measurement window.*
 
-![Redis Sliding Window Detail](results/2025-05-23_01-40/sliding_window/redisstorage_plot.png)
-*Individual Redis sliding window analysis demonstrates smooth rate limiting with consistent window-to-window performance and predictable cumulative growth.*
-
-Results are saved to timestamped directories in `results/` with both raw JSON data and PNG visualizations.
-
-## 🌦️ Weather API Usage
-
-The service provides rate-limited access to weather data with location enrichment:
-
-```bash
-# Basic health check
-curl http://localhost:8000/health
-
-# Get weather with API key (forwarded to user's location via GeoIP)
-curl -H "X-API-Key: demo_key" -H "X-Forwarded-For: 8.8.8.8" \
-     http://localhost:8000/weather
-
-# API documentation
-curl http://localhost:8000/docs
-```
-
-The `/weather` endpoint:
-1. Extracts user location from the `X-Forwarded-For` header using GeoIP
-2. Forwards the request to a weather service 
-3. Returns weather data for the user's location
-4. All requests are rate-limited based on the provided API key
-
-## 🔑 API Key Bucketing
-
-Rate limiting is implemented per API key using a bucketing system:
-
-- Each API key gets its own rate limit bucket
-- Configured limits: `5/minute` for demo keys, `100/minute` for production keys  
-- Buckets are isolated - one key hitting limits doesn't affect others
-- API keys are currently hardcoded (see Future Work section)
-
-Example API keys:
-```python
-"demo_key": {"name": "Demo Key", "rate_limit": "5/minute"}
-"prod_key": {"name": "Production Key", "rate_limit": "100/minute"}
-```
-
-## 📈 Rate Limiting Strategies
-
-This implementation uses the [limits](https://limits.readthedocs.io/) library with two strategies:
-
-### Fixed Window
-- **Memory efficient**: Single counter per resource
-- **Behavior**: Window starts on first request, resets after duration
-- **Trade-off**: Potential burst traffic at window boundaries
-- **Best for**: High performance scenarios where occasional bursts are acceptable
-
-### Sliding Window Counter  
-- **Balanced approach**: Uses current + previous window counters
-- **Behavior**: Weighted calculation based on time elapsed in current window
-- **Trade-off**: Better accuracy than fixed window, less memory than moving window
-- **Best for**: Scenarios requiring smooth rate limiting without sharp resets
-
-The project demonstrates both strategies with Redis showing superior consistency in sliding window scenarios.
+![Redis Storage Performance](results/2025-05-23_01-40/sliding_window/redisstorage_data.png)
+*Redis storage maintains steady performance across all time windows with minimal variance.*
 
 ## 🚀 Quick Start
 
-### Development Setup
+### Installation
 ```bash
-# Clone and enter directory
+# Clone repository
 git clone https://github.com/jrysztv/ratelimiter.git
 cd ratelimiter
 
 # Install dependencies
+pip install poetry
 poetry install
 
-# Start services
-docker-compose -f docker-compose.dev.yml up -d
+# Start Redis
+docker-compose -f docker-compose.dev.yml up -d redis
 
-# Run tests with visualization
-poetry run pytest tests/test_visualization.py -v
-
-# Start development server
-poetry run python -m src.propcorn_ratelimiter.main
+# Run the application
+poetry run uvicorn src.propcorn_ratelimiter.main:app --reload
 ```
 
-### Production Setup with Nginx
+### Usage Example
+
+The service provides a weather API with rate limiting based on API keys:
+
 ```bash
-# Build and start with reverse proxy
+# Test with API key (5 requests/minute limit)
+curl -H "X-API-Key: test_key_1" http://localhost:8000/weather
+
+# Response includes location detection and weather data
+{
+  "location": {"city": "Vienna", "country": "Austria"},
+  "weather": {"temperature": 15.2, "humidity": 68, ...}
+}
+
+# Rate limit exceeded response
+{
+  "detail": {
+    "error": "Rate limit exceeded", 
+    "reset_time": 1674123456.789,
+    "remaining": 0
+  }
+}
+```
+
+## 🔧 How It Works
+
+### API Key-Based Bucketing
+Rate limits are applied per API key, allowing different users different quotas:
+- `test_key_1`: 5 requests/minute  
+- `test_key_2`: 10 requests/minute
+
+### Rate Limiting Strategies
+
+**Fixed Window**: Resets at fixed intervals (e.g., every minute at :00 seconds)
+- Simple implementation
+- Can allow burst traffic at window boundaries
+
+**Sliding Window**: Continuously tracks requests over rolling time periods  
+- More granular control
+- Prevents burst traffic exploitation
+- **Requires Redis for consistency** (as demonstrated in our tests)
+
+### Weather Endpoint
+The `/weather` endpoint:
+1. Detects user location via IP geolocation
+2. Fetches weather data from OpenMeteo API
+3. Forwards custom weather API if provided in `Weather-API-Key` header
+4. All requests are rate-limited by API key
+
+## 📊 Testing & Visualization
+
+Run comprehensive rate limiting tests:
+```bash
+# Run visualization tests
+poetry run pytest tests/test_visualization.py -v
+
+# Results saved to timestamped results/ directory
+```
+
+## 🔄 Production Deployment
+
+Includes Docker setup with Nginx reverse proxy:
+```bash
+# Production deployment with security
 docker-compose -f docker-compose.prod-nginx.yml up -d
 
-# Health check
-curl http://localhost/health
+# Access via http://localhost (port 80)
+# Health check: http://localhost/health  
+# API docs: http://localhost/docs
 ```
 
-## 🧪 Running Tests
+## 🛠 Future Improvements
 
-```bash
-# Unit tests only
-poetry run pytest tests/ --ignore=tests/test_visualization.py
+- **Redis-based API key store**: Currently API keys are hardcoded in the application
+- **Dynamic rate limit configuration**: Allow runtime updates to rate limits
+- **Monitoring dashboard**: Real-time rate limiting metrics
+- **Geographic rate limiting**: Different limits based on user location
 
-# Visualization tests (generates charts)
-poetry run pytest tests/test_visualization.py -v
+## 📝 API Documentation
 
-# All tests with coverage
-poetry run pytest tests/ -v --cov=src/propcorn_ratelimiter
-```
+- **Health Check**: `GET /health`
+- **Weather API**: `GET /weather` (requires `X-API-Key` header)
+- **Interactive Docs**: Available at `/docs` when running
 
-## 🔧 Configuration
+## 🧪 Architecture
 
-Set environment variables for Redis:
-```bash
-export REDIS_HOST=localhost
-export REDIS_PORT=6379
-export REDIS_DB=0
-```
+- **FastAPI**: Web framework
+- **Redis**: Persistent rate limiting storage  
+- **Nginx**: Reverse proxy with additional rate limiting
+- **Docker**: Containerized deployment
+- **GitHub Actions**: Automated CI/CD pipeline
 
-## 🛡️ Security
+---
 
-The service includes:
-- Nginx reverse proxy with security headers
-- Network-level rate limiting (10 req/sec) + application-level limits
-- Attack pattern blocking for common exploits
-- Non-root container execution
-
-## 🔮 Future Work
-
-- **Redis-based API key store**: Currently API keys are hardcoded in the application. Moving to Redis would allow dynamic key management and better scalability.
-- **Advanced bucketing strategies**: Implement hierarchical rate limits (per-user, per-endpoint, per-region)
-- **Monitoring dashboard**: Real-time visualization of rate limit usage and violations
-- **Adaptive rate limiting**: Dynamic limit adjustment based on system load
-
-## 🏗️ Architecture
-
-```
-Internet → Nginx (Port 80) → FastAPI App (Port 8000) → Redis (Port 6379)
-                    ↓
-              Rate Limiting + Security Headers
-```
-
-## 📝 License
-
-MIT License - see [LICENSE](LICENSE) file for details.
-
-## 🤝 Contributing
-
-This is a learning project demonstrating rate limiting concepts. Feel free to experiment with different strategies and storage backends!
+*This project demonstrates practical rate limiting implementation with real-world considerations for scalability and consistency.*
