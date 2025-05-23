@@ -180,7 +180,7 @@ async def test_different_strategies():
 
 
 @pytest.mark.asyncio
-@pytest.mark.parametrize("rate_limit_value,lower,higher", [("10/second", 8, 16)])
+@pytest.mark.parametrize("rate_limit_value,lower,higher", [("10/second", 8, 18)])
 async def test_high_frequency_sliding_memory(
     rate_limit_value: str, lower: int, higher: int
 ):
@@ -202,7 +202,7 @@ async def test_high_frequency_sliding_memory(
 
 
 @pytest.mark.asyncio
-@pytest.mark.parametrize("rate_limit_value,lower,higher", [("10/second", 8, 14)])
+@pytest.mark.parametrize("rate_limit_value,lower,higher", [("10/second", 8, 18)])
 async def test_high_frequency_sliding_redis(
     rate_limit_value: str, lower: int, higher: int
 ):

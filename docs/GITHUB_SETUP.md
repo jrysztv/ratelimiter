@@ -29,10 +29,14 @@ Add the following secrets by clicking **New repository secret**:
 
 | Secret Name | Description | How to Get Value |
 |-------------|-------------|------------------|
-| `EC2_SSH_KEY` | Private SSH key for EC2 access | Copy contents of `~/.ssh/github_actions_key` from EC2 |
+| `EC2_SSH_KEY_B64` | Base64-encoded private SSH key | `base64 -w 0 ~/.ssh/your-key.pem` |
 | `EC2_HOST` | EC2 instance public IP or domain | From AWS EC2 console |
 | `EC2_USERNAME` | EC2 username | `ubuntu` (for Ubuntu instances) |
-| `EC2_APP_PATH` | Application directory on EC2 | `/opt/propcorn-ratelimiter` |
+| `EC2_APP_PATH` | Application directory on EC2 | `/opt/ratelimiter` |
+| `AWS_ACCESS_KEY_ID` | AWS Access Key for dynamic security | From IAM user creation |
+| `AWS_SECRET_ACCESS_KEY` | AWS Secret Key for dynamic security | From IAM user creation |
+| `AWS_REGION` | AWS region where EC2 is located | e.g., `eu-west-1`, `us-east-1` |
+| `EC2_SECURITY_GROUP_ID` | Security group ID for dynamic access | From EC2 console, format: `sg-...` |
 
 ### 2.2 Optional Secrets (for enhanced features)
 
@@ -45,34 +49,43 @@ Add the following secrets by clicking **New repository secret**:
 
 ## Step 3: Detailed Secret Setup Instructions
 
-### 3.1 Getting EC2_SSH_KEY
+### 3.1 Getting EC2_SSH_KEY_B64
 
-On your EC2 instance:
+**NEW METHOD**: Use base64 encoding for reliability:
+
 ```bash
-# Display the private key
-cat ~/.ssh/github_actions_key
+# On your local machine (Git Bash), encode your SSH key
+base64 -w 0 ~/.ssh/your-key.pem
 ```
 
-Copy the entire output (including `-----BEGIN RSA PRIVATE KEY-----` and `-----END RSA PRIVATE KEY-----`) and paste it as the value for `EC2_SSH_KEY`.
+Copy the entire base64 string output and paste it as the value for `EC2_SSH_KEY_B64`.
 
-### 3.2 Getting EC2_HOST
+**Why base64?**: Prevents line break and encoding issues that occur when copying SSH keys directly.
+
+### 3.2 Setting Up AWS Credentials
+
+**Create IAM User:**
+1. **AWS IAM Console** → **Users** → **Create User**
+2. **Name**: `github-actions-deploy`
+3. **Permissions**: `AmazonEC2FullAccess`
+4. **Create access key** → **Application running outside AWS**
+5. **Copy**: Access Key ID and Secret Access Key
+
+**Get Security Group ID:**
+1. **AWS EC2 Console** → **Your Instance** → **Security** tab
+2. **Copy Security Group ID** (format: `sg-1234567890abcdef0`)
+
+### 3.3 Getting EC2_HOST
 
 From AWS EC2 Console:
 1. Select your instance
-2. Copy the **Public IPv4 address** or **Public IPv4 DNS**
+2. Copy the **Public IPv4 address** (e.g., `3.252.200.91`)
 3. Use this as the value for `EC2_HOST`
 
-**Example**: `54.123.45.67` or `ec2-54-123-45-67.compute-1.amazonaws.com`
+### 3.4 Setting EC2_USERNAME and EC2_APP_PATH
 
-### 3.3 Setting EC2_USERNAME
-
-For Ubuntu instances, this is always `ubuntu`.
-For Amazon Linux instances, this would be `ec2-user`.
-
-### 3.4 Setting EC2_APP_PATH
-
-This should match the directory where you cloned the repository on EC2:
-`/opt/propcorn-ratelimiter`
+- **EC2_USERNAME**: `ubuntu` (for Ubuntu instances)
+- **EC2_APP_PATH**: `/opt/ratelimiter`
 
 ## Step 4: Environment Variables (Optional)
 

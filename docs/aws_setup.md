@@ -1,17 +1,63 @@
 # AWS Setup Guide for PROPCORN-RATELIMITER
 
-This guide covers the setup required for deploying the application to AWS EC2 using GitHub Actions CI/CD.
+This guide covers the complete AWS setup required for deploying the application to AWS EC2 using automated GitHub Actions CI/CD with dynamic security group management.
 
-## EC2 Instance Setup
+## Prerequisites
+
+- AWS Account with EC2 access
+- Basic familiarity with AWS IAM and EC2
+
+## Phase 1: IAM User Setup for GitHub Actions
+
+### 1.1 Create IAM User
+
+1. **Go to AWS IAM Console** → **Users** → **Create User**
+2. **User details**:
+   - **User name**: `github-actions-deploy`
+   - **Uncheck** "Provide user access to the AWS Management Console"
+3. **Permissions**: 
+   - **Attach policies directly**
+   - **Select**: `AmazonEC2FullAccess`
+4. **Review and create user**
+
+### 1.2 Generate Access Keys
+
+1. **Select the created user** → **Security credentials** tab
+2. **Create access key** → **Application running outside AWS**
+3. **Copy both values**:
+   - **Access Key ID** (starts with `AKIA...`)
+   - **Secret Access Key** (long random string)
+4. **Store these safely** - you'll add them to GitHub secrets
+
+## Phase 2: EC2 Instance Setup
+
+### 2.1 Launch EC2 Instance
 
 1. **Launch an EC2 instance**:
-   - Amazon Linux 2 or Ubuntu Server recommended
-   - t2.micro (free tier) or larger as needed
-   - Configure security group to allow:
-     - SSH (port 22) from your IP
-     - HTTP (port 80) from anywhere
-     - HTTPS (port 443) from anywhere
-     - Application port (8000) from anywhere or behind a load balancer
+   - **AMI**: Ubuntu Server 22.04 LTS (recommended)
+   - **Instance Type**: t2.micro (free tier) or larger as needed
+   - **Key Pair**: Create new or use existing `.pem` file
+   - **Security Group**: Create new with these rules:
+
+**Inbound Rules:**
+```
+Type    Port    Source          Description
+SSH     22      YOUR-IP/32      Personal access (replace YOUR-IP)
+HTTP    80      0.0.0.0/0       Public web access
+HTTPS   443     0.0.0.0/0       Public web access (optional)
+```
+
+**IMPORTANT**: 
+- ✅ **Only add YOUR personal IP** for SSH access
+- ❌ **Never use 0.0.0.0/0 for SSH** - GitHub Actions manages this dynamically
+- ✅ **HTTP/HTTPS can be open** for public web access
+
+### 2.2 Get Security Group ID
+
+After creating the instance:
+1. **AWS EC2 Console** → **Instances** → **Select your instance**
+2. **Security** tab → **Security groups** → **Copy the Security Group ID**
+3. **Save this ID** - you'll need it for GitHub secrets (format: `sg-1234567890abcdef0`)
 
 2. **Install Docker and Docker Compose**:
    ```bash
@@ -62,18 +108,26 @@ This guide covers the setup required for deploying the application to AWS EC2 us
 
 ## GitHub Secrets Configuration
 
-Add the following secrets to your GitHub repository (Settings → Secrets and variables → Actions):
+Add the following secrets to your GitHub repository (Settings → Environments → production):
 
-1. **AWS Credentials**:
-   - `AWS_ACCESS_KEY_ID`: Your AWS Access Key
-   - `AWS_SECRET_ACCESS_KEY`: Your AWS Secret Key
-   - `AWS_REGION`: The AWS region (e.g., `us-east-1`)
+### EC2 Connection Secrets:
+- **`EC2_HOST`**: Your EC2 instance public DNS or IP (e.g., `3.252.200.91`)
+- **`EC2_USERNAME`**: The username for SSH connection (`ubuntu` for Ubuntu instances)
+- **`EC2_APP_PATH`**: The path to your application (e.g., `/opt/ratelimiter`)
+- **`EC2_SSH_KEY_B64`**: Your base64-encoded private SSH key
 
-2. **EC2 Connection Information**:
-   - `EC2_HOST`: Your EC2 instance public DNS or IP
-   - `EC2_USERNAME`: The username for SSH connection (e.g., `ec2-user` or `ubuntu`)
-   - `EC2_APP_PATH`: The path to your application (e.g., `/home/ec2-user/apps/PROPCORN-RATELIMITER`)
-   - `EC2_SSH_KEY`: Your private SSH key for connecting to the EC2 instance
+### AWS Credentials for Dynamic Security Management:
+- **`AWS_ACCESS_KEY_ID`**: From the IAM user you created (starts with `AKIA...`)
+- **`AWS_SECRET_ACCESS_KEY`**: From the IAM user you created (long random string)
+- **`AWS_REGION`**: The AWS region where your EC2 is located (e.g., `eu-west-1`)
+- **`EC2_SECURITY_GROUP_ID`**: Your security group ID (e.g., `sg-1234567890abcdef0`)
+
+### Encode SSH Key for GitHub:
+```bash
+# Run in Git Bash to encode your SSH key
+base64 -w 0 ~/.ssh/your-key.pem
+# Copy the entire output string to EC2_SSH_KEY_B64 secret
+```
 
 ## Environment Variables
 

@@ -308,21 +308,41 @@ cd ratelimiter
 
 Add these Environment Secrets in GitHub → Settings → Environments → production:
 
-```
-EC2_SSH_KEY: [Your complete .pem file contents]
-EC2_HOST: [Your EC2 public IP]
-EC2_USERNAME: ubuntu
-EC2_APP_PATH: /opt/ratelimiter
+```bash
+# EC2 Connection:
+EC2_SSH_KEY_B64=[Base64 encoded SSH key]
+EC2_HOST=[Your EC2 public IP]
+EC2_USERNAME=ubuntu
+EC2_APP_PATH=/opt/ratelimiter
+
+# AWS Credentials (for dynamic security group management):
+AWS_ACCESS_KEY_ID=[Your AWS Access Key ID]  
+AWS_SECRET_ACCESS_KEY=[Your AWS Secret Access Key]
+AWS_REGION=[Your AWS region, e.g., eu-west-1]
+EC2_SECURITY_GROUP_ID=[Your security group ID, e.g., sg-...]
 ```
 
-**Important**: Copy the entire SSH key including `-----BEGIN RSA PRIVATE KEY-----` and `-----END RSA PRIVATE KEY-----` lines.
+**AWS Setup Required**:
+1. Create IAM user `github-actions-deploy` with `AmazonEC2FullAccess`
+2. Generate access keys for "Application running outside AWS"
+3. Get your EC2 security group ID from AWS console
 
 ### 3. Security Group Settings
 
-Configure EC2 Security Group:
-- **SSH (22)**: Your IP only
-- **HTTP (80)**: 0.0.0.0/0  
-- **HTTPS (443)**: 0.0.0.0/0
+Configure EC2 Security Group with **secure access**:
+
+**Inbound Rules:**
+```
+Type    Port    Source          Description
+SSH     22      YOUR-IP/32      Personal access only
+HTTP    80      0.0.0.0/0       Public web access
+HTTPS   443     0.0.0.0/0       Public web access (optional)
+```
+
+**🔐 Dynamic GitHub Actions Access**:
+- GitHub automatically adds its runner IP for SSH during deployment
+- SSH access is automatically removed after deployment
+- **Never add 0.0.0.0/0 for SSH** - this is handled securely and automatically
 
 ### 4. Production Deployment
 

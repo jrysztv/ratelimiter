@@ -84,12 +84,33 @@ cd YOUR-REPO
 4. **Add these secrets**:
 
 ```bash
-# Required secrets:
+# SSH and EC2 Connection:
 EC2_SSH_KEY_B64 = [Base64 encoded contents of your .pem file]
 EC2_HOST        = [Your EC2 public IP address]
 EC2_USERNAME    = ubuntu
 EC2_APP_PATH    = /opt/ratelimiter
+
+# AWS Credentials for Dynamic Security Group Management:
+AWS_ACCESS_KEY_ID     = [Your AWS Access Key ID]
+AWS_SECRET_ACCESS_KEY = [Your AWS Secret Access Key]
+AWS_REGION           = [Your AWS region, e.g., eu-west-1]
+EC2_SECURITY_GROUP_ID = [Your EC2 security group ID, e.g., sg-1234567890abcdef0]
 ```
+
+### 2.2.1 AWS Credentials Setup
+
+**Create IAM User for GitHub Actions:**
+
+1. **AWS IAM Console** → **Users** → **Create User**
+2. **User name**: `github-actions-deploy`
+3. **Permissions**: Attach `AmazonEC2FullAccess` policy
+4. **Create access key** → **Application running outside AWS**
+5. **Copy Access Key ID and Secret Access Key**
+
+**Get Security Group ID:**
+
+1. **AWS EC2 Console** → **Instances** → **Select your instance**
+2. **Security tab** → **Security groups** → **Copy Security Group ID**
 
 ### 2.3 SSH Key Secret Format
 
@@ -110,13 +131,25 @@ base64 -w 0 ~/.ssh/your-key.pem
 # Name the secret: EC2_SSH_KEY_B64
 ```
 
-**Common Mistakes with old approach:**
-- ❌ Missing BEGIN/END lines
-- ❌ Extra spaces or newlines  
-- ❌ Windows line endings (CRLF)
-- ❌ Partial key content
+### 2.4 Security Group Configuration
 
-**New base64 approach avoids all these issues!**
+**IMPORTANT**: Configure your EC2 Security Group for secure access:
+
+**Inbound Rules:**
+```
+Type    Port    Source          Description
+SSH     22      YOUR-IP/32      Personal access only
+HTTP    80      0.0.0.0/0       Public web access
+HTTPS   443     0.0.0.0/0       Public web access
+```
+
+**🔐 Dynamic SSH Access**: GitHub Actions will automatically:
+1. Detect its current IP address
+2. Temporarily add SSH access for that IP
+3. Deploy the application 
+4. Remove the temporary SSH rule
+
+**Never add SSH access for 0.0.0.0/0** - this is handled dynamically for security!
 
 ## 🚀 Phase 3: Deployment Pipeline
 
@@ -126,7 +159,11 @@ The GitHub Actions workflow consists of:
 
 1. **Test Stage**: Runs unit tests (Redis tests may fail in CI, that's expected)
 2. **Build Stage**: Builds Docker images and tests with Nginx
-3. **Deploy Stage**: Deploys to EC2 using SSH
+3. **Deploy Stage**: 
+   - **AWS Setup**: Configures AWS CLI with provided credentials
+   - **Security Group**: Temporarily adds GitHub runner IP to SSH access
+   - **SSH Deploy**: Connects to EC2 and deploys application
+   - **Cleanup**: Removes temporary SSH access (runs even if deployment fails)
 
 ### 3.2 Common Build Issues and Solutions
 
@@ -134,7 +171,13 @@ The GitHub Actions workflow consists of:
 **Solution**: The workflow uses `docker compose` (v2 syntax) for GitHub Actions and `docker-compose` (legacy) for EC2.
 
 **Issue**: SSH connection failures
-**Solution**: Verify your SSH key secret format and EC2 security group settings.
+**Solution**: Verify your SSH key secret format and ensure security group only has your personal IP.
+
+**Issue**: AWS permissions denied
+**Solution**: Verify your AWS credentials and ensure the IAM user has EC2 permissions.
+
+**Issue**: Security group rule already exists
+**Solution**: Expected behavior. GitHub Actions safely handles existing rules.
 
 **Issue**: Redis test failures in CI
 **Solution**: Expected behavior. Core tests pass, Redis tests fail gracefully.

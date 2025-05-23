@@ -133,6 +133,31 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
     
+    - name: Configure AWS CLI
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
+    
+    - name: Get GitHub Actions Runner IP and Update Security Group
+      id: security-group
+      run: |
+        # Get the current public IP of the GitHub Actions runner
+        RUNNER_IP=$(curl -s https://checkip.amazonaws.com)
+        echo "Runner IP: $RUNNER_IP"
+        echo "runner-ip=$RUNNER_IP" >> $GITHUB_OUTPUT
+        
+        # Add SSH rule for current runner IP
+        aws ec2 authorize-security-group-ingress \
+          --group-id ${{ secrets.EC2_SECURITY_GROUP_ID }} \
+          --protocol tcp \
+          --port 22 \
+          --cidr ${RUNNER_IP}/32 \
+          --tag-specifications 'ResourceType=security-group-rule,Tags=[{Key=Name,Value=github-actions-temp},{Key=CreatedBy,Value=github-actions}]' || echo "Rule may already exist"
+        
+        echo "✅ Added SSH access for IP: ${RUNNER_IP}/32"
+    
     - name: Configure SSH
       run: |
         mkdir -p ~/.ssh
@@ -184,6 +209,22 @@ jobs:
           docker-compose -f docker-compose.prod-nginx.yml logs
           exit 1
         EOF
+        
+    - name: Cleanup Security Group Rule
+      if: always()
+      run: |
+        # Remove the temporary SSH rule for this runner
+        RUNNER_IP="${{ steps.security-group.outputs.runner-ip }}"
+        
+        if [ ! -z "$RUNNER_IP" ]; then
+          aws ec2 revoke-security-group-ingress \
+            --group-id ${{ secrets.EC2_SECURITY_GROUP_ID }} \
+            --protocol tcp \
+            --port 22 \
+            --cidr ${RUNNER_IP}/32 || echo "Rule may have been already removed"
+          
+          echo "🧹 Removed temporary SSH access for IP: ${RUNNER_IP}/32"
+        fi
         
     - name: Notify deployment status
       if: always()
