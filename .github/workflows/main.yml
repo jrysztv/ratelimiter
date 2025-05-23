@@ -136,9 +136,15 @@ jobs:
     - name: Configure SSH
       run: |
         mkdir -p ~/.ssh
-        echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
+        # Decode base64 SSH key safely
+        printf "%s" "${{ secrets.EC2_SSH_KEY_B64 }}" | base64 -d > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
-        ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
+        
+        # Add host to known_hosts (don't fail if host is temporarily unreachable)
+        ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts || true
+        
+        # Verify SSH key format
+        ssh-keygen -l -f ~/.ssh/id_rsa
         
     - name: Deploy to EC2
       run: |
