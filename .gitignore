@@ -89,5 +89,9 @@ logs/
 .env.local
 .env.*.local
 
+# AWS Keys (NEVER commit these!)
+*.pem
+*.ppk
+
 # Poetry
-poetry.lock 
+# poetry.lock - REMOVED: needed for production builds 
