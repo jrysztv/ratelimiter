@@ -1,0 +1,1265 @@
+﻿2025-05-23T17:03:55.4683297Z Current runner version: '2.324.0'
+2025-05-23T17:03:55.4705909Z ##[group]Runner Image Provisioner
+2025-05-23T17:03:55.4706794Z Hosted Compute Agent
+2025-05-23T17:03:55.4707361Z Version: 20250508.323
+2025-05-23T17:03:55.4707979Z Commit: 81b259f29879f73b4213d199e42d8c3465dae986
+2025-05-23T17:03:55.4708700Z Build Date: 2025-05-08T19:40:08Z
+2025-05-23T17:03:55.4709339Z ##[endgroup]
+2025-05-23T17:03:55.4709928Z ##[group]Operating System
+2025-05-23T17:03:55.4710496Z Ubuntu
+2025-05-23T17:03:55.4710962Z 24.04.2
+2025-05-23T17:03:55.4711498Z LTS
+2025-05-23T17:03:55.4711991Z ##[endgroup]
+2025-05-23T17:03:55.4712526Z ##[group]Runner Image
+2025-05-23T17:03:55.4713164Z Image: ubuntu-24.04
+2025-05-23T17:03:55.4713675Z Version: 20250511.1.0
+2025-05-23T17:03:55.4714691Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20250511.1/images/ubuntu/Ubuntu2404-Readme.md
+2025-05-23T17:03:55.4716570Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20250511.1
+2025-05-23T17:03:55.4717651Z ##[endgroup]
+2025-05-23T17:03:55.4718837Z ##[group]GITHUB_TOKEN Permissions
+2025-05-23T17:03:55.4720917Z Contents: read
+2025-05-23T17:03:55.4721509Z Metadata: read
+2025-05-23T17:03:55.4722014Z Packages: read
+2025-05-23T17:03:55.4722587Z ##[endgroup]
+2025-05-23T17:03:55.4725842Z Secret source: Actions
+2025-05-23T17:03:55.4726874Z Prepare workflow directory
+2025-05-23T17:03:55.5130629Z Prepare all required actions
+2025-05-23T17:03:55.5166807Z Getting action download info
+2025-05-23T17:03:55.7801753Z ##[group]Download immutable action package 'actions/checkout@v4'
+2025-05-23T17:03:55.7802835Z Version: 4.2.2
+2025-05-23T17:03:55.7803896Z Digest: sha256:ccb2698953eaebd21c7bf6268a94f9c26518a7e38e27e0b83c1fe1ad049819b1
+2025-05-23T17:03:55.7805212Z Source commit SHA: 11bd71901bbe5b1630ceea73d27597364c9af683
+2025-05-23T17:03:55.7806248Z ##[endgroup]
+2025-05-23T17:03:55.8618859Z ##[group]Download immutable action package 'actions/setup-python@v5'
+2025-05-23T17:03:55.8619638Z Version: 5.6.0
+2025-05-23T17:03:55.8620337Z Digest: sha256:0b35a0c11c97499e4e0576589036d450b9f5f9da74b7774225b3614b57324404
+2025-05-23T17:03:55.8621239Z Source commit SHA: a26af69be951a213d495a4c3e4e4022e16d87065
+2025-05-23T17:03:55.8621885Z ##[endgroup]
+2025-05-23T17:03:56.0863304Z ##[group]Download immutable action package 'actions/cache@v4'
+2025-05-23T17:03:56.0864034Z Version: 4.2.3
+2025-05-23T17:03:56.0864734Z Digest: sha256:c8a3bb963e1f1826d8fcc8d1354f0dd29d8ac1db1d4f6f20247055ae11b81ed9
+2025-05-23T17:03:56.0865888Z Source commit SHA: 5a3ec84eff668545956fd18022155c47e93e2684
+2025-05-23T17:03:56.0866557Z ##[endgroup]
+2025-05-23T17:03:56.2393203Z Download action repository 'snok/install-poetry@v1' (SHA:76e04a911780d5b312d89783f7b1cd627778900a)
+2025-05-23T17:03:56.4321233Z ##[group]Download immutable action package 'actions/upload-artifact@v4'
+2025-05-23T17:03:56.4322714Z Version: 4.6.2
+2025-05-23T17:03:56.4323913Z Digest: sha256:290722aa3281d5caf23d0acdc3dbeb3424786a1a01a9cc97e72f147225e37c38
+2025-05-23T17:03:56.4326070Z Source commit SHA: ea165f8d65b6e75b540449e92b4886f43607fa02
+2025-05-23T17:03:56.4327289Z ##[endgroup]
+2025-05-23T17:03:56.5940785Z Download action repository 'codecov/codecov-action@v4' (SHA:b9fd7d16f6d7d1b5d2bec1a2887e65ceed900238)
+2025-05-23T17:03:57.1080509Z Complete job name: test
+2025-05-23T17:03:57.1800393Z ##[group]Checking docker version
+2025-05-23T17:03:57.1814199Z ##[command]/usr/bin/docker version --format '{{.Server.APIVersion}}'
+2025-05-23T17:03:57.2660550Z '1.48'
+2025-05-23T17:03:57.2676085Z Docker daemon API version: '1.48'
+2025-05-23T17:03:57.2677483Z ##[command]/usr/bin/docker version --format '{{.Client.APIVersion}}'
+2025-05-23T17:03:57.2832942Z '1.48'
+2025-05-23T17:03:57.2847981Z Docker client API version: '1.48'
+2025-05-23T17:03:57.2853963Z ##[endgroup]
+2025-05-23T17:03:57.2857482Z ##[group]Clean up resources from previous jobs
+2025-05-23T17:03:57.2863418Z ##[command]/usr/bin/docker ps --all --quiet --no-trunc --filter "label=73c5b6"
+2025-05-23T17:03:57.3006175Z ##[command]/usr/bin/docker network prune --force --filter "label=73c5b6"
+2025-05-23T17:03:57.3136838Z ##[endgroup]
+2025-05-23T17:03:57.3137732Z ##[group]Create local container network
+2025-05-23T17:03:57.3148814Z ##[command]/usr/bin/docker network create --label 73c5b6 github_network_42aa65d6dc4141feba1393ef59ab5684
+2025-05-23T17:03:57.3690903Z 1f084ecc12f0de3e52a9354de1ddd0fb98d6a05cbcf19f68f083ddb3f81ff684
+2025-05-23T17:03:57.3712032Z ##[endgroup]
+2025-05-23T17:03:57.3737970Z ##[group]Starting redis service container
+2025-05-23T17:03:57.3757928Z ##[command]/usr/bin/docker pull redis:7-alpine
+2025-05-23T17:03:57.8375544Z 7-alpine: Pulling from library/redis
+2025-05-23T17:03:57.9613869Z f18232174bc9: Pulling fs layer
+2025-05-23T17:03:57.9616071Z 6bbf9a9fb8d1: Pulling fs layer
+2025-05-23T17:03:57.9617768Z b9ad71003506: Pulling fs layer
+2025-05-23T17:03:57.9619927Z 5cf94cf2539d: Pulling fs layer
+2025-05-23T17:03:57.9621133Z 234c75618d30: Pulling fs layer
+2025-05-23T17:03:57.9622270Z 1eb3fe6b681a: Pulling fs layer
+2025-05-23T17:03:57.9623271Z 4f4fb700ef54: Pulling fs layer
+2025-05-23T17:03:57.9624219Z 234f7e17f3b5: Pulling fs layer
+2025-05-23T17:03:57.9625100Z 234c75618d30: Waiting
+2025-05-23T17:03:57.9626108Z 1eb3fe6b681a: Waiting
+2025-05-23T17:03:57.9626912Z 4f4fb700ef54: Waiting
+2025-05-23T17:03:57.9627729Z 234f7e17f3b5: Waiting
+2025-05-23T17:03:57.9628525Z 5cf94cf2539d: Waiting
+2025-05-23T17:03:58.0631320Z 6bbf9a9fb8d1: Verifying Checksum
+2025-05-23T17:03:58.0633510Z 6bbf9a9fb8d1: Download complete
+2025-05-23T17:03:58.0734715Z b9ad71003506: Verifying Checksum
+2025-05-23T17:03:58.0737164Z b9ad71003506: Download complete
+2025-05-23T17:03:58.0837865Z f18232174bc9: Verifying Checksum
+2025-05-23T17:03:58.0839833Z f18232174bc9: Download complete
+2025-05-23T17:03:58.1679749Z 5cf94cf2539d: Verifying Checksum
+2025-05-23T17:03:58.1681632Z 5cf94cf2539d: Download complete
+2025-05-23T17:03:58.1883617Z f18232174bc9: Pull complete
+2025-05-23T17:03:58.2578483Z 1eb3fe6b681a: Download complete
+2025-05-23T17:03:58.2789978Z 4f4fb700ef54: Verifying Checksum
+2025-05-23T17:03:58.2791972Z 4f4fb700ef54: Download complete
+2025-05-23T17:03:58.3454663Z 234c75618d30: Verifying Checksum
+2025-05-23T17:03:58.3456707Z 234c75618d30: Download complete
+2025-05-23T17:03:58.3632128Z 234f7e17f3b5: Verifying Checksum
+2025-05-23T17:03:58.3634804Z 234f7e17f3b5: Download complete
+2025-05-23T17:03:58.7676597Z 6bbf9a9fb8d1: Pull complete
+2025-05-23T17:03:58.9381316Z b9ad71003506: Pull complete
+2025-05-23T17:03:58.9661336Z 5cf94cf2539d: Pull complete
+2025-05-23T17:03:59.1660252Z 234c75618d30: Pull complete
+2025-05-23T17:03:59.1767743Z 1eb3fe6b681a: Pull complete
+2025-05-23T17:03:59.1860712Z 4f4fb700ef54: Pull complete
+2025-05-23T17:03:59.1976764Z 234f7e17f3b5: Pull complete
+2025-05-23T17:03:59.2019838Z Digest: sha256:f773b35a95e170d92dd4214a3ec4859b1b7960bf56896ae687646d695f311187
+2025-05-23T17:03:59.2034621Z Status: Downloaded newer image for redis:7-alpine
+2025-05-23T17:03:59.2051382Z docker.io/library/redis:7-alpine
+2025-05-23T17:03:59.2085805Z ##[command]/usr/bin/docker create --name ee15379af540405082995f1a53578e2a_redis7alpine_7bf6b9 --label 73c5b6 --network github_network_42aa65d6dc4141feba1393ef59ab5684 --network-alias redis -p 6379:6379 --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5 -e GITHUB_ACTIONS=true -e CI=true redis:7-alpine
+2025-05-23T17:03:59.2467110Z 5f2a1b8b36f6fca2763f4a7d2b7518ed6ddee212066f18db911cf3256630cb28
+2025-05-23T17:03:59.2489733Z ##[command]/usr/bin/docker start 5f2a1b8b36f6fca2763f4a7d2b7518ed6ddee212066f18db911cf3256630cb28
+2025-05-23T17:03:59.5802328Z 5f2a1b8b36f6fca2763f4a7d2b7518ed6ddee212066f18db911cf3256630cb28
+2025-05-23T17:03:59.5827808Z ##[command]/usr/bin/docker ps --all --filter id=5f2a1b8b36f6fca2763f4a7d2b7518ed6ddee212066f18db911cf3256630cb28 --filter status=running --no-trunc --format "{{.ID}} {{.Status}}"
+2025-05-23T17:03:59.5964748Z 5f2a1b8b36f6fca2763f4a7d2b7518ed6ddee212066f18db911cf3256630cb28 Up Less than a second (health: starting)
+2025-05-23T17:03:59.5983925Z ##[command]/usr/bin/docker port 5f2a1b8b36f6fca2763f4a7d2b7518ed6ddee212066f18db911cf3256630cb28
+2025-05-23T17:03:59.6097156Z 6379/tcp -> 0.0.0.0:6379
+2025-05-23T17:03:59.6097486Z 6379/tcp -> [::]:6379
+2025-05-23T17:03:59.6141208Z ##[endgroup]
+2025-05-23T17:03:59.6149750Z ##[group]Waiting for all services to be ready
+2025-05-23T17:03:59.6162669Z ##[command]/usr/bin/docker inspect --format="{{if .Config.Healthcheck}}{{print .State.Health.Status}}{{end}}" 5f2a1b8b36f6fca2763f4a7d2b7518ed6ddee212066f18db911cf3256630cb28
+2025-05-23T17:03:59.6271470Z starting
+2025-05-23T17:03:59.6291443Z redis service is starting, waiting 2 seconds before checking again.
+2025-05-23T17:04:01.6294613Z ##[command]/usr/bin/docker inspect --format="{{if .Config.Healthcheck}}{{print .State.Health.Status}}{{end}}" 5f2a1b8b36f6fca2763f4a7d2b7518ed6ddee212066f18db911cf3256630cb28
+2025-05-23T17:04:01.6416717Z starting
+2025-05-23T17:04:01.6431400Z redis service is starting, waiting 4 seconds before checking again.
+2025-05-23T17:04:05.9956022Z ##[command]/usr/bin/docker inspect --format="{{if .Config.Healthcheck}}{{print .State.Health.Status}}{{end}}" 5f2a1b8b36f6fca2763f4a7d2b7518ed6ddee212066f18db911cf3256630cb28
+2025-05-23T17:04:06.0076375Z starting
+2025-05-23T17:04:06.0091648Z redis service is starting, waiting 7 seconds before checking again.
+2025-05-23T17:04:13.2651108Z ##[command]/usr/bin/docker inspect --format="{{if .Config.Healthcheck}}{{print .State.Health.Status}}{{end}}" 5f2a1b8b36f6fca2763f4a7d2b7518ed6ddee212066f18db911cf3256630cb28
+2025-05-23T17:04:13.2771201Z healthy
+2025-05-23T17:04:13.2788889Z redis service is healthy.
+2025-05-23T17:04:13.2789344Z ##[endgroup]
+2025-05-23T17:04:13.3016798Z ##[group]Run actions/checkout@v4
+2025-05-23T17:04:13.3017359Z with:
+2025-05-23T17:04:13.3017569Z   repository: jrysztv/ratelimiter
+2025-05-23T17:04:13.3017942Z   token: ***
+2025-05-23T17:04:13.3018134Z   ssh-strict: true
+2025-05-23T17:04:13.3018327Z   ssh-user: git
+2025-05-23T17:04:13.3018535Z   persist-credentials: true
+2025-05-23T17:04:13.3018753Z   clean: true
+2025-05-23T17:04:13.3018953Z   sparse-checkout-cone-mode: true
+2025-05-23T17:04:13.3019205Z   fetch-depth: 1
+2025-05-23T17:04:13.3019389Z   fetch-tags: false
+2025-05-23T17:04:13.3019576Z   show-progress: true
+2025-05-23T17:04:13.3019769Z   lfs: false
+2025-05-23T17:04:13.3019945Z   submodules: false
+2025-05-23T17:04:13.3020143Z   set-safe-directory: true
+2025-05-23T17:04:13.3020522Z env:
+2025-05-23T17:04:13.3020691Z   PYTHON_VERSION: 3.11
+2025-05-23T17:04:13.3020895Z   POETRY_VERSION: 1.8.0
+2025-05-23T17:04:13.3021092Z ##[endgroup]
+2025-05-23T17:04:13.4069414Z Syncing repository: jrysztv/ratelimiter
+2025-05-23T17:04:13.4070671Z ##[group]Getting Git version info
+2025-05-23T17:04:13.4071083Z Working directory is '/home/runner/work/ratelimiter/ratelimiter'
+2025-05-23T17:04:13.4071611Z [command]/usr/bin/git version
+2025-05-23T17:04:13.4172616Z git version 2.49.0
+2025-05-23T17:04:13.4198057Z ##[endgroup]
+2025-05-23T17:04:13.4211246Z Temporarily overriding HOME='/home/runner/work/_temp/3950650a-5306-4ad8-93fe-69beba5f31bd' before making global git config changes
+2025-05-23T17:04:13.4212730Z Adding repository directory to the temporary git global config as a safe directory
+2025-05-23T17:04:13.4223058Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/ratelimiter/ratelimiter
+2025-05-23T17:04:13.4258109Z Deleting the contents of '/home/runner/work/ratelimiter/ratelimiter'
+2025-05-23T17:04:13.4261136Z ##[group]Initializing the repository
+2025-05-23T17:04:13.4264878Z [command]/usr/bin/git init /home/runner/work/ratelimiter/ratelimiter
+2025-05-23T17:04:13.4333596Z hint: Using 'master' as the name for the initial branch. This default branch name
+2025-05-23T17:04:13.4334377Z hint: is subject to change. To configure the initial branch name to use in all
+2025-05-23T17:04:13.4334896Z hint: of your new repositories, which will suppress this warning, call:
+2025-05-23T17:04:13.4335472Z hint:
+2025-05-23T17:04:13.4335799Z hint: 	git config --global init.defaultBranch <name>
+2025-05-23T17:04:13.4336120Z hint:
+2025-05-23T17:04:13.4336434Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2025-05-23T17:04:13.4337154Z hint: 'development'. The just-created branch can be renamed via this command:
+2025-05-23T17:04:13.4337545Z hint:
+2025-05-23T17:04:13.4337751Z hint: 	git branch -m <name>
+2025-05-23T17:04:13.4341018Z Initialized empty Git repository in /home/runner/work/ratelimiter/ratelimiter/.git/
+2025-05-23T17:04:13.4351381Z [command]/usr/bin/git remote add origin https://github.com/jrysztv/ratelimiter
+2025-05-23T17:04:13.4384134Z ##[endgroup]
+2025-05-23T17:04:13.4384970Z ##[group]Disabling automatic garbage collection
+2025-05-23T17:04:13.4389734Z [command]/usr/bin/git config --local gc.auto 0
+2025-05-23T17:04:13.4416732Z ##[endgroup]
+2025-05-23T17:04:13.4417357Z ##[group]Setting up auth
+2025-05-23T17:04:13.4424071Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-05-23T17:04:13.4453236Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-05-23T17:04:13.4748178Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-05-23T17:04:13.4776810Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-05-23T17:04:13.4988169Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2025-05-23T17:04:13.5020271Z ##[endgroup]
+2025-05-23T17:04:13.5020991Z ##[group]Fetching the repository
+2025-05-23T17:04:13.5037433Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +a9c52d8fcf185756ad8cce2ff85069afc6575bdd:refs/remotes/origin/main
+2025-05-23T17:04:13.9859403Z From https://github.com/jrysztv/ratelimiter
+2025-05-23T17:04:13.9860241Z  * [new ref]         a9c52d8fcf185756ad8cce2ff85069afc6575bdd -> origin/main
+2025-05-23T17:04:13.9888519Z ##[endgroup]
+2025-05-23T17:04:13.9889136Z ##[group]Determining the checkout info
+2025-05-23T17:04:13.9890628Z ##[endgroup]
+2025-05-23T17:04:13.9895975Z [command]/usr/bin/git sparse-checkout disable
+2025-05-23T17:04:13.9937457Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2025-05-23T17:04:13.9965705Z ##[group]Checking out the ref
+2025-05-23T17:04:13.9969296Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2025-05-23T17:04:14.0178883Z Switched to a new branch 'main'
+2025-05-23T17:04:14.0181395Z branch 'main' set up to track 'origin/main'.
+2025-05-23T17:04:14.0187341Z ##[endgroup]
+2025-05-23T17:04:14.0220939Z [command]/usr/bin/git log -1 --format=%H
+2025-05-23T17:04:14.0242741Z a9c52d8fcf185756ad8cce2ff85069afc6575bdd
+2025-05-23T17:04:14.0473598Z ##[group]Run actions/setup-python@v5
+2025-05-23T17:04:14.0473883Z with:
+2025-05-23T17:04:14.0474073Z   python-version: 3.11
+2025-05-23T17:04:14.0474293Z   check-latest: false
+2025-05-23T17:04:14.0474605Z   token: ***
+2025-05-23T17:04:14.0474801Z   update-environment: true
+2025-05-23T17:04:14.0475028Z   allow-prereleases: false
+2025-05-23T17:04:14.0475442Z   freethreaded: false
+2025-05-23T17:04:14.0475645Z env:
+2025-05-23T17:04:14.0475817Z   PYTHON_VERSION: 3.11
+2025-05-23T17:04:14.0476017Z   POETRY_VERSION: 1.8.0
+2025-05-23T17:04:14.0476213Z ##[endgroup]
+2025-05-23T17:04:14.2176349Z ##[group]Installed versions
+2025-05-23T17:04:14.2484883Z Successfully set up CPython (3.11.12)
+2025-05-23T17:04:14.2485918Z ##[endgroup]
+2025-05-23T17:04:14.2632341Z ##[group]Run actions/cache@v4
+2025-05-23T17:04:14.2632746Z with:
+2025-05-23T17:04:14.2633020Z   path: ~/.local
+2025-05-23T17:04:14.2633344Z   key: poetry-1.8.0-Linux
+2025-05-23T17:04:14.2633720Z   enableCrossOsArchive: false
+2025-05-23T17:04:14.2634111Z   fail-on-cache-miss: false
+2025-05-23T17:04:14.2634468Z   lookup-only: false
+2025-05-23T17:04:14.2634786Z   save-always: false
+2025-05-23T17:04:14.2635476Z env:
+2025-05-23T17:04:14.2635759Z   PYTHON_VERSION: 3.11
+2025-05-23T17:04:14.2636097Z   POETRY_VERSION: 1.8.0
+2025-05-23T17:04:14.2636521Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:14.2636949Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.12/x64/lib/pkgconfig
+2025-05-23T17:04:14.2637345Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:14.2637695Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:14.2638047Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:14.2638446Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.12/x64/lib
+2025-05-23T17:04:14.2638733Z ##[endgroup]
+2025-05-23T17:04:14.5375163Z Cache hit for: poetry-1.8.0-Linux
+2025-05-23T17:04:15.2133210Z Received 28673352 of 28673352 (100.0%), 47.4 MBs/sec
+2025-05-23T17:04:15.2134271Z Cache Size: ~27 MB (28673352 B)
+2025-05-23T17:04:15.2170126Z [command]/usr/bin/tar -xf /home/runner/work/_temp/f32919fd-542a-4c59-a0c1-3e890842eb0a/cache.tzst -P -C /home/runner/work/ratelimiter/ratelimiter --use-compress-program unzstd
+2025-05-23T17:04:15.5776016Z Cache restored successfully
+2025-05-23T17:04:15.5930388Z Cache restored from key: poetry-1.8.0-Linux
+2025-05-23T17:04:15.6092974Z ##[group]Run snok/install-poetry@v1
+2025-05-23T17:04:15.6093277Z with:
+2025-05-23T17:04:15.6093465Z   version: 1.8.0
+2025-05-23T17:04:15.6093676Z   virtualenvs-create: true
+2025-05-23T17:04:15.6093926Z   virtualenvs-in-project: true
+2025-05-23T17:04:15.6094200Z   virtualenvs-path: {cache-dir}/virtualenvs
+2025-05-23T17:04:15.6094487Z   installer-parallel: true
+2025-05-23T17:04:15.6094707Z env:
+2025-05-23T17:04:15.6094881Z   PYTHON_VERSION: 3.11
+2025-05-23T17:04:15.6095086Z   POETRY_VERSION: 1.8.0
+2025-05-23T17:04:15.6095667Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:15.6096090Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.12/x64/lib/pkgconfig
+2025-05-23T17:04:15.6096489Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:15.6096862Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:15.6097220Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:15.6097611Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.12/x64/lib
+2025-05-23T17:04:15.6097913Z ##[endgroup]
+2025-05-23T17:04:15.6174422Z ##[group]Run $GITHUB_ACTION_PATH/main.sh
+2025-05-23T17:04:15.6174769Z [36;1m$GITHUB_ACTION_PATH/main.sh[0m
+2025-05-23T17:04:15.6230570Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2025-05-23T17:04:15.6230905Z env:
+2025-05-23T17:04:15.6231087Z   PYTHON_VERSION: 3.11
+2025-05-23T17:04:15.6231305Z   POETRY_VERSION: 1.8.0
+2025-05-23T17:04:15.6231580Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:15.6231988Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.12/x64/lib/pkgconfig
+2025-05-23T17:04:15.6232374Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:15.6232725Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:15.6233117Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:15.6233481Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.12/x64/lib
+2025-05-23T17:04:15.6233782Z   VERSION: 1.8.0
+2025-05-23T17:04:15.6233988Z   VIRTUALENVS_CREATE: true
+2025-05-23T17:04:15.6234212Z   VIRTUALENVS_IN_PROJECT: true
+2025-05-23T17:04:15.6234465Z   VIRTUALENVS_PATH: {cache-dir}/virtualenvs
+2025-05-23T17:04:15.6234723Z   INSTALLER_PARALLEL: true
+2025-05-23T17:04:15.6234936Z   INSTALLATION_ARGUMENTS: 
+2025-05-23T17:04:15.6235142Z   POETRY_PLUGINS: 
+2025-05-23T17:04:15.6235491Z ##[endgroup]
+2025-05-23T17:04:16.7070947Z 
+2025-05-23T17:04:16.7072111Z [33mSetting Poetry installation path as /home/runner/.local[0m
+2025-05-23T17:04:16.7072888Z 
+2025-05-23T17:04:16.7073242Z [33mInstalling Poetry 👷[0m
+2025-05-23T17:04:16.7073669Z 
+2025-05-23T17:04:16.8982101Z Retrieving Poetry metadata
+2025-05-23T17:04:16.8982379Z 
+2025-05-23T17:04:16.8982559Z The latest version (1.8.0) is already installed.
+2025-05-23T17:04:19.4877273Z 
+2025-05-23T17:04:19.4878201Z [33mInstallation completed. Configuring settings 🛠[0m
+2025-05-23T17:04:19.4878658Z 
+2025-05-23T17:04:19.4878848Z [33mDone ✅[0m
+2025-05-23T17:04:19.4879081Z 
+2025-05-23T17:04:19.4880416Z [33mIf you are creating a venv in your project, you can activate it by running 'source .venv/bin/activate'. If you're running this in an OS matrix, you can use 'source $VENV' instead, as an OS agnostic option[0m
+2025-05-23T17:04:19.5721711Z ##[group]Run actions/cache@v4
+2025-05-23T17:04:19.5722024Z with:
+2025-05-23T17:04:19.5722248Z   path: .venv
+2025-05-23T17:04:19.5722738Z   key: poetry-deps-3.11-ab6e31c3392d0efedc4dd9b677d2ba5c91dc86024c6ec34f51d1c88a363cf83b
+2025-05-23T17:04:19.5723327Z   restore-keys: poetry-deps-3.11-
+
+2025-05-23T17:04:19.5723666Z   enableCrossOsArchive: false
+2025-05-23T17:04:19.5723969Z   fail-on-cache-miss: false
+2025-05-23T17:04:19.5724260Z   lookup-only: false
+2025-05-23T17:04:19.5724519Z   save-always: false
+2025-05-23T17:04:19.5724783Z env:
+2025-05-23T17:04:19.5725004Z   PYTHON_VERSION: 3.11
+2025-05-23T17:04:19.5725601Z   POETRY_VERSION: 1.8.0
+2025-05-23T17:04:19.5726083Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:19.5726634Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.12/x64/lib/pkgconfig
+2025-05-23T17:04:19.5727160Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:19.5727668Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:19.5728139Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:19.5728620Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.12/x64/lib
+2025-05-23T17:04:19.5729021Z   VENV: .venv/bin/activate
+2025-05-23T17:04:19.5729266Z ##[endgroup]
+2025-05-23T17:04:19.8194489Z Cache hit for: poetry-deps-3.11-ab6e31c3392d0efedc4dd9b677d2ba5c91dc86024c6ec34f51d1c88a363cf83b
+2025-05-23T17:04:20.5888691Z Received 46703206 of 46703206 (100.0%), 66.6 MBs/sec
+2025-05-23T17:04:20.5889399Z Cache Size: ~45 MB (46703206 B)
+2025-05-23T17:04:20.5923160Z [command]/usr/bin/tar -xf /home/runner/work/_temp/0a47d594-101c-440b-ad88-66952e323255/cache.tzst -P -C /home/runner/work/ratelimiter/ratelimiter --use-compress-program unzstd
+2025-05-23T17:04:20.9823749Z Cache restored successfully
+2025-05-23T17:04:20.9994852Z Cache restored from key: poetry-deps-3.11-ab6e31c3392d0efedc4dd9b677d2ba5c91dc86024c6ec34f51d1c88a363cf83b
+2025-05-23T17:04:21.0111725Z ##[group]Run poetry install --no-interaction --no-ansi
+2025-05-23T17:04:21.0112426Z [36;1mpoetry install --no-interaction --no-ansi[0m
+2025-05-23T17:04:21.0165653Z shell: /usr/bin/bash -e {0}
+2025-05-23T17:04:21.0165911Z env:
+2025-05-23T17:04:21.0166093Z   PYTHON_VERSION: 3.11
+2025-05-23T17:04:21.0166312Z   POETRY_VERSION: 1.8.0
+2025-05-23T17:04:21.0166592Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:21.0167023Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.12/x64/lib/pkgconfig
+2025-05-23T17:04:21.0167435Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:21.0167813Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:21.0168185Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:21.0168551Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.12/x64/lib
+2025-05-23T17:04:21.0168863Z   VENV: .venv/bin/activate
+2025-05-23T17:04:21.0169086Z ##[endgroup]
+2025-05-23T17:04:21.6300925Z Installing dependencies from lock file
+2025-05-23T17:04:21.7443522Z 
+2025-05-23T17:04:21.7444024Z No dependencies to install or update
+2025-05-23T17:04:21.7470785Z 
+2025-05-23T17:04:21.7471528Z Installing the current project: propcorn-ratelimiter (0.1.0)
+2025-05-23T17:04:21.8056305Z ##[group]Run # Run only core functionality tests - these must pass for deployment
+2025-05-23T17:04:21.8056879Z [36;1m# Run only core functionality tests - these must pass for deployment[0m
+2025-05-23T17:04:21.8057489Z [36;1mpoetry run pytest tests/ -v --cov=src/propcorn_ratelimiter --cov-report=xml --cov-report=term-missing \[0m
+2025-05-23T17:04:21.8058178Z [36;1m  --ignore=tests/test_visualization.py \[0m
+2025-05-23T17:04:21.8058536Z [36;1m  -k "not (high_frequency or redis_async or redis_debug)"[0m
+2025-05-23T17:04:21.8109439Z shell: /usr/bin/bash -e {0}
+2025-05-23T17:04:21.8109694Z env:
+2025-05-23T17:04:21.8109880Z   PYTHON_VERSION: 3.11
+2025-05-23T17:04:21.8110103Z   POETRY_VERSION: 1.8.0
+2025-05-23T17:04:21.8110387Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:21.8110818Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.12/x64/lib/pkgconfig
+2025-05-23T17:04:21.8111243Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:21.8111645Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:21.8112024Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:21.8112395Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.12/x64/lib
+2025-05-23T17:04:21.8112710Z   VENV: .venv/bin/activate
+2025-05-23T17:04:21.8112936Z ##[endgroup]
+2025-05-23T17:04:22.8891820Z /home/runner/work/ratelimiter/ratelimiter/.venv/lib/python3.11/site-packages/pytest_asyncio/plugin.py:217: PytestDeprecationWarning: The configuration option "asyncio_default_fixture_loop_scope" is unset.
+2025-05-23T17:04:22.8895035Z The event loop scope for asynchronous fixtures will default to the fixture caching scope. Future versions of pytest-asyncio will default the loop scope for asynchronous fixtures to function scope. Set the default fixture loop scope explicitly in order to avoid unexpected behavior in the future. Valid fixture loop scopes are: "function", "class", "module", "package", "session"
+2025-05-23T17:04:22.8897310Z 
+2025-05-23T17:04:22.8897687Z   warnings.warn(PytestDeprecationWarning(_DEFAULT_FIXTURE_LOOP_SCOPE_UNSET))
+2025-05-23T17:04:22.9950872Z ============================= test session starts ==============================
+2025-05-23T17:04:22.9951663Z platform linux -- Python 3.11.12, pytest-8.3.5, pluggy-1.6.0 -- /home/runner/work/ratelimiter/ratelimiter/.venv/bin/python
+2025-05-23T17:04:22.9952362Z cachedir: .pytest_cache
+2025-05-23T17:04:22.9952712Z rootdir: /home/runner/work/ratelimiter/ratelimiter
+2025-05-23T17:04:22.9953122Z configfile: pyproject.toml
+2025-05-23T17:04:22.9953469Z plugins: asyncio-0.26.0, anyio-4.9.0, cov-6.1.1
+2025-05-23T17:04:22.9954118Z asyncio: mode=Mode.AUTO, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+2025-05-23T17:04:23.7448343Z collecting ... collected 34 items / 10 deselected / 24 selected
+2025-05-23T17:04:23.7448754Z 
+2025-05-23T17:04:23.8716334Z tests/test_geoip_enrichment.py::test_get_location PASSED                 [  4%]
+2025-05-23T17:04:24.1181946Z tests/test_geoip_enrichment.py::test_get_location_invalid_ip PASSED      [  8%]
+2025-05-23T17:04:24.1233581Z tests/test_main.py::test_weather_endpoint_success PASSED                 [ 12%]
+2025-05-23T17:04:24.1293921Z tests/test_main.py::test_weather_endpoint_with_forwarded_ip PASSED       [ 16%]
+2025-05-23T17:04:24.1348481Z tests/test_main.py::test_weather_endpoint_location_failure PASSED        [ 20%]
+2025-05-23T17:04:24.1384495Z tests/test_main.py::test_weather_endpoint_weather_api_failure PASSED     [ 25%]
+2025-05-23T17:04:24.1399325Z tests/test_rate_limiter.py::test_validate_api_key PASSED                 [ 29%]
+2025-05-23T17:04:24.5636173Z tests/test_rate_limiter.py::test_get_redis_storage PASSED                [ 33%]
+2025-05-23T17:04:24.5648370Z tests/test_rate_limiter.py::test_invalid_strategy PASSED                 [ 37%]
+2025-05-23T17:04:24.5697974Z tests/test_rate_limiter.py::test_invalid_rate_limit PASSED               [ 41%]
+2025-05-23T17:04:24.5736115Z tests/test_rate_limiter.py::test_missing_request PASSED                  [ 45%]
+2025-05-23T17:04:24.5877413Z tests/test_rate_limiter.py::test_api_key_default_rate PASSED             [ 50%]
+2025-05-23T17:04:24.5960305Z tests/test_rate_limiter.py::test_rate_limit_decorator PASSED             [ 54%]
+2025-05-23T17:04:24.6044225Z tests/test_rate_limiter.py::test_rate_limit_exceeded PASSED              [ 58%]
+2025-05-23T17:04:24.6107149Z tests/test_rate_limiter.py::test_different_rate_limits PASSED            [ 62%]
+2025-05-23T17:04:24.6346906Z tests/test_rate_limiter.py::test_different_strategies PASSED             [ 66%]
+2025-05-23T17:04:24.6423685Z tests/test_rate_limiter_async.py::test_redis_connection_via_app PASSED   [ 70%]
+2025-05-23T17:04:24.6458195Z tests/test_redis_connection.py::test_redis_connection_auto_detection PASSED [ 75%]
+2025-05-23T17:04:25.1891509Z tests/test_weather_request.py::test_get_weather PASSED                   [ 79%]
+2025-05-23T17:04:25.6769847Z tests/test_weather_request.py::test_get_weather_invalid_coordinates PASSED [ 83%]
+2025-05-23T17:04:25.8679395Z tests/unit/test_geoip_enrichment.py::test_get_location PASSED            [ 87%]
+2025-05-23T17:04:26.0354125Z tests/unit/test_geoip_enrichment.py::test_get_location_invalid_ip PASSED [ 91%]
+2025-05-23T17:04:26.5250112Z tests/unit/test_weather_request.py::test_get_weather PASSED              [ 95%]
+2025-05-23T17:04:27.0538193Z tests/unit/test_weather_request.py::test_get_weather_invalid_coordinates PASSED [100%]
+2025-05-23T17:04:27.0538770Z 
+2025-05-23T17:04:27.0538969Z ================================ tests coverage ================================
+2025-05-23T17:04:27.0539581Z _______________ coverage: platform linux, python 3.11.12-final-0 _______________
+2025-05-23T17:04:27.0539973Z 
+2025-05-23T17:04:27.0540167Z Name                                                   Stmts   Miss  Cover   Missing
+2025-05-23T17:04:27.0540716Z ------------------------------------------------------------------------------------
+2025-05-23T17:04:27.0541394Z src/propcorn_ratelimiter/__init__.py                       0      0   100%
+2025-05-23T17:04:27.0542093Z src/propcorn_ratelimiter/main.py                          34      3    91%   22-31
+2025-05-23T17:04:27.0542832Z src/propcorn_ratelimiter/rate_limiter/limiter.py          58      2    97%   48-49
+2025-05-23T17:04:27.0543593Z src/propcorn_ratelimiter/weather/__init__.py               0      0   100%
+2025-05-23T17:04:27.0544333Z src/propcorn_ratelimiter/weather/geoip_enrichment.py       8      0   100%
+2025-05-23T17:04:27.0545059Z src/propcorn_ratelimiter/weather/weather_request.py        9      0   100%
+2025-05-23T17:04:27.0545978Z ------------------------------------------------------------------------------------
+2025-05-23T17:04:27.0546485Z TOTAL                                                    109      5    95%
+2025-05-23T17:04:27.0546942Z Coverage XML written to file coverage.xml
+2025-05-23T17:04:27.0547417Z ====================== 24 passed, 10 deselected in 4.06s =======================
+2025-05-23T17:04:27.1751139Z ##[group]Run # These tests show memory vs Redis performance characteristics
+2025-05-23T17:04:27.1751658Z [36;1m# These tests show memory vs Redis performance characteristics[0m
+2025-05-23T17:04:27.1752123Z [36;1mecho "🔬 Running High-Frequency Performance Analysis..."[0m
+2025-05-23T17:04:27.1752770Z [36;1mpoetry run pytest tests/test_rate_limiter.py -v -k "high_frequency" || echo "⚠️ Performance tests failed (expected in CI environments)"[0m
+2025-05-23T17:04:27.1804110Z shell: /usr/bin/bash -e {0}
+2025-05-23T17:04:27.1804358Z env:
+2025-05-23T17:04:27.1804548Z   PYTHON_VERSION: 3.11
+2025-05-23T17:04:27.1804780Z   POETRY_VERSION: 1.8.0
+2025-05-23T17:04:27.1805069Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:27.1805722Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.12/x64/lib/pkgconfig
+2025-05-23T17:04:27.1806167Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:27.1806574Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:27.1806960Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:27.1807331Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.12/x64/lib
+2025-05-23T17:04:27.1807668Z   VENV: .venv/bin/activate
+2025-05-23T17:04:27.1807897Z ##[endgroup]
+2025-05-23T17:04:27.1879594Z 🔬 Running High-Frequency Performance Analysis...
+2025-05-23T17:04:27.8285916Z /home/runner/work/ratelimiter/ratelimiter/.venv/lib/python3.11/site-packages/pytest_asyncio/plugin.py:217: PytestDeprecationWarning: The configuration option "asyncio_default_fixture_loop_scope" is unset.
+2025-05-23T17:04:27.8289321Z The event loop scope for asynchronous fixtures will default to the fixture caching scope. Future versions of pytest-asyncio will default the loop scope for asynchronous fixtures to function scope. Set the default fixture loop scope explicitly in order to avoid unexpected behavior in the future. Valid fixture loop scopes are: "function", "class", "module", "package", "session"
+2025-05-23T17:04:27.8291097Z 
+2025-05-23T17:04:27.8291412Z   warnings.warn(PytestDeprecationWarning(_DEFAULT_FIXTURE_LOOP_SCOPE_UNSET))
+2025-05-23T17:04:27.8515818Z ============================= test session starts ==============================
+2025-05-23T17:04:27.8516927Z platform linux -- Python 3.11.12, pytest-8.3.5, pluggy-1.6.0 -- /home/runner/work/ratelimiter/ratelimiter/.venv/bin/python
+2025-05-23T17:04:27.8517969Z cachedir: .pytest_cache
+2025-05-23T17:04:27.8518442Z rootdir: /home/runner/work/ratelimiter/ratelimiter
+2025-05-23T17:04:27.8518984Z configfile: pyproject.toml
+2025-05-23T17:04:27.8519453Z plugins: asyncio-0.26.0, anyio-4.9.0, cov-6.1.1
+2025-05-23T17:04:27.8520358Z asyncio: mode=Mode.AUTO, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+2025-05-23T17:04:28.4391049Z collecting ... collected 14 items / 10 deselected / 4 selected
+2025-05-23T17:04:28.4391555Z 
+2025-05-23T17:04:30.5201416Z tests/test_rate_limiter.py::test_high_frequency_sliding_memory[10/second-8-18] FAILED [ 25%]
+2025-05-23T17:04:32.8472339Z tests/test_rate_limiter.py::test_high_frequency_sliding_redis[10/second-8-18] PASSED [ 50%]
+2025-05-23T17:04:34.9038489Z tests/test_rate_limiter.py::test_high_frequency_fixed_memory[10/second-8-16] PASSED [ 75%]
+2025-05-23T17:04:36.9742249Z tests/test_rate_limiter.py::test_high_frequency_fixed_redis[10/second-8-14] PASSED [100%]
+2025-05-23T17:04:36.9742907Z 
+2025-05-23T17:04:36.9743114Z =================================== FAILURES ===================================
+2025-05-23T17:04:36.9743797Z ______________ test_high_frequency_sliding_memory[10/second-8-18] ______________
+2025-05-23T17:04:36.9744198Z 
+2025-05-23T17:04:36.9744450Z rate_limit_value = '10/second', lower = 8, higher = 18
+2025-05-23T17:04:36.9744866Z 
+2025-05-23T17:04:36.9745047Z     @pytest.mark.asyncio
+2025-05-23T17:04:36.9745996Z     @pytest.mark.parametrize("rate_limit_value,lower,higher", [("10/second", 8, 18)])
+2025-05-23T17:04:36.9746854Z     async def test_high_frequency_sliding_memory(
+2025-05-23T17:04:36.9747827Z         rate_limit_value: str, lower: int, higher: int
+2025-05-23T17:04:36.9748391Z     ):
+2025-05-23T17:04:36.9748727Z         """
+2025-05-23T17:04:36.9749201Z         Test sliding window rate limiting with MemoryStorage.
+2025-05-23T17:04:36.9749760Z         Makes requests at 30/second for 5 seconds and verifies proper rate limiting.
+2025-05-23T17:04:36.9750412Z         Note: MemoryStorage has slightly higher tolerance due to in-memory nature.
+2025-05-23T17:04:36.9750885Z         """
+2025-05-23T17:04:36.9751158Z >       await _test_high_frequency_rate_limiting(
+2025-05-23T17:04:36.9751526Z             rate_limit_value,
+2025-05-23T17:04:36.9751819Z             lower,
+2025-05-23T17:04:36.9752060Z             higher,
+2025-05-23T17:04:36.9752304Z             "sliding",
+2025-05-23T17:04:36.9752579Z             lambda: MemoryStorage(),
+2025-05-23T17:04:36.9752914Z             "test_key_sliding_memory",
+2025-05-23T17:04:36.9753258Z             "Test Client Sliding Memory",
+2025-05-23T17:04:36.9753638Z             "/test-high-frequency-sliding-memory",
+2025-05-23T17:04:36.9753989Z         )
+2025-05-23T17:04:36.9754120Z 
+2025-05-23T17:04:36.9754288Z tests/test_rate_limiter.py:192: 
+2025-05-23T17:04:36.9754655Z _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+2025-05-23T17:04:36.9754928Z 
+2025-05-23T17:04:36.9755587Z rate_limit_value = '10/second', lower = 8, higher = 18, strategy = 'sliding'
+2025-05-23T17:04:36.9756289Z get_storage_fn = <function test_high_frequency_sliding_memory.<locals>.<lambda> at 0x7f0f34eafce0>
+2025-05-23T17:04:36.9756879Z test_key = 'test_key_sliding_memory'
+2025-05-23T17:04:36.9757161Z test_key_name = 'Test Client Sliding Memory'
+2025-05-23T17:04:36.9757572Z endpoint_path = '/test-high-frequency-sliding-memory', setup_redis_env = False
+2025-05-23T17:04:36.9757886Z 
+2025-05-23T17:04:36.9758010Z     async def _test_high_frequency_rate_limiting(
+2025-05-23T17:04:36.9758296Z         rate_limit_value: str,
+2025-05-23T17:04:36.9758528Z         lower: int,
+2025-05-23T17:04:36.9758720Z         higher: int,
+2025-05-23T17:04:36.9758919Z         strategy: str,
+2025-05-23T17:04:36.9759137Z         get_storage_fn: Callable[[], Any],
+2025-05-23T17:04:36.9759390Z         test_key: str,
+2025-05-23T17:04:36.9759590Z         test_key_name: str,
+2025-05-23T17:04:36.9759809Z         endpoint_path: str,
+2025-05-23T17:04:36.9760042Z         setup_redis_env: bool = False,
+2025-05-23T17:04:36.9760277Z     ):
+2025-05-23T17:04:36.9760454Z         """
+2025-05-23T17:04:36.9760724Z         Shared implementation for high frequency rate limiting tests.
+2025-05-23T17:04:36.9761046Z     
+2025-05-23T17:04:36.9761220Z         Args:
+2025-05-23T17:04:36.9761472Z             rate_limit_value: The rate limit string (e.g. "10/second")
+2025-05-23T17:04:36.9761842Z             lower: Lower bound for expected requests in any window
+2025-05-23T17:04:36.9762201Z             higher: Upper bound for expected requests in any window
+2025-05-23T17:04:36.9762524Z             strategy: Rate limiting strategy to use
+2025-05-23T17:04:36.9762827Z             get_storage_fn: Function to get storage backend
+2025-05-23T17:04:36.9763140Z             test_key: API key to create for testing
+2025-05-23T17:04:36.9763423Z             test_key_name: Name for the API key
+2025-05-23T17:04:36.9763721Z             endpoint_path: Path for the test endpoint
+2025-05-23T17:04:36.9764081Z             setup_redis_env: Whether to set up Redis environment variables
+2025-05-23T17:04:36.9764393Z         """
+2025-05-23T17:04:36.9764618Z         # Create a new test key specifically for this test
+2025-05-23T17:04:36.9764916Z         API_KEYS[test_key] = {
+2025-05-23T17:04:36.9765145Z             "name": test_key_name,
+2025-05-23T17:04:36.9765719Z             "rate_limit": "5/minute",  # Default rate limit
+2025-05-23T17:04:36.9765991Z         }
+2025-05-23T17:04:36.9766158Z     
+2025-05-23T17:04:36.9766404Z         # Store original environment variables to restore them later
+2025-05-23T17:04:36.9766718Z         original_env = {}
+2025-05-23T17:04:36.9767104Z         if setup_redis_env:
+2025-05-23T17:04:36.9767424Z             for var in ["REDIS_HOST", "REDIS_PORT", "REDIS_DB", "REDIS_URI"]:
+2025-05-23T17:04:36.9767753Z                 if var in os.environ:
+2025-05-23T17:04:36.9768031Z                     original_env[var] = os.environ[var]
+2025-05-23T17:04:36.9768285Z     
+2025-05-23T17:04:36.9768451Z         try:
+2025-05-23T17:04:36.9768645Z             storage = get_storage_fn()
+2025-05-23T17:04:36.9768877Z     
+2025-05-23T17:04:36.9769128Z             # Parameters for the test - reduced for Docker compatibility
+2025-05-23T17:04:36.9769455Z             test_duration = 2  # seconds
+2025-05-23T17:04:36.9769782Z             target_request_rate = 30  # requests per second - less aggressive
+2025-05-23T17:04:36.9770156Z             total_requests = test_duration * target_request_rate
+2025-05-23T17:04:36.9770438Z     
+2025-05-23T17:04:36.9770628Z             @app.get(endpoint_path)
+2025-05-23T17:04:36.9771002Z             @rate_limit(strategy=strategy, rate=rate_limit_value, storage_backend=storage)
+2025-05-23T17:04:36.9771401Z             async def test_endpoint(request: Request):
+2025-05-23T17:04:36.9771687Z                 return {"message": "success"}
+2025-05-23T17:04:36.9771925Z     
+2025-05-23T17:04:36.9772118Z             successful_requests: List[float] = []
+2025-05-23T17:04:36.9772652Z             start_time = time.time()
+2025-05-23T17:04:36.9772880Z     
+2025-05-23T17:04:36.9773131Z             # Use async client for Redis tests to avoid deadlocks in Docker
+2025-05-23T17:04:36.9773473Z             use_async_client = setup_redis_env
+2025-05-23T17:04:36.9773724Z     
+2025-05-23T17:04:36.9773899Z             if use_async_client:
+2025-05-23T17:04:36.9774163Z                 # Import here to avoid circular imports
+2025-05-23T17:04:36.9774435Z                 import httpx
+2025-05-23T17:04:36.9774678Z                 from httpx import ASGITransport
+2025-05-23T17:04:36.9774929Z     
+2025-05-23T17:04:36.9775117Z                 async def make_request():
+2025-05-23T17:04:36.9775562Z                     try:
+2025-05-23T17:04:36.9775797Z                         async with httpx.AsyncClient(
+2025-05-23T17:04:36.9776150Z                             transport=ASGITransport(app=app), base_url="http://test"
+2025-05-23T17:04:36.9776497Z                         ) as async_client:
+2025-05-23T17:04:36.9776781Z                             response = await async_client.get(
+2025-05-23T17:04:36.9777100Z                                 endpoint_path, headers={"X-API-Key": test_key}
+2025-05-23T17:04:36.9777392Z                             )
+2025-05-23T17:04:36.9777638Z                             if response.status_code == 200:
+2025-05-23T17:04:36.9777944Z                                 successful_requests.append(time.time())
+2025-05-23T17:04:36.9778230Z                     except Exception:
+2025-05-23T17:04:36.9778475Z                         pass
+2025-05-23T17:04:36.9778688Z             else:
+2025-05-23T17:04:36.9778868Z     
+2025-05-23T17:04:36.9779061Z                 async def make_request():
+2025-05-23T17:04:36.9779304Z                     try:
+2025-05-23T17:04:36.9779528Z                         response = client.get(
+2025-05-23T17:04:36.9779823Z                             endpoint_path, headers={"X-API-Key": test_key}
+2025-05-23T17:04:36.9780113Z                         )
+2025-05-23T17:04:36.9780345Z                         if response.status_code == 200:
+2025-05-23T17:04:36.9780652Z                             successful_requests.append(time.time())
+2025-05-23T17:04:36.9780940Z                     except Exception:
+2025-05-23T17:04:36.9781178Z                         pass
+2025-05-23T17:04:36.9781384Z     
+2025-05-23T17:04:36.9781635Z             # Run requests with a smaller batch size to avoid timeout issues
+2025-05-23T17:04:36.9781957Z             batch_size = 10
+2025-05-23T17:04:36.9782214Z             for i in range(0, total_requests, batch_size):
+2025-05-23T17:04:36.9782487Z                 tasks = []
+2025-05-23T17:04:36.9783065Z                 for _ in range(min(batch_size, total_requests - i)):
+2025-05-23T17:04:36.9783440Z                     tasks.append(asyncio.create_task(make_request()))
+2025-05-23T17:04:36.9783779Z                     await asyncio.sleep(1 / target_request_rate)
+2025-05-23T17:04:36.9784048Z     
+2025-05-23T17:04:36.9784241Z                 await asyncio.gather(*tasks)
+2025-05-23T17:04:36.9784492Z     
+2025-05-23T17:04:36.9784670Z             end_time = time.time()
+2025-05-23T17:04:36.9784900Z     
+2025-05-23T17:04:36.9785099Z             actual_duration = end_time - start_time
+2025-05-23T17:04:36.9785680Z             actual_rate = len(successful_requests) / actual_duration
+2025-05-23T17:04:36.9785982Z     
+2025-05-23T17:04:36.9786160Z             window_rates = []
+2025-05-23T17:04:36.9786409Z             for i in range(int(actual_duration)):
+2025-05-23T17:04:36.9786697Z                 window_start = start_time + i
+2025-05-23T17:04:36.9786965Z                 window_end = window_start + 1
+2025-05-23T17:04:36.9787224Z                 window_requests = sum(
+2025-05-23T17:04:36.9787553Z                     1 for t in successful_requests if window_start <= t < window_end
+2025-05-23T17:04:36.9787865Z                 )
+2025-05-23T17:04:36.9788082Z                 window_rates.append(window_requests)
+2025-05-23T17:04:36.9788334Z     
+2025-05-23T17:04:36.9788561Z             expected_rate = int(rate_limit_value.split("/")[0])
+2025-05-23T17:04:36.9788978Z     
+2025-05-23T17:04:36.9789166Z             # Verify rate limiting is working
+2025-05-23T17:04:36.9789453Z             total_successful = len(successful_requests)
+2025-05-23T17:04:36.9789803Z             assert total_successful > 0, "No successful requests were made"
+2025-05-23T17:04:36.9790225Z >           assert total_successful <= expected_rate * actual_duration * 1.2, (
+2025-05-23T17:04:36.9790694Z                 f"Got {total_successful} successful requests, which exceeds the expected limit of "
+2025-05-23T17:04:36.9791199Z                 f"{expected_rate * actual_duration * 1.2} over {actual_duration:.1f} seconds"
+2025-05-23T17:04:36.9791549Z             )
+2025-05-23T17:04:36.9791962Z E           AssertionError: Got 25 successful requests, which exceeds the expected limit of 24.431333541870117 over 2.0 seconds
+2025-05-23T17:04:36.9792459Z E           assert 25 <= ((10 * 2.0359444618225098) * 1.2)
+2025-05-23T17:04:36.9792653Z 
+2025-05-23T17:04:36.9792775Z tests/test_rate_limiter.py:418: AssertionError
+2025-05-23T17:04:36.9793086Z ================================ tests coverage ================================
+2025-05-23T17:04:36.9793477Z _______________ coverage: platform linux, python 3.11.12-final-0 _______________
+2025-05-23T17:04:36.9793734Z 
+2025-05-23T17:04:36.9793864Z Name                                                   Stmts   Miss  Cover   Missing
+2025-05-23T17:04:36.9794219Z ------------------------------------------------------------------------------------
+2025-05-23T17:04:36.9794632Z src/propcorn_ratelimiter/__init__.py                       0      0   100%
+2025-05-23T17:04:36.9795086Z src/propcorn_ratelimiter/main.py                          34     34     0%   1-86
+2025-05-23T17:04:36.9795858Z src/propcorn_ratelimiter/rate_limiter/limiter.py          58      9    84%   41, 48-49, 65, 71, 92, 106, 119-120
+2025-05-23T17:04:36.9796392Z src/propcorn_ratelimiter/weather/__init__.py               0      0   100%
+2025-05-23T17:04:36.9796872Z src/propcorn_ratelimiter/weather/geoip_enrichment.py       8      8     0%   3-25
+2025-05-23T17:04:36.9797374Z src/propcorn_ratelimiter/weather/weather_request.py        9      9     0%   3-34
+2025-05-23T17:04:36.9797805Z ------------------------------------------------------------------------------------
+2025-05-23T17:04:36.9798139Z TOTAL                                                    109     60    45%
+2025-05-23T17:04:36.9798454Z =========================== short test summary info ============================
+2025-05-23T17:04:36.9799384Z FAILED tests/test_rate_limiter.py::test_high_frequency_sliding_memory[10/second-8-18] - AssertionError: Got 25 successful requests, which exceeds the expected limit of 24.431333541870117 over 2.0 seconds
+2025-05-23T17:04:36.9800118Z assert 25 <= ((10 * 2.0359444618225098) * 1.2)
+2025-05-23T17:04:36.9800442Z ================== 1 failed, 3 passed, 10 deselected in 9.13s ==================
+2025-05-23T17:04:37.0865665Z ⚠️ Performance tests failed (expected in CI environments)
+2025-05-23T17:04:37.0901295Z ##[group]Run # Redis async tests often fail in CI due to networking/timing
+2025-05-23T17:04:37.0902198Z [36;1m# Redis async tests often fail in CI due to networking/timing[0m
+2025-05-23T17:04:37.0902889Z [36;1mecho "🔬 Running Redis Async Analysis..." [0m
+2025-05-23T17:04:37.0904006Z [36;1mpoetry run pytest tests/test_rate_limiter_async.py tests/test_redis_debug.py -v || echo "⚠️ Redis async tests failed (expected in CI)"[0m
+2025-05-23T17:04:37.0955996Z shell: /usr/bin/bash -e {0}
+2025-05-23T17:04:37.0956245Z env:
+2025-05-23T17:04:37.0956444Z   PYTHON_VERSION: 3.11
+2025-05-23T17:04:37.0956682Z   POETRY_VERSION: 1.8.0
+2025-05-23T17:04:37.0956970Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:37.0957409Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.12/x64/lib/pkgconfig
+2025-05-23T17:04:37.0957838Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:37.0958253Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:37.0958846Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:37.0959218Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.12/x64/lib
+2025-05-23T17:04:37.0959535Z   VENV: .venv/bin/activate
+2025-05-23T17:04:37.0959759Z ##[endgroup]
+2025-05-23T17:04:37.1040777Z 🔬 Running Redis Async Analysis...
+2025-05-23T17:04:37.7483866Z /home/runner/work/ratelimiter/ratelimiter/.venv/lib/python3.11/site-packages/pytest_asyncio/plugin.py:217: PytestDeprecationWarning: The configuration option "asyncio_default_fixture_loop_scope" is unset.
+2025-05-23T17:04:37.7486674Z The event loop scope for asynchronous fixtures will default to the fixture caching scope. Future versions of pytest-asyncio will default the loop scope for asynchronous fixtures to function scope. Set the default fixture loop scope explicitly in order to avoid unexpected behavior in the future. Valid fixture loop scopes are: "function", "class", "module", "package", "session"
+2025-05-23T17:04:37.7488255Z 
+2025-05-23T17:04:37.7488579Z   warnings.warn(PytestDeprecationWarning(_DEFAULT_FIXTURE_LOOP_SCOPE_UNSET))
+2025-05-23T17:04:37.7715923Z ============================= test session starts ==============================
+2025-05-23T17:04:37.7716902Z platform linux -- Python 3.11.12, pytest-8.3.5, pluggy-1.6.0 -- /home/runner/work/ratelimiter/ratelimiter/.venv/bin/python
+2025-05-23T17:04:37.7717742Z cachedir: .pytest_cache
+2025-05-23T17:04:37.7718190Z rootdir: /home/runner/work/ratelimiter/ratelimiter
+2025-05-23T17:04:37.7718711Z configfile: pyproject.toml
+2025-05-23T17:04:37.7719164Z plugins: asyncio-0.26.0, anyio-4.9.0, cov-6.1.1
+2025-05-23T17:04:37.7719980Z asyncio: mode=Mode.AUTO, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+2025-05-23T17:04:38.3033275Z collecting ... collected 7 items
+2025-05-23T17:04:38.3033558Z 
+2025-05-23T17:04:39.9208929Z tests/test_rate_limiter_async.py::test_high_frequency_sliding_redis_async FAILED [ 14%]
+2025-05-23T17:04:41.1633046Z tests/test_rate_limiter_async.py::test_high_frequency_fixed_redis_async FAILED [ 28%]
+2025-05-23T17:04:41.1695010Z tests/test_rate_limiter_async.py::test_redis_connection_via_app PASSED   [ 42%]
+2025-05-23T17:04:41.2272891Z tests/test_redis_debug.py::test_redis_connection PASSED                  [ 57%]
+2025-05-23T17:04:41.2709686Z tests/test_redis_debug.py::test_redis_connection_basic FAILED            [ 71%]
+2025-05-23T17:04:41.8894269Z tests/test_redis_debug.py::test_redis_basic_operations FAILED            [ 85%]
+2025-05-23T17:04:42.4313540Z tests/test_redis_debug.py::test_redis_concurrent_operations FAILED       [100%]
+2025-05-23T17:04:42.4314215Z 
+2025-05-23T17:04:42.4314446Z =================================== FAILURES ===================================
+2025-05-23T17:04:42.4315193Z ___________________ test_high_frequency_sliding_redis_async ____________________
+2025-05-23T17:04:42.4315987Z 
+2025-05-23T17:04:42.4316182Z     @pytest.mark.asyncio
+2025-05-23T17:04:42.4317146Z     async def test_high_frequency_sliding_redis_async():
+2025-05-23T17:04:42.4317767Z         """
+2025-05-23T17:04:42.4318365Z         Test sliding window rate limiting with RedisStorage using async HTTP client.
+2025-05-23T17:04:42.4319293Z         This avoids the deadlock issues with TestClient + async Redis operations.
+2025-05-23T17:04:42.4319976Z         """
+2025-05-23T17:04:42.4320316Z         # Add test key
+2025-05-23T17:04:42.4320754Z         test_key = "test_key_sliding_redis_async"
+2025-05-23T17:04:42.4321283Z         API_KEYS[test_key] = {
+2025-05-23T17:04:42.4321788Z             "name": "Test Client Sliding Redis Async",
+2025-05-23T17:04:42.4322325Z             "rate_limit": "5/minute",
+2025-05-23T17:04:42.4322793Z         }
+2025-05-23T17:04:42.4323110Z     
+2025-05-23T17:04:42.4323418Z         try:
+2025-05-23T17:04:42.4323800Z             async with httpx.AsyncClient(
+2025-05-23T17:04:42.4324433Z                 transport=ASGITransport(app=app), base_url="http://test"
+2025-05-23T17:04:42.4325060Z             ) as client:
+2025-05-23T17:04:42.4326034Z                 # Test basic rate limiting functionality
+2025-05-23T17:04:42.4326579Z                 storage = get_redis_storage()
+2025-05-23T17:04:42.4327064Z     
+2025-05-23T17:04:42.4327414Z                 # Clear any existing data
+2025-05-23T17:04:42.4327897Z                 await storage.clear(test_key)
+2025-05-23T17:04:42.4328331Z     
+2025-05-23T17:04:42.4328706Z                 # Make requests and count successes
+2025-05-23T17:04:42.4329221Z                 successful_requests = 0
+2025-05-23T17:04:42.4329708Z                 rate_limited_requests = 0
+2025-05-23T17:04:42.4330168Z     
+2025-05-23T17:04:42.4330661Z                 # Test with a 10/second rate limit by making 15 requests quickly
+2025-05-23T17:04:42.4331240Z                 for i in range(15):
+2025-05-23T17:04:42.4331875Z                     response = await client.get("/weather", headers={"X-API-Key": test_key})
+2025-05-23T17:04:42.4332459Z     
+2025-05-23T17:04:42.4332785Z                     if response.status_code == 200:
+2025-05-23T17:04:42.4333277Z                         successful_requests += 1
+2025-05-23T17:04:42.4333747Z                     elif response.status_code == 429:
+2025-05-23T17:04:42.4334197Z                         rate_limited_requests += 1
+2025-05-23T17:04:42.4334595Z     
+2025-05-23T17:04:42.4334921Z                     # Small delay to avoid overwhelming
+2025-05-23T17:04:42.4335562Z                     await asyncio.sleep(0.05)
+2025-05-23T17:04:42.4335963Z     
+2025-05-23T17:04:42.4336286Z                 print(f"\nAsync Redis Test Results:")
+2025-05-23T17:04:42.4336799Z                 print(f"Successful requests: {successful_requests}")
+2025-05-23T17:04:42.4337370Z                 print(f"Rate limited requests: {rate_limited_requests}")
+2025-05-23T17:04:42.4338025Z                 print(f"Total requests: {successful_requests + rate_limited_requests}")
+2025-05-23T17:04:42.4338560Z     
+2025-05-23T17:04:42.4338875Z                 # Verify that rate limiting is working
+2025-05-23T17:04:42.4339455Z >               assert successful_requests > 0, "Should have some successful requests"
+2025-05-23T17:04:42.4340172Z E               AssertionError: Should have some successful requests
+2025-05-23T17:04:42.4340662Z E               assert 0 > 0
+2025-05-23T17:04:42.4340884Z 
+2025-05-23T17:04:42.4341094Z tests/test_rate_limiter_async.py:58: AssertionError
+2025-05-23T17:04:42.4341663Z ----------------------------- Captured stdout call -----------------------------
+2025-05-23T17:04:42.4342050Z 
+2025-05-23T17:04:42.4342192Z Async Redis Test Results:
+2025-05-23T17:04:42.4342555Z Successful requests: 0
+2025-05-23T17:04:42.4342895Z Rate limited requests: 10
+2025-05-23T17:04:42.4343238Z Total requests: 10
+2025-05-23T17:04:42.4343694Z ____________________ test_high_frequency_fixed_redis_async _____________________
+2025-05-23T17:04:42.4344104Z 
+2025-05-23T17:04:42.4344255Z     @pytest.mark.asyncio
+2025-05-23T17:04:42.4344685Z     async def test_high_frequency_fixed_redis_async():
+2025-05-23T17:04:42.4345113Z         """
+2025-05-23T17:04:42.4346020Z         Test fixed window rate limiting with RedisStorage using async HTTP client.
+2025-05-23T17:04:42.4346593Z         """
+2025-05-23T17:04:42.4346883Z         # Add test key
+2025-05-23T17:04:42.4347253Z         test_key = "test_key_fixed_redis_async"
+2025-05-23T17:04:42.4347686Z         API_KEYS[test_key] = {
+2025-05-23T17:04:42.4348086Z             "name": "Test Client Fixed Redis Async",
+2025-05-23T17:04:42.4348520Z             "rate_limit": "5/minute",
+2025-05-23T17:04:42.4348891Z         }
+2025-05-23T17:04:42.4349164Z     
+2025-05-23T17:04:42.4349437Z         try:
+2025-05-23T17:04:42.4349760Z             async with httpx.AsyncClient(
+2025-05-23T17:04:42.4350284Z                 transport=ASGITransport(app=app), base_url="http://test"
+2025-05-23T17:04:42.4350792Z             ) as client:
+2025-05-23T17:04:42.4351176Z                 # Test basic rate limiting functionality
+2025-05-23T17:04:42.4367904Z                 storage = get_redis_storage()
+2025-05-23T17:04:42.4368389Z     
+2025-05-23T17:04:42.4368961Z                 # Clear any existing data
+2025-05-23T17:04:42.4369418Z                 await storage.clear(test_key)
+2025-05-23T17:04:42.4369975Z     
+2025-05-23T17:04:42.4370313Z                 # Make requests and count successes
+2025-05-23T17:04:42.4370762Z                 successful_requests = 0
+2025-05-23T17:04:42.4371183Z                 rate_limited_requests = 0
+2025-05-23T17:04:42.4371582Z     
+2025-05-23T17:04:42.4371980Z                 # Test with a 10/second rate limit by making 15 requests quickly
+2025-05-23T17:04:42.4372487Z                 for i in range(15):
+2025-05-23T17:04:42.4373039Z                     response = await client.get("/weather", headers={"X-API-Key": test_key})
+2025-05-23T17:04:42.4373596Z     
+2025-05-23T17:04:42.4373916Z                     if response.status_code == 200:
+2025-05-23T17:04:42.4374374Z                         successful_requests += 1
+2025-05-23T17:04:42.4374840Z                     elif response.status_code == 429:
+2025-05-23T17:04:42.4375468Z                         rate_limited_requests += 1
+2025-05-23T17:04:42.4375879Z     
+2025-05-23T17:04:42.4376203Z                     # Small delay
+2025-05-23T17:04:42.4376605Z                     await asyncio.sleep(0.05)
+2025-05-23T17:04:42.4376995Z     
+2025-05-23T17:04:42.4377327Z                 print(f"\nAsync Redis Fixed Test Results:")
+2025-05-23T17:04:42.4377857Z                 print(f"Successful requests: {successful_requests}")
+2025-05-23T17:04:42.4378418Z                 print(f"Rate limited requests: {rate_limited_requests}")
+2025-05-23T17:04:42.4379058Z                 print(f"Total requests: {successful_requests + rate_limited_requests}")
+2025-05-23T17:04:42.4379582Z     
+2025-05-23T17:04:42.4379895Z                 # Verify that rate limiting is working
+2025-05-23T17:04:42.4380466Z >               assert successful_requests > 0, "Should have some successful requests"
+2025-05-23T17:04:42.4381142Z E               AssertionError: Should have some successful requests
+2025-05-23T17:04:42.4381639Z E               assert 0 > 0
+2025-05-23T17:04:42.4381867Z 
+2025-05-23T17:04:42.4382073Z tests/test_rate_limiter_async.py:114: AssertionError
+2025-05-23T17:04:42.4382645Z ----------------------------- Captured stdout call -----------------------------
+2025-05-23T17:04:42.4383024Z 
+2025-05-23T17:04:42.4383180Z Async Redis Fixed Test Results:
+2025-05-23T17:04:42.4383563Z Successful requests: 0
+2025-05-23T17:04:42.4383903Z Rate limited requests: 10
+2025-05-23T17:04:42.4384257Z Total requests: 10
+2025-05-23T17:04:42.4384700Z _________________________ test_redis_connection_basic __________________________
+2025-05-23T17:04:42.4385083Z 
+2025-05-23T17:04:42.4385226Z     @pytest.mark.asyncio
+2025-05-23T17:04:42.4385771Z     async def test_redis_connection_basic():
+2025-05-23T17:04:42.4386288Z         """Basic test to check if we can connect to Redis at all"""
+2025-05-23T17:04:42.4386762Z         try:
+2025-05-23T17:04:42.4387073Z             storage = get_redis_storage()
+2025-05-23T17:04:42.4387694Z             print(f"Storage type: {type(storage)}")
+2025-05-23T17:04:42.4388256Z             print(f"Storage URI: {getattr(storage, '_uri', 'unknown')}")
+2025-05-23T17:04:42.4388772Z             result = await storage.check()
+2025-05-23T17:04:42.4389211Z             print(f"Redis check result: {result}")
+2025-05-23T17:04:42.4389647Z >           assert result is True
+2025-05-23T17:04:42.4390026Z E           assert False is True
+2025-05-23T17:04:42.4390268Z 
+2025-05-23T17:04:42.4390443Z tests/test_redis_debug.py:60: AssertionError
+2025-05-23T17:04:42.4390983Z ----------------------------- Captured stdout call -----------------------------
+2025-05-23T17:04:42.4391613Z Storage type: <class 'limits.aio.storage.redis.RedisStorage'>
+2025-05-23T17:04:42.4392126Z Storage URI: unknown
+2025-05-23T17:04:42.4392459Z Redis check result: False
+2025-05-23T17:04:42.4392852Z Redis connection failed: assert False is True
+2025-05-23T17:04:42.4393422Z _________________________ test_redis_basic_operations __________________________
+2025-05-23T17:04:42.4393970Z 
+2025-05-23T17:04:42.4394150Z self = Connection<host=redis,port=6379,db=0>
+2025-05-23T17:04:42.4394434Z 
+2025-05-23T17:04:42.4394591Z     async def connect(self) -> None:
+2025-05-23T17:04:42.4394967Z         """
+2025-05-23T17:04:42.4395471Z         Establish a connnection to the redis server
+2025-05-23T17:04:42.4395953Z         and initiate any post connect callbacks
+2025-05-23T17:04:42.4396359Z         """
+2025-05-23T17:04:42.4396668Z         self._connection_error = None
+2025-05-23T17:04:42.4397039Z         try:
+2025-05-23T17:04:42.4397344Z >           await self._connect()
+2025-05-23T17:04:42.4397593Z 
+2025-05-23T17:04:42.4397862Z .venv/lib/python3.11/site-packages/coredis/connection.py:287: 
+2025-05-23T17:04:42.4398445Z _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+2025-05-23T17:04:42.4399065Z .venv/lib/python3.11/site-packages/coredis/connection.py:781: in _connect
+2025-05-23T17:04:42.4399644Z     transport, _ = await connection
+2025-05-23T17:04:42.4400378Z /opt/hostedtoolcache/Python/3.11.12/x64/lib/python3.11/asyncio/base_events.py:1046: in create_connection
+2025-05-23T17:04:42.4401129Z     infos = await self._ensure_resolved(
+2025-05-23T17:04:42.4401844Z /opt/hostedtoolcache/Python/3.11.12/x64/lib/python3.11/asyncio/base_events.py:1420: in _ensure_resolved
+2025-05-23T17:04:42.4402688Z     return await loop.getaddrinfo(host, port, family=family, type=type,
+2025-05-23T17:04:42.4403511Z /opt/hostedtoolcache/Python/3.11.12/x64/lib/python3.11/asyncio/base_events.py:868: in getaddrinfo
+2025-05-23T17:04:42.4404212Z     return await self.run_in_executor(
+2025-05-23T17:04:42.4404908Z /opt/hostedtoolcache/Python/3.11.12/x64/lib/python3.11/concurrent/futures/thread.py:58: in run
+2025-05-23T17:04:42.4405854Z     result = self.fn(*self.args, **self.kwargs)
+2025-05-23T17:04:42.4406332Z _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+2025-05-23T17:04:42.4406644Z 
+2025-05-23T17:04:42.4407073Z host = 'redis', port = 6379, family = 0, type = <SocketKind.SOCK_STREAM: 1>
+2025-05-23T17:04:42.4407627Z proto = 0, flags = 0
+2025-05-23T17:04:42.4407835Z 
+2025-05-23T17:04:42.4408094Z     def getaddrinfo(host, port, family=0, type=0, proto=0, flags=0):
+2025-05-23T17:04:42.4408698Z         """Resolve host and port into list of address info entries.
+2025-05-23T17:04:42.4409166Z     
+2025-05-23T17:04:42.4409623Z         Translate the host/port argument into a sequence of 5-tuples that contain
+2025-05-23T17:04:42.4410356Z         all the necessary arguments for creating a socket connected to that service.
+2025-05-23T17:04:42.4411061Z         host is a domain name, a string representation of an IPv4/v6 address or
+2025-05-23T17:04:42.4411750Z         None. port is a string service name such as 'http', a numeric port number or
+2025-05-23T17:04:42.4412427Z         None. By passing None as the value of host and port, you can pass NULL to
+2025-05-23T17:04:42.4412963Z         the underlying C API.
+2025-05-23T17:04:42.4413313Z     
+2025-05-23T17:04:42.4414092Z         The family, type and proto arguments can be optionally specified in order to
+2025-05-23T17:04:42.4414909Z         narrow the list of addresses returned. Passing zero as a value for each of
+2025-05-23T17:04:42.4415853Z         these arguments selects the full range of results.
+2025-05-23T17:04:42.4416300Z         """
+2025-05-23T17:04:42.4416740Z         # We override this function since we want to translate the numeric family
+2025-05-23T17:04:42.4417312Z         # and socket type values to enum constants.
+2025-05-23T17:04:42.4417729Z         addrlist = []
+2025-05-23T17:04:42.4418203Z >       for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+2025-05-23T17:04:42.4418896Z E       socket.gaierror: [Errno -3] Temporary failure in name resolution
+2025-05-23T17:04:42.4419304Z 
+2025-05-23T17:04:42.4419632Z /opt/hostedtoolcache/Python/3.11.12/x64/lib/python3.11/socket.py:974: gaierror
+2025-05-23T17:04:42.4420096Z 
+2025-05-23T17:04:42.4420451Z The above exception was the direct cause of the following exception:
+2025-05-23T17:04:42.4421019Z 
+2025-05-23T17:04:42.4421178Z     @pytest.mark.asyncio
+2025-05-23T17:04:42.4421567Z     async def test_redis_basic_operations():
+2025-05-23T17:04:42.4422014Z         """Test basic Redis operations"""
+2025-05-23T17:04:42.4422410Z         try:
+2025-05-23T17:04:42.4422719Z             storage = get_redis_storage()
+2025-05-23T17:04:42.4423102Z     
+2025-05-23T17:04:42.4423399Z             # Test basic increment
+2025-05-23T17:04:42.4423812Z             print("Testing basic increment...")
+2025-05-23T17:04:42.4424279Z >           result = await storage.incr("test_key", 60, 1)
+2025-05-23T17:04:42.4424585Z 
+2025-05-23T17:04:42.4424735Z tests/test_redis_debug.py:74: 
+2025-05-23T17:04:42.4425157Z _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+2025-05-23T17:04:42.4425977Z .venv/lib/python3.11/site-packages/limits/aio/storage/base.py:28: in inner
+2025-05-23T17:04:42.4426554Z     return await fn(*args, **kwargs)
+2025-05-23T17:04:42.4427195Z .venv/lib/python3.11/site-packages/limits/aio/storage/redis/__init__.py:163: in incr
+2025-05-23T17:04:42.4427894Z     return await self.bridge.incr(key, expiry, amount)
+2025-05-23T17:04:42.4428573Z .venv/lib/python3.11/site-packages/limits/aio/storage/redis/coredis.py:117: in incr
+2025-05-23T17:04:42.4429330Z     if (value := await self.get_connection().incrby(key, amount)) == amount:
+2025-05-23T17:04:42.4430077Z .venv/lib/python3.11/site-packages/coredis/commands/_wrappers.py:206: in wrapped
+2025-05-23T17:04:42.4430803Z     async with command_cache(callable, *args, **kwargs) as response:
+2025-05-23T17:04:42.4431540Z /opt/hostedtoolcache/Python/3.11.12/x64/lib/python3.11/contextlib.py:210: in __aenter__
+2025-05-23T17:04:42.4432188Z     return await anext(self.gen)
+2025-05-23T17:04:42.4432764Z .venv/lib/python3.11/site-packages/coredis/commands/_wrappers.py:103: in __call__
+2025-05-23T17:04:42.4433379Z     yield await func(*args, **kwargs)
+2025-05-23T17:04:42.4433947Z .venv/lib/python3.11/site-packages/coredis/commands/core.py:349: in incrby
+2025-05-23T17:04:42.4434535Z     return await self.execute_command(
+2025-05-23T17:04:42.4435152Z .venv/lib/python3.11/site-packages/coredis/client/basic.py:945: in execute_command
+2025-05-23T17:04:42.4435997Z     return await self.retry_policy.call_with_retries(
+2025-05-23T17:04:42.4436630Z .venv/lib/python3.11/site-packages/coredis/retry.py:71: in call_with_retries
+2025-05-23T17:04:42.4437188Z     raise last_error
+2025-05-23T17:04:42.4437695Z .venv/lib/python3.11/site-packages/coredis/retry.py:55: in call_with_retries
+2025-05-23T17:04:42.4438269Z     return await func()
+2025-05-23T17:04:42.4438812Z .venv/lib/python3.11/site-packages/coredis/client/basic.py:974: in _execute_command
+2025-05-23T17:04:42.4439464Z     request = await connection.create_request(
+2025-05-23T17:04:42.4440142Z .venv/lib/python3.11/site-packages/coredis/connection.py:610: in create_request
+2025-05-23T17:04:42.4440726Z     await self.connect()
+2025-05-23T17:04:42.4441290Z _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+2025-05-23T17:04:42.4441632Z 
+2025-05-23T17:04:42.4441809Z self = Connection<host=redis,port=6379,db=0>
+2025-05-23T17:04:42.4442100Z 
+2025-05-23T17:04:42.4442256Z     async def connect(self) -> None:
+2025-05-23T17:04:42.4442628Z         """
+2025-05-23T17:04:42.4442961Z         Establish a connnection to the redis server
+2025-05-23T17:04:42.4443428Z         and initiate any post connect callbacks
+2025-05-23T17:04:42.4443836Z         """
+2025-05-23T17:04:42.4444138Z         self._connection_error = None
+2025-05-23T17:04:42.4444521Z         try:
+2025-05-23T17:04:42.4444826Z             await self._connect()
+2025-05-23T17:04:42.4445425Z         except (asyncio.CancelledError, RedisError) as err:
+2025-05-23T17:04:42.4445928Z             self._connection_error = err
+2025-05-23T17:04:42.4446323Z             raise
+2025-05-23T17:04:42.4446643Z         except Exception as err:
+2025-05-23T17:04:42.4447030Z             self._connection_error = err
+2025-05-23T17:04:42.4447653Z >           raise ConnectionError(str(err)) from err
+2025-05-23T17:04:42.4448338Z E           coredis.exceptions.ConnectionError: [Errno -3] Temporary failure in name resolution
+2025-05-23T17:04:42.4448857Z 
+2025-05-23T17:04:42.4449183Z .venv/lib/python3.11/site-packages/coredis/connection.py:293: ConnectionError
+2025-05-23T17:04:42.4449882Z ----------------------------- Captured stdout call -----------------------------
+2025-05-23T17:04:42.4450398Z Testing basic increment...
+2025-05-23T17:04:42.4450942Z Redis basic operations failed: [Errno -3] Temporary failure in name resolution
+2025-05-23T17:04:42.4451646Z _______________________ test_redis_concurrent_operations _______________________
+2025-05-23T17:04:42.4452041Z 
+2025-05-23T17:04:42.4452218Z self = Connection<host=redis,port=6379,db=0>
+2025-05-23T17:04:42.4452499Z 
+2025-05-23T17:04:42.4452651Z     async def connect(self) -> None:
+2025-05-23T17:04:42.4453021Z         """
+2025-05-23T17:04:42.4453359Z         Establish a connnection to the redis server
+2025-05-23T17:04:42.4453841Z         and initiate any post connect callbacks
+2025-05-23T17:04:42.4454258Z         """
+2025-05-23T17:04:42.4454567Z         self._connection_error = None
+2025-05-23T17:04:42.4454939Z         try:
+2025-05-23T17:04:42.4455390Z >           await self._connect()
+2025-05-23T17:04:42.4455651Z 
+2025-05-23T17:04:42.4455913Z .venv/lib/python3.11/site-packages/coredis/connection.py:287: 
+2025-05-23T17:04:42.4456482Z _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+2025-05-23T17:04:42.4457096Z .venv/lib/python3.11/site-packages/coredis/connection.py:781: in _connect
+2025-05-23T17:04:42.4457673Z     transport, _ = await connection
+2025-05-23T17:04:42.4458394Z /opt/hostedtoolcache/Python/3.11.12/x64/lib/python3.11/asyncio/base_events.py:1046: in create_connection
+2025-05-23T17:04:42.4459129Z     infos = await self._ensure_resolved(
+2025-05-23T17:04:42.4459849Z /opt/hostedtoolcache/Python/3.11.12/x64/lib/python3.11/asyncio/base_events.py:1420: in _ensure_resolved
+2025-05-23T17:04:42.4460725Z     return await loop.getaddrinfo(host, port, family=family, type=type,
+2025-05-23T17:04:42.4461536Z /opt/hostedtoolcache/Python/3.11.12/x64/lib/python3.11/asyncio/base_events.py:868: in getaddrinfo
+2025-05-23T17:04:42.4462232Z     return await self.run_in_executor(
+2025-05-23T17:04:42.4462903Z /opt/hostedtoolcache/Python/3.11.12/x64/lib/python3.11/concurrent/futures/thread.py:58: in run
+2025-05-23T17:04:42.4463605Z     result = self.fn(*self.args, **self.kwargs)
+2025-05-23T17:04:42.4464086Z _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+2025-05-23T17:04:42.4464401Z 
+2025-05-23T17:04:42.4464673Z host = 'redis', port = 6379, family = 0, type = <SocketKind.SOCK_STREAM: 1>
+2025-05-23T17:04:42.4465193Z proto = 0, flags = 0
+2025-05-23T17:04:42.4465544Z 
+2025-05-23T17:04:42.4465801Z     def getaddrinfo(host, port, family=0, type=0, proto=0, flags=0):
+2025-05-23T17:04:42.4466407Z         """Resolve host and port into list of address info entries.
+2025-05-23T17:04:42.4467102Z     
+2025-05-23T17:04:42.4467565Z         Translate the host/port argument into a sequence of 5-tuples that contain
+2025-05-23T17:04:42.4468327Z         all the necessary arguments for creating a socket connected to that service.
+2025-05-23T17:04:42.4469072Z         host is a domain name, a string representation of an IPv4/v6 address or
+2025-05-23T17:04:42.4469808Z         None. port is a string service name such as 'http', a numeric port number or
+2025-05-23T17:04:42.4470498Z         None. By passing None as the value of host and port, you can pass NULL to
+2025-05-23T17:04:42.4471052Z         the underlying C API.
+2025-05-23T17:04:42.4471395Z     
+2025-05-23T17:04:42.4471842Z         The family, type and proto arguments can be optionally specified in order to
+2025-05-23T17:04:42.4472583Z         narrow the list of addresses returned. Passing zero as a value for each of
+2025-05-23T17:04:42.4473201Z         these arguments selects the full range of results.
+2025-05-23T17:04:42.4473816Z         """
+2025-05-23T17:04:42.4474290Z         # We override this function since we want to translate the numeric family
+2025-05-23T17:04:42.4474875Z         # and socket type values to enum constants.
+2025-05-23T17:04:42.4475467Z         addrlist = []
+2025-05-23T17:04:42.4475955Z >       for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+2025-05-23T17:04:42.4476647Z E       socket.gaierror: [Errno -3] Temporary failure in name resolution
+2025-05-23T17:04:42.4477044Z 
+2025-05-23T17:04:42.4477370Z /opt/hostedtoolcache/Python/3.11.12/x64/lib/python3.11/socket.py:974: gaierror
+2025-05-23T17:04:42.4477829Z 
+2025-05-23T17:04:42.4478102Z The above exception was the direct cause of the following exception:
+2025-05-23T17:04:42.4478510Z 
+2025-05-23T17:04:42.4478656Z     @pytest.mark.asyncio
+2025-05-23T17:04:42.4479063Z     async def test_redis_concurrent_operations():
+2025-05-23T17:04:42.4479644Z         """Test concurrent Redis operations to see if there's a deadlock"""
+2025-05-23T17:04:42.4480171Z         try:
+2025-05-23T17:04:42.4480495Z             storage = get_redis_storage()
+2025-05-23T17:04:42.4480887Z     
+2025-05-23T17:04:42.4481205Z             async def increment_task(task_id):
+2025-05-23T17:04:42.4481648Z                 try:
+2025-05-23T17:04:42.4482060Z                     print(f"Task {task_id} starting...")
+2025-05-23T17:04:42.4482638Z                     result = await storage.incr(f"concurrent_test_{task_id}", 60, 1)
+2025-05-23T17:04:42.4483249Z                     print(f"Task {task_id} completed with result: {result}")
+2025-05-23T17:04:42.4483733Z                     return result
+2025-05-23T17:04:42.4484122Z                 except Exception as e:
+2025-05-23T17:04:42.4484585Z                     print(f"Task {task_id} failed: {e}")
+2025-05-23T17:04:42.4485015Z                     raise
+2025-05-23T17:04:42.4485481Z     
+2025-05-23T17:04:42.4485807Z             print("Starting 5 concurrent tasks...")
+2025-05-23T17:04:42.4486277Z             tasks = [increment_task(i) for i in range(5)]
+2025-05-23T17:04:42.4486713Z     
+2025-05-23T17:04:42.4487037Z             # Use asyncio.wait_for to prevent hanging
+2025-05-23T17:04:42.4487633Z >           results = await asyncio.wait_for(asyncio.gather(*tasks), timeout=10.0)
+2025-05-23T17:04:42.4488057Z 
+2025-05-23T17:04:42.4488208Z tests/test_redis_debug.py:113: 
+2025-05-23T17:04:42.4488632Z _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+2025-05-23T17:04:42.4489333Z /opt/hostedtoolcache/Python/3.11.12/x64/lib/python3.11/asyncio/tasks.py:489: in wait_for
+2025-05-23T17:04:42.4489964Z     return fut.result()
+2025-05-23T17:04:42.4490382Z tests/test_redis_debug.py:102: in increment_task
+2025-05-23T17:04:42.4490938Z     result = await storage.incr(f"concurrent_test_{task_id}", 60, 1)
+2025-05-23T17:04:42.4491622Z .venv/lib/python3.11/site-packages/limits/aio/storage/base.py:28: in inner
+2025-05-23T17:04:42.4492203Z     return await fn(*args, **kwargs)
+2025-05-23T17:04:42.4492990Z .venv/lib/python3.11/site-packages/limits/aio/storage/redis/__init__.py:163: in incr
+2025-05-23T17:04:42.4493676Z     return await self.bridge.incr(key, expiry, amount)
+2025-05-23T17:04:42.4494344Z .venv/lib/python3.11/site-packages/limits/aio/storage/redis/coredis.py:117: in incr
+2025-05-23T17:04:42.4495098Z     if (value := await self.get_connection().incrby(key, amount)) == amount:
+2025-05-23T17:04:42.4495983Z .venv/lib/python3.11/site-packages/coredis/commands/_wrappers.py:206: in wrapped
+2025-05-23T17:04:42.4496703Z     async with command_cache(callable, *args, **kwargs) as response:
+2025-05-23T17:04:42.4497442Z /opt/hostedtoolcache/Python/3.11.12/x64/lib/python3.11/contextlib.py:210: in __aenter__
+2025-05-23T17:04:42.4498111Z     return await anext(self.gen)
+2025-05-23T17:04:42.4498723Z .venv/lib/python3.11/site-packages/coredis/commands/_wrappers.py:103: in __call__
+2025-05-23T17:04:42.4499364Z     yield await func(*args, **kwargs)
+2025-05-23T17:04:42.4499931Z .venv/lib/python3.11/site-packages/coredis/commands/core.py:349: in incrby
+2025-05-23T17:04:42.4500827Z     return await self.execute_command(
+2025-05-23T17:04:42.4501433Z .venv/lib/python3.11/site-packages/coredis/client/basic.py:945: in execute_command
+2025-05-23T17:04:42.4502093Z     return await self.retry_policy.call_with_retries(
+2025-05-23T17:04:42.4502718Z .venv/lib/python3.11/site-packages/coredis/retry.py:71: in call_with_retries
+2025-05-23T17:04:42.4503293Z     raise last_error
+2025-05-23T17:04:42.4503796Z .venv/lib/python3.11/site-packages/coredis/retry.py:55: in call_with_retries
+2025-05-23T17:04:42.4504366Z     return await func()
+2025-05-23T17:04:42.4504897Z .venv/lib/python3.11/site-packages/coredis/client/basic.py:974: in _execute_command
+2025-05-23T17:04:42.4505755Z     request = await connection.create_request(
+2025-05-23T17:04:42.4506392Z .venv/lib/python3.11/site-packages/coredis/connection.py:610: in create_request
+2025-05-23T17:04:42.4507012Z     await self.connect()
+2025-05-23T17:04:42.4507407Z _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+2025-05-23T17:04:42.4507769Z 
+2025-05-23T17:04:42.4507942Z self = Connection<host=redis,port=6379,db=0>
+2025-05-23T17:04:42.4508240Z 
+2025-05-23T17:04:42.4508393Z     async def connect(self) -> None:
+2025-05-23T17:04:42.4508779Z         """
+2025-05-23T17:04:42.4509119Z         Establish a connnection to the redis server
+2025-05-23T17:04:42.4509598Z         and initiate any post connect callbacks
+2025-05-23T17:04:42.4510013Z         """
+2025-05-23T17:04:42.4510332Z         self._connection_error = None
+2025-05-23T17:04:42.4510722Z         try:
+2025-05-23T17:04:42.4511034Z             await self._connect()
+2025-05-23T17:04:42.4511500Z         except (asyncio.CancelledError, RedisError) as err:
+2025-05-23T17:04:42.4511990Z             self._connection_error = err
+2025-05-23T17:04:42.4512381Z             raise
+2025-05-23T17:04:42.4512716Z         except Exception as err:
+2025-05-23T17:04:42.4513105Z             self._connection_error = err
+2025-05-23T17:04:42.4513553Z >           raise ConnectionError(str(err)) from err
+2025-05-23T17:04:42.4514254Z E           coredis.exceptions.ConnectionError: [Errno -3] Temporary failure in name resolution
+2025-05-23T17:04:42.4514791Z 
+2025-05-23T17:04:42.4515123Z .venv/lib/python3.11/site-packages/coredis/connection.py:293: ConnectionError
+2025-05-23T17:04:42.4515997Z ----------------------------- Captured stdout call -----------------------------
+2025-05-23T17:04:42.4516519Z Starting 5 concurrent tasks...
+2025-05-23T17:04:42.4516884Z Task 0 starting...
+2025-05-23T17:04:42.4517205Z Task 1 starting...
+2025-05-23T17:04:42.4517522Z Task 2 starting...
+2025-05-23T17:04:42.4517835Z Task 3 starting...
+2025-05-23T17:04:42.4518155Z Task 4 starting...
+2025-05-23T17:04:42.4518580Z Task 0 failed: [Errno -3] Temporary failure in name resolution
+2025-05-23T17:04:42.4519275Z Concurrent operations failed: [Errno -3] Temporary failure in name resolution
+2025-05-23T17:04:42.4519987Z --------------------------- Captured stdout teardown ---------------------------
+2025-05-23T17:04:42.4520797Z Task 1 failed: [Errno -3] Temporary failure in name resolution
+2025-05-23T17:04:42.4521423Z ---------------------------- Captured log teardown -----------------------------
+2025-05-23T17:04:42.4522501Z ERROR    asyncio:base_events.py:1785 an error occurred during closing of asynchronous generator <async_generator object CommandCache.__call__ at 0x7febbbc1e650>
+2025-05-23T17:04:42.4523629Z asyncgen: <async_generator object CommandCache.__call__ at 0x7febbbc1e650>
+2025-05-23T17:04:42.4524323Z RuntimeError: aclose(): asynchronous generator is already running
+2025-05-23T17:04:42.4525557Z ERROR    asyncio:base_events.py:1785 an error occurred during closing of asynchronous generator <async_generator object CommandCache.__call__ at 0x7febbbc1e260>
+2025-05-23T17:04:42.4526664Z asyncgen: <async_generator object CommandCache.__call__ at 0x7febbbc1e260>
+2025-05-23T17:04:42.4527352Z RuntimeError: aclose(): asynchronous generator is already running
+2025-05-23T17:04:42.4528430Z ERROR    asyncio:base_events.py:1785 an error occurred during closing of asynchronous generator <async_generator object CommandCache.__call__ at 0x7febbbc1de70>
+2025-05-23T17:04:42.4529712Z asyncgen: <async_generator object CommandCache.__call__ at 0x7febbbc1de70>
+2025-05-23T17:04:42.4530421Z RuntimeError: aclose(): asynchronous generator is already running
+2025-05-23T17:04:42.4531000Z ================================ tests coverage ================================
+2025-05-23T17:04:42.4531599Z _______________ coverage: platform linux, python 3.11.12-final-0 _______________
+2025-05-23T17:04:42.4532016Z 
+2025-05-23T17:04:42.4532216Z Name                                                   Stmts   Miss  Cover   Missing
+2025-05-23T17:04:42.4532759Z ------------------------------------------------------------------------------------
+2025-05-23T17:04:42.4533416Z src/propcorn_ratelimiter/__init__.py                       0      0   100%
+2025-05-23T17:04:42.4534157Z src/propcorn_ratelimiter/main.py                          34     10    71%   22-31, 55, 68-74, 85-86
+2025-05-23T17:04:42.4535034Z src/propcorn_ratelimiter/rate_limiter/limiter.py          58      9    84%   41, 48-49, 65, 71, 92, 106, 119-120
+2025-05-23T17:04:42.4536042Z src/propcorn_ratelimiter/weather/__init__.py               0      0   100%
+2025-05-23T17:04:42.4536783Z src/propcorn_ratelimiter/weather/geoip_enrichment.py       8      0   100%
+2025-05-23T17:04:42.4537559Z src/propcorn_ratelimiter/weather/weather_request.py        9      5    44%   23-34
+2025-05-23T17:04:42.4538266Z ------------------------------------------------------------------------------------
+2025-05-23T17:04:42.4538806Z TOTAL                                                    109     24    78%
+2025-05-23T17:04:42.4539323Z =========================== short test summary info ============================
+2025-05-23T17:04:42.4540335Z FAILED tests/test_rate_limiter_async.py::test_high_frequency_sliding_redis_async - AssertionError: Should have some successful requests
+2025-05-23T17:04:42.4541196Z assert 0 > 0
+2025-05-23T17:04:42.4541969Z FAILED tests/test_rate_limiter_async.py::test_high_frequency_fixed_redis_async - AssertionError: Should have some successful requests
+2025-05-23T17:04:42.4542815Z assert 0 > 0
+2025-05-23T17:04:42.4543322Z FAILED tests/test_redis_debug.py::test_redis_connection_basic - assert False is True
+2025-05-23T17:04:42.4544534Z FAILED tests/test_redis_debug.py::test_redis_basic_operations - coredis.exceptions.ConnectionError: [Errno -3] Temporary failure in name resolution
+2025-05-23T17:04:42.4546194Z FAILED tests/test_redis_debug.py::test_redis_concurrent_operations - coredis.exceptions.ConnectionError: [Errno -3] Temporary failure in name resolution
+2025-05-23T17:04:42.4547232Z ========================= 5 failed, 2 passed in 4.67s ==========================
+2025-05-23T17:04:42.5657061Z ⚠️ Redis async tests failed (expected in CI)
+2025-05-23T17:04:42.5683256Z ##[group]Run # Generate performance visualizations and analysis data
+2025-05-23T17:04:42.5683749Z [36;1m# Generate performance visualizations and analysis data[0m
+2025-05-23T17:04:42.5684150Z [36;1mecho "📊 Running Visualization Analysis..."[0m
+2025-05-23T17:04:42.5684672Z [36;1mpoetry run pytest tests/test_visualization.py -v || echo "⚠️ Visualization tests failed (expected in CI)"[0m
+2025-05-23T17:04:42.5736936Z shell: /usr/bin/bash -e {0}
+2025-05-23T17:04:42.5737198Z env:
+2025-05-23T17:04:42.5737386Z   PYTHON_VERSION: 3.11
+2025-05-23T17:04:42.5737618Z   POETRY_VERSION: 1.8.0
+2025-05-23T17:04:42.5737908Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:42.5738340Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.12/x64/lib/pkgconfig
+2025-05-23T17:04:42.5738755Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:42.5739120Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:42.5739516Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:42.5739886Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.12/x64/lib
+2025-05-23T17:04:42.5740200Z   VENV: .venv/bin/activate
+2025-05-23T17:04:42.5740608Z ##[endgroup]
+2025-05-23T17:04:42.5811079Z 📊 Running Visualization Analysis...
+2025-05-23T17:04:43.2367902Z /home/runner/work/ratelimiter/ratelimiter/.venv/lib/python3.11/site-packages/pytest_asyncio/plugin.py:217: PytestDeprecationWarning: The configuration option "asyncio_default_fixture_loop_scope" is unset.
+2025-05-23T17:04:43.2370474Z The event loop scope for asynchronous fixtures will default to the fixture caching scope. Future versions of pytest-asyncio will default the loop scope for asynchronous fixtures to function scope. Set the default fixture loop scope explicitly in order to avoid unexpected behavior in the future. Valid fixture loop scopes are: "function", "class", "module", "package", "session"
+2025-05-23T17:04:43.2372091Z 
+2025-05-23T17:04:43.2372421Z   warnings.warn(PytestDeprecationWarning(_DEFAULT_FIXTURE_LOOP_SCOPE_UNSET))
+2025-05-23T17:04:43.2617914Z ============================= test session starts ==============================
+2025-05-23T17:04:43.2618855Z platform linux -- Python 3.11.12, pytest-8.3.5, pluggy-1.6.0 -- /home/runner/work/ratelimiter/ratelimiter/.venv/bin/python
+2025-05-23T17:04:43.2619602Z cachedir: .pytest_cache
+2025-05-23T17:04:43.2619989Z rootdir: /home/runner/work/ratelimiter/ratelimiter
+2025-05-23T17:04:43.2620450Z configfile: pyproject.toml
+2025-05-23T17:04:43.2620842Z plugins: asyncio-0.26.0, anyio-4.9.0, cov-6.1.1
+2025-05-23T17:04:43.2621572Z asyncio: mode=Mode.AUTO, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+2025-05-23T17:04:46.0441013Z collecting ... collected 2 items
+2025-05-23T17:04:46.0441306Z 
+2025-05-23T17:04:55.9074800Z tests/test_visualization.py::test_visualize_sliding_window PASSED        [ 50%]
+2025-05-23T17:05:05.4921281Z tests/test_visualization.py::test_visualize_fixed_window PASSED          [100%]
+2025-05-23T17:05:05.4921828Z 
+2025-05-23T17:05:05.4922024Z ================================ tests coverage ================================
+2025-05-23T17:05:05.4922644Z _______________ coverage: platform linux, python 3.11.12-final-0 _______________
+2025-05-23T17:05:05.4923090Z 
+2025-05-23T17:05:05.4923279Z Name                                                   Stmts   Miss  Cover   Missing
+2025-05-23T17:05:05.4923813Z ------------------------------------------------------------------------------------
+2025-05-23T17:05:05.4924463Z src/propcorn_ratelimiter/__init__.py                       0      0   100%
+2025-05-23T17:05:05.4925164Z src/propcorn_ratelimiter/main.py                          34     34     0%   1-86
+2025-05-23T17:05:05.4926197Z src/propcorn_ratelimiter/rate_limiter/limiter.py          58      9    84%   41, 48-49, 65, 71, 92, 106, 119-120
+2025-05-23T17:05:05.4927016Z src/propcorn_ratelimiter/weather/__init__.py               0      0   100%
+2025-05-23T17:05:05.4928053Z src/propcorn_ratelimiter/weather/geoip_enrichment.py       8      8     0%   3-25
+2025-05-23T17:05:05.4928839Z src/propcorn_ratelimiter/weather/weather_request.py        9      9     0%   3-34
+2025-05-23T17:05:05.4929513Z ------------------------------------------------------------------------------------
+2025-05-23T17:05:05.4930023Z TOTAL                                                    109     60    45%
+2025-05-23T17:05:05.4930488Z ============================== 2 passed in 22.24s ==============================
+2025-05-23T17:05:05.6922900Z ##[group]Run actions/upload-artifact@v4
+2025-05-23T17:05:05.6923189Z with:
+2025-05-23T17:05:05.6923386Z   name: test-results-17
+2025-05-23T17:05:05.6923617Z   path: results/
+coverage.xml
+
+2025-05-23T17:05:05.6923855Z   retention-days: 30
+2025-05-23T17:05:05.6924066Z   if-no-files-found: warn
+2025-05-23T17:05:05.6924287Z   compression-level: 6
+2025-05-23T17:05:05.6924502Z   overwrite: false
+2025-05-23T17:05:05.6924706Z   include-hidden-files: false
+2025-05-23T17:05:05.6924932Z env:
+2025-05-23T17:05:05.6925108Z   PYTHON_VERSION: 3.11
+2025-05-23T17:05:05.6925574Z   POETRY_VERSION: 1.8.0
+2025-05-23T17:05:05.6925856Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:05:05.6926446Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.12/x64/lib/pkgconfig
+2025-05-23T17:05:05.6926842Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:05:05.6927201Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:05:05.6927607Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:05:05.6927976Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.12/x64/lib
+2025-05-23T17:05:05.6928285Z   VENV: .venv/bin/activate
+2025-05-23T17:05:05.6928500Z ##[endgroup]
+2025-05-23T17:05:05.9132430Z Multiple search paths detected. Calculating the least common ancestor of all paths
+2025-05-23T17:05:05.9135623Z The least common ancestor is /home/runner/work/ratelimiter/ratelimiter. This will be the root directory of the artifact
+2025-05-23T17:05:05.9138265Z With the provided path, there will be 21 files uploaded
+2025-05-23T17:05:05.9142270Z Artifact name is valid!
+2025-05-23T17:05:05.9143573Z Root directory input is valid!
+2025-05-23T17:05:06.0540423Z Beginning upload of artifact content to blob storage
+2025-05-23T17:05:06.5979250Z Uploaded bytes 3844529
+2025-05-23T17:05:06.6293215Z Finished uploading artifact content to blob storage!
+2025-05-23T17:05:06.6296612Z SHA256 digest of uploaded artifact zip is dcd7bac171f9c9625a6377bfafbbed796e9e1f42f84bab527b3af3513b3f81c8
+2025-05-23T17:05:06.6298576Z Finalizing artifact upload
+2025-05-23T17:05:06.7175010Z Artifact test-results-17.zip successfully finalized. Artifact ID 3186996426
+2025-05-23T17:05:06.7176666Z Artifact test-results-17 has been successfully uploaded! Final size is 3844529 bytes. Artifact ID is 3186996426
+2025-05-23T17:05:06.7182795Z Artifact download URL: https://github.com/jrysztv/ratelimiter/actions/runs/15215490787/artifacts/3186996426
+2025-05-23T17:05:06.7336916Z ##[group]Run codecov/codecov-action@v4
+2025-05-23T17:05:06.7337211Z with:
+2025-05-23T17:05:06.7337409Z   file: ./coverage.xml
+2025-05-23T17:05:06.7337628Z   flags: unittests
+2025-05-23T17:05:06.7337838Z   name: codecov-umbrella
+2025-05-23T17:05:06.7338073Z env:
+2025-05-23T17:05:06.7338306Z   PYTHON_VERSION: 3.11
+2025-05-23T17:05:06.7338522Z   POETRY_VERSION: 1.8.0
+2025-05-23T17:05:06.7338818Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:05:06.7339315Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.12/x64/lib/pkgconfig
+2025-05-23T17:05:06.7339734Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:05:06.7340113Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:05:06.7340489Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:05:06.7340857Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.12/x64/lib
+2025-05-23T17:05:06.7341170Z   VENV: .venv/bin/activate
+2025-05-23T17:05:06.7341712Z ##[endgroup]
+2025-05-23T17:05:06.8171786Z eventName: push
+2025-05-23T17:05:06.8188560Z ==> linux OS detected
+2025-05-23T17:05:07.1677842Z https://cli.codecov.io/latest/linux/codecov.SHA256SUM
+2025-05-23T17:05:07.2522582Z gpg: directory '/home/runner/.gnupg' created
+2025-05-23T17:05:07.2525095Z gpg: keybox '/home/runner/.gnupg/pubring.kbx' created
+2025-05-23T17:05:07.2552337Z gpg: /home/runner/.gnupg/trustdb.gpg: trustdb created
+2025-05-23T17:05:07.2553339Z gpg: key 806BB28AED779869: public key "Codecov Uploader (Codecov Uploader Verification Key) <security@codecov.io>" imported
+2025-05-23T17:05:07.2666892Z gpg: Total number processed: 1
+2025-05-23T17:05:07.2667366Z gpg:               imported: 1
+2025-05-23T17:05:07.2731769Z gpg: Signature made Wed Apr  9 03:02:55 2025 UTC
+2025-05-23T17:05:07.2732553Z gpg:                using RSA key 27034E7FDB850E0BBC2C62FF806BB28AED779869
+2025-05-23T17:05:07.2735026Z gpg: Good signature from "Codecov Uploader (Codecov Uploader Verification Key) <security@codecov.io>" [unknown]
+2025-05-23T17:05:07.2736345Z gpg: WARNING: This key is not certified with a trusted signature!
+2025-05-23T17:05:07.2737176Z gpg:          There is no indication that the signature belongs to the owner.
+2025-05-23T17:05:07.2738318Z Primary key fingerprint: 2703 4E7F DB85 0E0B BC2C  62FF 806B B28A ED77 9869
+2025-05-23T17:05:07.3322496Z ==> Uploader SHASUM verified (0f7aadde579ebde1443ad2f977beada703f562997fdda603f213faf2a8559868  codecov)
+2025-05-23T17:05:07.3323243Z ==> Running version latest
+2025-05-23T17:05:07.4075222Z Could not pull latest version information: SyntaxError: Unexpected token '<', "<!DOCTYPE "... is not valid JSON
+2025-05-23T17:05:07.4077085Z ==> Running git config --global --add safe.directory /home/runner/work/ratelimiter/ratelimiter
+2025-05-23T17:05:07.4165090Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/ratelimiter/ratelimiter
+2025-05-23T17:05:07.4219154Z ==> Running command '/home/runner/work/_actions/codecov/codecov-action/v4/dist/codecov create-commit'
+2025-05-23T17:05:07.4221457Z [command]/home/runner/work/_actions/codecov/codecov-action/v4/dist/codecov create-commit --git-service github
+2025-05-23T17:05:08.0634249Z info - 2025-05-23 17:05:08,062 -- ci service found: github-actions
+2025-05-23T17:05:08.0683092Z warning - 2025-05-23 17:05:08,068 -- No config file could be found. Ignoring config.
+2025-05-23T17:05:08.0858191Z warning - 2025-05-23 17:05:08,085 -- Branch `main` is protected but no token was provided
+2025-05-23T17:05:08.0859410Z warning - 2025-05-23 17:05:08,085 -- For information on Codecov upload tokens, see https://docs.codecov.com/docs/codecov-tokens
+2025-05-23T17:05:08.4073208Z info - 2025-05-23 17:05:08,406 -- Process Commit creating complete
+2025-05-23T17:05:08.4074283Z error - 2025-05-23 17:05:08,407 -- Commit creating failed: {"message":"Token required - not valid tokenless upload"}
+2025-05-23T17:05:08.5130558Z Sentry is attempting to send 3 pending events
+2025-05-23T17:05:08.5131247Z Waiting up to 2 seconds
+2025-05-23T17:05:08.5132433Z Press Ctrl-C to quit
+2025-05-23T17:05:08.6523866Z ==> Running command '/home/runner/work/_actions/codecov/codecov-action/v4/dist/codecov create-report'
+2025-05-23T17:05:08.6526093Z [command]/home/runner/work/_actions/codecov/codecov-action/v4/dist/codecov create-report --git-service github
+2025-05-23T17:05:09.2971624Z info - 2025-05-23 17:05:09,296 -- ci service found: github-actions
+2025-05-23T17:05:09.3022649Z warning - 2025-05-23 17:05:09,301 -- No config file could be found. Ignoring config.
+2025-05-23T17:05:09.4801112Z info - 2025-05-23 17:05:09,479 -- Process Report creating complete
+2025-05-23T17:05:09.4805057Z error - 2025-05-23 17:05:09,480 -- Report creating failed: {"message":"Token required - not valid tokenless upload"}
+2025-05-23T17:05:09.5863955Z Sentry is attempting to send 2 pending events
+2025-05-23T17:05:09.5864394Z Waiting up to 2 seconds
+2025-05-23T17:05:09.5864706Z Press Ctrl-C to quit
+2025-05-23T17:05:09.6824986Z ==> Running command '/home/runner/work/_actions/codecov/codecov-action/v4/dist/codecov do-upload'
+2025-05-23T17:05:09.6826864Z [command]/home/runner/work/_actions/codecov/codecov-action/v4/dist/codecov do-upload -f ./coverage.xml -F unittests --git-service github -n codecov-umbrella
+2025-05-23T17:05:10.3343985Z info - 2025-05-23 17:05:10,333 -- ci service found: github-actions
+2025-05-23T17:05:10.3397445Z warning - 2025-05-23 17:05:10,339 -- No config file could be found. Ignoring config.
+2025-05-23T17:05:10.3599015Z warning - 2025-05-23 17:05:10,359 -- xcrun is not installed or can't be found.
+2025-05-23T17:05:10.4097468Z warning - 2025-05-23 17:05:10,409 -- No gcov data found.
+2025-05-23T17:05:10.4101375Z warning - 2025-05-23 17:05:10,409 -- coverage.py is not installed or can't be found.
+2025-05-23T17:05:10.4672598Z info - 2025-05-23 17:05:10,466 -- Found 1 coverage files to report
+2025-05-23T17:05:10.4673457Z info - 2025-05-23 17:05:10,466 -- > /home/runner/work/ratelimiter/ratelimiter/coverage.xml
+2025-05-23T17:05:10.6495916Z info - 2025-05-23 17:05:10,649 -- Process Upload complete
+2025-05-23T17:05:10.6496841Z error - 2025-05-23 17:05:10,649 -- Upload failed: {"message":"Token required - not valid tokenless upload"}
+2025-05-23T17:05:10.7561966Z Sentry is attempting to send 2 pending events
+2025-05-23T17:05:10.7562802Z Waiting up to 2 seconds
+2025-05-23T17:05:10.7563111Z Press Ctrl-C to quit
+2025-05-23T17:05:11.3204365Z Post job cleanup.
+2025-05-23T17:05:11.4474381Z Cache hit occurred on the primary key poetry-deps-3.11-ab6e31c3392d0efedc4dd9b677d2ba5c91dc86024c6ec34f51d1c88a363cf83b, not saving cache.
+2025-05-23T17:05:11.4579867Z Post job cleanup.
+2025-05-23T17:05:11.5845047Z Cache hit occurred on the primary key poetry-1.8.0-Linux, not saving cache.
+2025-05-23T17:05:11.5932677Z Post job cleanup.
+2025-05-23T17:05:11.7523360Z Post job cleanup.
+2025-05-23T17:05:11.8464789Z [command]/usr/bin/git version
+2025-05-23T17:05:11.8503266Z git version 2.49.0
+2025-05-23T17:05:11.8542931Z Copying '/home/runner/.gitconfig' to '/home/runner/work/_temp/04a4be7d-8e3f-4201-9ac7-612a0a80f6b5/.gitconfig'
+2025-05-23T17:05:11.8554297Z Temporarily overriding HOME='/home/runner/work/_temp/04a4be7d-8e3f-4201-9ac7-612a0a80f6b5' before making global git config changes
+2025-05-23T17:05:11.8556524Z Adding repository directory to the temporary git global config as a safe directory
+2025-05-23T17:05:11.8568425Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/ratelimiter/ratelimiter
+2025-05-23T17:05:11.8603055Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-05-23T17:05:11.8634891Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-05-23T17:05:11.8869615Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-05-23T17:05:11.8890747Z http.https://github.com/.extraheader
+2025-05-23T17:05:11.8905103Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2025-05-23T17:05:11.8940264Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-05-23T17:05:11.9253683Z Print service container logs: ee15379af540405082995f1a53578e2a_redis7alpine_7bf6b9
+2025-05-23T17:05:11.9258467Z ##[command]/usr/bin/docker logs --details 5f2a1b8b36f6fca2763f4a7d2b7518ed6ddee212066f18db911cf3256630cb28
+2025-05-23T17:05:11.9378632Z  1:C 23 May 2025 17:03:59.587 # WARNING Memory overcommit must be enabled! Without it, a background save or replication may fail under low memory condition. Being disabled, it can also cause failures without low memory condition, see https://github.com/jemalloc/jemalloc/issues/1328. To fix this issue add 'vm.overcommit_memory = 1' to /etc/sysctl.conf and then reboot or run the command 'sysctl vm.overcommit_memory=1' for this to take effect.
+2025-05-23T17:05:11.9381309Z  1:C 23 May 2025 17:03:59.587 * oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+2025-05-23T17:05:11.9382155Z  1:C 23 May 2025 17:03:59.587 * Redis version=7.4.3, bits=64, commit=00000000, modified=0, pid=1, just started
+2025-05-23T17:05:11.9383438Z  1:C 23 May 2025 17:03:59.587 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+2025-05-23T17:05:11.9384520Z  1:M 23 May 2025 17:03:59.587 * monotonic clock: POSIX clock_gettime
+2025-05-23T17:05:11.9385151Z  1:M 23 May 2025 17:03:59.588 * Running mode=standalone, port=6379.
+2025-05-23T17:05:11.9385908Z  1:M 23 May 2025 17:03:59.588 * Server initialized
+2025-05-23T17:05:11.9386456Z  1:M 23 May 2025 17:03:59.588 * Ready to accept connections tcp
+2025-05-23T17:05:11.9401800Z Stop and remove container: ee15379af540405082995f1a53578e2a_redis7alpine_7bf6b9
+2025-05-23T17:05:11.9406983Z ##[command]/usr/bin/docker rm --force 5f2a1b8b36f6fca2763f4a7d2b7518ed6ddee212066f18db911cf3256630cb28
+2025-05-23T17:05:12.0646958Z 5f2a1b8b36f6fca2763f4a7d2b7518ed6ddee212066f18db911cf3256630cb28
+2025-05-23T17:05:12.0677224Z Remove container network: github_network_42aa65d6dc4141feba1393ef59ab5684
+2025-05-23T17:05:12.0681615Z ##[command]/usr/bin/docker network rm github_network_42aa65d6dc4141feba1393ef59ab5684
+2025-05-23T17:05:12.1702613Z github_network_42aa65d6dc4141feba1393ef59ab5684
+2025-05-23T17:05:12.1761729Z Cleaning up orphan processes

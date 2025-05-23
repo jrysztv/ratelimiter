@@ -1,0 +1,19 @@
+﻿2025-05-23T17:04:21.0111710Z ##[group]Run poetry install --no-interaction --no-ansi
+2025-05-23T17:04:21.0112420Z [36;1mpoetry install --no-interaction --no-ansi[0m
+2025-05-23T17:04:21.0165639Z shell: /usr/bin/bash -e {0}
+2025-05-23T17:04:21.0165908Z env:
+2025-05-23T17:04:21.0166090Z   PYTHON_VERSION: 3.11
+2025-05-23T17:04:21.0166310Z   POETRY_VERSION: 1.8.0
+2025-05-23T17:04:21.0166589Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:21.0167020Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.12/x64/lib/pkgconfig
+2025-05-23T17:04:21.0167433Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:21.0167810Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:21.0168183Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:21.0168548Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.12/x64/lib
+2025-05-23T17:04:21.0168860Z   VENV: .venv/bin/activate
+2025-05-23T17:04:21.0169083Z ##[endgroup]
+2025-05-23T17:04:21.6300748Z Installing dependencies from lock file
+2025-05-23T17:04:21.7443489Z 
+2025-05-23T17:04:21.7444016Z No dependencies to install or update
+2025-05-23T17:04:21.7470766Z 
+2025-05-23T17:04:21.7471512Z Installing the current project: propcorn-ratelimiter (0.1.0)

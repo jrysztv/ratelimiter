@@ -185,65 +185,71 @@ jobs:
         
     - name: Deploy to EC2
       run: |
-        ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} << 'EOF'
-          set -e
-          
-          # Navigate to application directory
-          cd ${{ secrets.EC2_APP_PATH }}
-          
-          # Pull latest changes
-          git pull origin main
-          
-          # Stop existing containers gracefully
-          docker-compose -f docker-compose.prod-nginx.yml down --timeout 30 || true
-          
-          # Remove old images to free space
-          docker image prune -f || true
-          
-          # Build and start new containers with Nginx
-          docker-compose -f docker-compose.prod-nginx.yml build --no-cache
-          docker-compose -f docker-compose.prod-nginx.yml up -d
-          
-          # Wait for services to be healthy
-          sleep 45
-          
-          # Verify deployment with retries (checking port 80 through Nginx)
-          SUCCESS=false
-          for i in {1..5}; do
-            echo "Health check attempt $i..."
-            if curl -f -s http://localhost/health > /dev/null 2>&1; then
-              echo "✅ Health check passed!"
-              # Use a safer approach for displaying the health check response
-              set +e  # Temporarily disable exit on error
-              HEALTH_RESPONSE=$(curl -s http://localhost/health 2>/dev/null)
-              CURL_EXIT_CODE=$?
-              set -e  # Re-enable exit on error
-              
-              if [ $CURL_EXIT_CODE -eq 0 ] && [ ! -z "$HEALTH_RESPONSE" ]; then
-                echo "$HEALTH_RESPONSE"
-              else
-                echo '{"status":"healthy","note":"response_display_failed"}'
-              fi
-              
-              echo ""
-              echo "✅ Deployment completed successfully!"
-              SUCCESS=true
-              break
+        # Create deployment script
+        cat > deploy_script.sh << 'DEPLOY_EOF'
+        #!/bin/bash
+        set -e
+        
+        # Navigate to application directory
+        cd ${{ secrets.EC2_APP_PATH }}
+        
+        # Pull latest changes
+        git pull origin main
+        
+        # Stop existing containers gracefully
+        docker-compose -f docker-compose.prod-nginx.yml down --timeout 30 || true
+        
+        # Remove old images to free space
+        docker image prune -f || true
+        
+        # Build and start new containers with Nginx
+        docker-compose -f docker-compose.prod-nginx.yml build --no-cache
+        docker-compose -f docker-compose.prod-nginx.yml up -d
+        
+        # Wait for services to be healthy
+        sleep 45
+        
+        # Verify deployment with retries (checking port 80 through Nginx)
+        SUCCESS=false
+        for i in {1..5}; do
+          echo "Health check attempt $i..."
+          if curl -f -s http://localhost/health > /dev/null 2>&1; then
+            echo "✅ Health check passed!"
+            # Use a safer approach for displaying the health check response
+            set +e  # Temporarily disable exit on error
+            HEALTH_RESPONSE=$(curl -s http://localhost/health 2>/dev/null)
+            CURL_EXIT_CODE=$?
+            set -e  # Re-enable exit on error
+            
+            if [ $CURL_EXIT_CODE -eq 0 ] && [ ! -z "$HEALTH_RESPONSE" ]; then
+              echo "$HEALTH_RESPONSE"
+            else
+              echo '{"status":"healthy","note":"response_display_failed"}'
             fi
-            echo "Health check attempt $i failed, retrying in 10 seconds..."
-            sleep 10
-          done
-          
-          if [ "$SUCCESS" = true ]; then
-            echo "🎉 Application is running successfully!"
-            exit 0
-          else
-            echo "❌ Deployment verification failed after 5 attempts!"
-            echo "Container logs:"
-            docker-compose -f docker-compose.prod-nginx.yml logs --tail=50
-            exit 1
+            
+            echo ""
+            echo "✅ Deployment completed successfully!"
+            SUCCESS=true
+            break
           fi
-        EOF
+          echo "Health check attempt $i failed, retrying in 10 seconds..."
+          sleep 10
+        done
+        
+        if [ "$SUCCESS" = true ]; then
+          echo "🎉 Application is running successfully!"
+          exit 0
+        else
+          echo "❌ Deployment verification failed after 5 attempts!"
+          echo "Container logs:"
+          docker-compose -f docker-compose.prod-nginx.yml logs --tail=50
+          exit 1
+        fi
+        DEPLOY_EOF
+        
+        # Transfer and execute the script
+        scp -o StrictHostKeyChecking=no deploy_script.sh ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }}:/tmp/deploy_script.sh
+        ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} "chmod +x /tmp/deploy_script.sh && /tmp/deploy_script.sh && rm -f /tmp/deploy_script.sh"
         
     - name: Cleanup Security Group Rule
       if: always()

@@ -1,0 +1,70 @@
+﻿2025-05-23T17:04:21.8056292Z ##[group]Run # Run only core functionality tests - these must pass for deployment
+2025-05-23T17:04:21.8056877Z [36;1m# Run only core functionality tests - these must pass for deployment[0m
+2025-05-23T17:04:21.8057485Z [36;1mpoetry run pytest tests/ -v --cov=src/propcorn_ratelimiter --cov-report=xml --cov-report=term-missing \[0m
+2025-05-23T17:04:21.8058175Z [36;1m  --ignore=tests/test_visualization.py \[0m
+2025-05-23T17:04:21.8058534Z [36;1m  -k "not (high_frequency or redis_async or redis_debug)"[0m
+2025-05-23T17:04:21.8109434Z shell: /usr/bin/bash -e {0}
+2025-05-23T17:04:21.8109691Z env:
+2025-05-23T17:04:21.8109878Z   PYTHON_VERSION: 3.11
+2025-05-23T17:04:21.8110101Z   POETRY_VERSION: 1.8.0
+2025-05-23T17:04:21.8110385Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:21.8110816Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.12/x64/lib/pkgconfig
+2025-05-23T17:04:21.8111240Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:21.8111611Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:21.8112021Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:21.8112393Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.12/x64/lib
+2025-05-23T17:04:21.8112708Z   VENV: .venv/bin/activate
+2025-05-23T17:04:21.8112933Z ##[endgroup]
+2025-05-23T17:04:22.8891780Z /home/runner/work/ratelimiter/ratelimiter/.venv/lib/python3.11/site-packages/pytest_asyncio/plugin.py:217: PytestDeprecationWarning: The configuration option "asyncio_default_fixture_loop_scope" is unset.
+2025-05-23T17:04:22.8895031Z The event loop scope for asynchronous fixtures will default to the fixture caching scope. Future versions of pytest-asyncio will default the loop scope for asynchronous fixtures to function scope. Set the default fixture loop scope explicitly in order to avoid unexpected behavior in the future. Valid fixture loop scopes are: "function", "class", "module", "package", "session"
+2025-05-23T17:04:22.8897276Z 
+2025-05-23T17:04:22.8897684Z   warnings.warn(PytestDeprecationWarning(_DEFAULT_FIXTURE_LOOP_SCOPE_UNSET))
+2025-05-23T17:04:22.9950838Z ============================= test session starts ==============================
+2025-05-23T17:04:22.9951660Z platform linux -- Python 3.11.12, pytest-8.3.5, pluggy-1.6.0 -- /home/runner/work/ratelimiter/ratelimiter/.venv/bin/python
+2025-05-23T17:04:22.9952359Z cachedir: .pytest_cache
+2025-05-23T17:04:22.9952709Z rootdir: /home/runner/work/ratelimiter/ratelimiter
+2025-05-23T17:04:22.9953120Z configfile: pyproject.toml
+2025-05-23T17:04:22.9953467Z plugins: asyncio-0.26.0, anyio-4.9.0, cov-6.1.1
+2025-05-23T17:04:22.9954115Z asyncio: mode=Mode.AUTO, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+2025-05-23T17:04:23.7448292Z collecting ... collected 34 items / 10 deselected / 24 selected
+2025-05-23T17:04:23.7448750Z 
+2025-05-23T17:04:23.8716292Z tests/test_geoip_enrichment.py::test_get_location PASSED                 [  4%]
+2025-05-23T17:04:24.1181862Z tests/test_geoip_enrichment.py::test_get_location_invalid_ip PASSED      [  8%]
+2025-05-23T17:04:24.1233548Z tests/test_main.py::test_weather_endpoint_success PASSED                 [ 12%]
+2025-05-23T17:04:24.1293896Z tests/test_main.py::test_weather_endpoint_with_forwarded_ip PASSED       [ 16%]
+2025-05-23T17:04:24.1348458Z tests/test_main.py::test_weather_endpoint_location_failure PASSED        [ 20%]
+2025-05-23T17:04:24.1384472Z tests/test_main.py::test_weather_endpoint_weather_api_failure PASSED     [ 25%]
+2025-05-23T17:04:24.1399308Z tests/test_rate_limiter.py::test_validate_api_key PASSED                 [ 29%]
+2025-05-23T17:04:24.5636131Z tests/test_rate_limiter.py::test_get_redis_storage PASSED                [ 33%]
+2025-05-23T17:04:24.5648360Z tests/test_rate_limiter.py::test_invalid_strategy PASSED                 [ 37%]
+2025-05-23T17:04:24.5697945Z tests/test_rate_limiter.py::test_invalid_rate_limit PASSED               [ 41%]
+2025-05-23T17:04:24.5735643Z tests/test_rate_limiter.py::test_missing_request PASSED                  [ 45%]
+2025-05-23T17:04:24.5877387Z tests/test_rate_limiter.py::test_api_key_default_rate PASSED             [ 50%]
+2025-05-23T17:04:24.5960282Z tests/test_rate_limiter.py::test_rate_limit_decorator PASSED             [ 54%]
+2025-05-23T17:04:24.6044204Z tests/test_rate_limiter.py::test_rate_limit_exceeded PASSED              [ 58%]
+2025-05-23T17:04:24.6107131Z tests/test_rate_limiter.py::test_different_rate_limits PASSED            [ 62%]
+2025-05-23T17:04:24.6346865Z tests/test_rate_limiter.py::test_different_strategies PASSED             [ 66%]
+2025-05-23T17:04:24.6423663Z tests/test_rate_limiter_async.py::test_redis_connection_via_app PASSED   [ 70%]
+2025-05-23T17:04:24.6458176Z tests/test_redis_connection.py::test_redis_connection_auto_detection PASSED [ 75%]
+2025-05-23T17:04:25.1891463Z tests/test_weather_request.py::test_get_weather PASSED                   [ 79%]
+2025-05-23T17:04:25.6769768Z tests/test_weather_request.py::test_get_weather_invalid_coordinates PASSED [ 83%]
+2025-05-23T17:04:25.8679352Z tests/unit/test_geoip_enrichment.py::test_get_location PASSED            [ 87%]
+2025-05-23T17:04:26.0354085Z tests/unit/test_geoip_enrichment.py::test_get_location_invalid_ip PASSED [ 91%]
+2025-05-23T17:04:26.5250064Z tests/unit/test_weather_request.py::test_get_weather PASSED              [ 95%]
+2025-05-23T17:04:27.0538149Z tests/unit/test_weather_request.py::test_get_weather_invalid_coordinates PASSED [100%]
+2025-05-23T17:04:27.0538762Z 
+2025-05-23T17:04:27.0538956Z ================================ tests coverage ================================
+2025-05-23T17:04:27.0539577Z _______________ coverage: platform linux, python 3.11.12-final-0 _______________
+2025-05-23T17:04:27.0539970Z 
+2025-05-23T17:04:27.0540163Z Name                                                   Stmts   Miss  Cover   Missing
+2025-05-23T17:04:27.0540712Z ------------------------------------------------------------------------------------
+2025-05-23T17:04:27.0541353Z src/propcorn_ratelimiter/__init__.py                       0      0   100%
+2025-05-23T17:04:27.0542086Z src/propcorn_ratelimiter/main.py                          34      3    91%   22-31
+2025-05-23T17:04:27.0542829Z src/propcorn_ratelimiter/rate_limiter/limiter.py          58      2    97%   48-49
+2025-05-23T17:04:27.0543590Z src/propcorn_ratelimiter/weather/__init__.py               0      0   100%
+2025-05-23T17:04:27.0544329Z src/propcorn_ratelimiter/weather/geoip_enrichment.py       8      0   100%
+2025-05-23T17:04:27.0545051Z src/propcorn_ratelimiter/weather/weather_request.py        9      0   100%
+2025-05-23T17:04:27.0545974Z ------------------------------------------------------------------------------------
+2025-05-23T17:04:27.0546481Z TOTAL                                                    109      5    95%
+2025-05-23T17:04:27.0546939Z Coverage XML written to file coverage.xml
+2025-05-23T17:04:27.0547414Z ====================== 24 passed, 10 deselected in 4.06s =======================

@@ -1,0 +1,16 @@
+﻿2025-05-23T17:05:11.9253667Z Print service container logs: ee15379af540405082995f1a53578e2a_redis7alpine_7bf6b9
+2025-05-23T17:05:11.9258456Z ##[command]/usr/bin/docker logs --details 5f2a1b8b36f6fca2763f4a7d2b7518ed6ddee212066f18db911cf3256630cb28
+2025-05-23T17:05:11.9378600Z  1:C 23 May 2025 17:03:59.587 # WARNING Memory overcommit must be enabled! Without it, a background save or replication may fail under low memory condition. Being disabled, it can also cause failures without low memory condition, see https://github.com/jemalloc/jemalloc/issues/1328. To fix this issue add 'vm.overcommit_memory = 1' to /etc/sysctl.conf and then reboot or run the command 'sysctl vm.overcommit_memory=1' for this to take effect.
+2025-05-23T17:05:11.9381305Z  1:C 23 May 2025 17:03:59.587 * oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+2025-05-23T17:05:11.9382149Z  1:C 23 May 2025 17:03:59.587 * Redis version=7.4.3, bits=64, commit=00000000, modified=0, pid=1, just started
+2025-05-23T17:05:11.9383390Z  1:C 23 May 2025 17:03:59.587 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+2025-05-23T17:05:11.9384516Z  1:M 23 May 2025 17:03:59.587 * monotonic clock: POSIX clock_gettime
+2025-05-23T17:05:11.9385148Z  1:M 23 May 2025 17:03:59.588 * Running mode=standalone, port=6379.
+2025-05-23T17:05:11.9385903Z  1:M 23 May 2025 17:03:59.588 * Server initialized
+2025-05-23T17:05:11.9386453Z  1:M 23 May 2025 17:03:59.588 * Ready to accept connections tcp
+2025-05-23T17:05:11.9401787Z Stop and remove container: ee15379af540405082995f1a53578e2a_redis7alpine_7bf6b9
+2025-05-23T17:05:11.9406973Z ##[command]/usr/bin/docker rm --force 5f2a1b8b36f6fca2763f4a7d2b7518ed6ddee212066f18db911cf3256630cb28
+2025-05-23T17:05:12.0646919Z 5f2a1b8b36f6fca2763f4a7d2b7518ed6ddee212066f18db911cf3256630cb28
+2025-05-23T17:05:12.0677208Z Remove container network: github_network_42aa65d6dc4141feba1393ef59ab5684
+2025-05-23T17:05:12.0681581Z ##[command]/usr/bin/docker network rm github_network_42aa65d6dc4141feba1393ef59ab5684
+2025-05-23T17:05:12.1702570Z github_network_42aa65d6dc4141feba1393ef59ab5684

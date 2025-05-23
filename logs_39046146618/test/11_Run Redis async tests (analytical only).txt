@@ -1,0 +1,459 @@
+﻿2025-05-23T17:04:37.0901280Z ##[group]Run # Redis async tests often fail in CI due to networking/timing
+2025-05-23T17:04:37.0902191Z [36;1m# Redis async tests often fail in CI due to networking/timing[0m
+2025-05-23T17:04:37.0902881Z [36;1mecho "🔬 Running Redis Async Analysis..." [0m
+2025-05-23T17:04:37.0903992Z [36;1mpoetry run pytest tests/test_rate_limiter_async.py tests/test_redis_debug.py -v || echo "⚠️ Redis async tests failed (expected in CI)"[0m
+2025-05-23T17:04:37.0955986Z shell: /usr/bin/bash -e {0}
+2025-05-23T17:04:37.0956242Z env:
+2025-05-23T17:04:37.0956441Z   PYTHON_VERSION: 3.11
+2025-05-23T17:04:37.0956680Z   POETRY_VERSION: 1.8.0
+2025-05-23T17:04:37.0956967Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:37.0957407Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.12/x64/lib/pkgconfig
+2025-05-23T17:04:37.0957834Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:37.0958214Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:37.0958843Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:37.0959215Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.12/x64/lib
+2025-05-23T17:04:37.0959532Z   VENV: .venv/bin/activate
+2025-05-23T17:04:37.0959756Z ##[endgroup]
+2025-05-23T17:04:37.1040757Z 🔬 Running Redis Async Analysis...
+2025-05-23T17:04:37.7483828Z /home/runner/work/ratelimiter/ratelimiter/.venv/lib/python3.11/site-packages/pytest_asyncio/plugin.py:217: PytestDeprecationWarning: The configuration option "asyncio_default_fixture_loop_scope" is unset.
+2025-05-23T17:04:37.7486668Z The event loop scope for asynchronous fixtures will default to the fixture caching scope. Future versions of pytest-asyncio will default the loop scope for asynchronous fixtures to function scope. Set the default fixture loop scope explicitly in order to avoid unexpected behavior in the future. Valid fixture loop scopes are: "function", "class", "module", "package", "session"
+2025-05-23T17:04:37.7488251Z 
+2025-05-23T17:04:37.7488561Z   warnings.warn(PytestDeprecationWarning(_DEFAULT_FIXTURE_LOOP_SCOPE_UNSET))
+2025-05-23T17:04:37.7715900Z ============================= test session starts ==============================
+2025-05-23T17:04:37.7716898Z platform linux -- Python 3.11.12, pytest-8.3.5, pluggy-1.6.0 -- /home/runner/work/ratelimiter/ratelimiter/.venv/bin/python
+2025-05-23T17:04:37.7717739Z cachedir: .pytest_cache
+2025-05-23T17:04:37.7718187Z rootdir: /home/runner/work/ratelimiter/ratelimiter
+2025-05-23T17:04:37.7718708Z configfile: pyproject.toml
+2025-05-23T17:04:37.7719161Z plugins: asyncio-0.26.0, anyio-4.9.0, cov-6.1.1
+2025-05-23T17:04:37.7719976Z asyncio: mode=Mode.AUTO, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+2025-05-23T17:04:38.3033237Z collecting ... collected 7 items
+2025-05-23T17:04:38.3033555Z 
+2025-05-23T17:04:39.9208881Z tests/test_rate_limiter_async.py::test_high_frequency_sliding_redis_async FAILED [ 14%]
+2025-05-23T17:04:41.1632988Z tests/test_rate_limiter_async.py::test_high_frequency_fixed_redis_async FAILED [ 28%]
+2025-05-23T17:04:41.1694977Z tests/test_rate_limiter_async.py::test_redis_connection_via_app PASSED   [ 42%]
+2025-05-23T17:04:41.2272853Z tests/test_redis_debug.py::test_redis_connection PASSED                  [ 57%]
+2025-05-23T17:04:41.2709648Z tests/test_redis_debug.py::test_redis_connection_basic FAILED            [ 71%]
+2025-05-23T17:04:41.8894223Z tests/test_redis_debug.py::test_redis_basic_operations FAILED            [ 85%]
+2025-05-23T17:04:42.4313497Z tests/test_redis_debug.py::test_redis_concurrent_operations FAILED       [100%]
+2025-05-23T17:04:42.4314209Z 
+2025-05-23T17:04:42.4314440Z =================================== FAILURES ===================================
+2025-05-23T17:04:42.4315187Z ___________________ test_high_frequency_sliding_redis_async ____________________
+2025-05-23T17:04:42.4315978Z 
+2025-05-23T17:04:42.4316177Z     @pytest.mark.asyncio
+2025-05-23T17:04:42.4316722Z     async def test_high_frequency_sliding_redis_async():
+2025-05-23T17:04:42.4317761Z         """
+2025-05-23T17:04:42.4318358Z         Test sliding window rate limiting with RedisStorage using async HTTP client.
+2025-05-23T17:04:42.4319289Z         This avoids the deadlock issues with TestClient + async Redis operations.
+2025-05-23T17:04:42.4319973Z         """
+2025-05-23T17:04:42.4320312Z         # Add test key
+2025-05-23T17:04:42.4320750Z         test_key = "test_key_sliding_redis_async"
+2025-05-23T17:04:42.4321277Z         API_KEYS[test_key] = {
+2025-05-23T17:04:42.4321784Z             "name": "Test Client Sliding Redis Async",
+2025-05-23T17:04:42.4322321Z             "rate_limit": "5/minute",
+2025-05-23T17:04:42.4322787Z         }
+2025-05-23T17:04:42.4323105Z     
+2025-05-23T17:04:42.4323413Z         try:
+2025-05-23T17:04:42.4323795Z             async with httpx.AsyncClient(
+2025-05-23T17:04:42.4324428Z                 transport=ASGITransport(app=app), base_url="http://test"
+2025-05-23T17:04:42.4325055Z             ) as client:
+2025-05-23T17:04:42.4326014Z                 # Test basic rate limiting functionality
+2025-05-23T17:04:42.4326574Z                 storage = get_redis_storage()
+2025-05-23T17:04:42.4327057Z     
+2025-05-23T17:04:42.4327408Z                 # Clear any existing data
+2025-05-23T17:04:42.4327893Z                 await storage.clear(test_key)
+2025-05-23T17:04:42.4328327Z     
+2025-05-23T17:04:42.4328692Z                 # Make requests and count successes
+2025-05-23T17:04:42.4329216Z                 successful_requests = 0
+2025-05-23T17:04:42.4329702Z                 rate_limited_requests = 0
+2025-05-23T17:04:42.4330162Z     
+2025-05-23T17:04:42.4330647Z                 # Test with a 10/second rate limit by making 15 requests quickly
+2025-05-23T17:04:42.4331235Z                 for i in range(15):
+2025-05-23T17:04:42.4331869Z                     response = await client.get("/weather", headers={"X-API-Key": test_key})
+2025-05-23T17:04:42.4332454Z     
+2025-05-23T17:04:42.4332781Z                     if response.status_code == 200:
+2025-05-23T17:04:42.4333265Z                         successful_requests += 1
+2025-05-23T17:04:42.4333743Z                     elif response.status_code == 429:
+2025-05-23T17:04:42.4334187Z                         rate_limited_requests += 1
+2025-05-23T17:04:42.4334592Z     
+2025-05-23T17:04:42.4334918Z                     # Small delay to avoid overwhelming
+2025-05-23T17:04:42.4335557Z                     await asyncio.sleep(0.05)
+2025-05-23T17:04:42.4335959Z     
+2025-05-23T17:04:42.4336283Z                 print(f"\nAsync Redis Test Results:")
+2025-05-23T17:04:42.4336795Z                 print(f"Successful requests: {successful_requests}")
+2025-05-23T17:04:42.4337366Z                 print(f"Rate limited requests: {rate_limited_requests}")
+2025-05-23T17:04:42.4338021Z                 print(f"Total requests: {successful_requests + rate_limited_requests}")
+2025-05-23T17:04:42.4338557Z     
+2025-05-23T17:04:42.4338871Z                 # Verify that rate limiting is working
+2025-05-23T17:04:42.4339437Z >               assert successful_requests > 0, "Should have some successful requests"
+2025-05-23T17:04:42.4340167Z E               AssertionError: Should have some successful requests
+2025-05-23T17:04:42.4340657Z E               assert 0 > 0
+2025-05-23T17:04:42.4340880Z 
+2025-05-23T17:04:42.4341090Z tests/test_rate_limiter_async.py:58: AssertionError
+2025-05-23T17:04:42.4341658Z ----------------------------- Captured stdout call -----------------------------
+2025-05-23T17:04:42.4342046Z 
+2025-05-23T17:04:42.4342188Z Async Redis Test Results:
+2025-05-23T17:04:42.4342551Z Successful requests: 0
+2025-05-23T17:04:42.4342892Z Rate limited requests: 10
+2025-05-23T17:04:42.4343235Z Total requests: 10
+2025-05-23T17:04:42.4343690Z ____________________ test_high_frequency_fixed_redis_async _____________________
+2025-05-23T17:04:42.4344100Z 
+2025-05-23T17:04:42.4344252Z     @pytest.mark.asyncio
+2025-05-23T17:04:42.4344682Z     async def test_high_frequency_fixed_redis_async():
+2025-05-23T17:04:42.4345110Z         """
+2025-05-23T17:04:42.4345731Z         Test fixed window rate limiting with RedisStorage using async HTTP client.
+2025-05-23T17:04:42.4346589Z         """
+2025-05-23T17:04:42.4346879Z         # Add test key
+2025-05-23T17:04:42.4347249Z         test_key = "test_key_fixed_redis_async"
+2025-05-23T17:04:42.4347683Z         API_KEYS[test_key] = {
+2025-05-23T17:04:42.4348082Z             "name": "Test Client Fixed Redis Async",
+2025-05-23T17:04:42.4348516Z             "rate_limit": "5/minute",
+2025-05-23T17:04:42.4348888Z         }
+2025-05-23T17:04:42.4349160Z     
+2025-05-23T17:04:42.4349434Z         try:
+2025-05-23T17:04:42.4349756Z             async with httpx.AsyncClient(
+2025-05-23T17:04:42.4350281Z                 transport=ASGITransport(app=app), base_url="http://test"
+2025-05-23T17:04:42.4350788Z             ) as client:
+2025-05-23T17:04:42.4351172Z                 # Test basic rate limiting functionality
+2025-05-23T17:04:42.4367888Z                 storage = get_redis_storage()
+2025-05-23T17:04:42.4368384Z     
+2025-05-23T17:04:42.4368952Z                 # Clear any existing data
+2025-05-23T17:04:42.4369414Z                 await storage.clear(test_key)
+2025-05-23T17:04:42.4369970Z     
+2025-05-23T17:04:42.4370300Z                 # Make requests and count successes
+2025-05-23T17:04:42.4370758Z                 successful_requests = 0
+2025-05-23T17:04:42.4371179Z                 rate_limited_requests = 0
+2025-05-23T17:04:42.4371578Z     
+2025-05-23T17:04:42.4371976Z                 # Test with a 10/second rate limit by making 15 requests quickly
+2025-05-23T17:04:42.4372484Z                 for i in range(15):
+2025-05-23T17:04:42.4373035Z                     response = await client.get("/weather", headers={"X-API-Key": test_key})
+2025-05-23T17:04:42.4373593Z     
+2025-05-23T17:04:42.4373913Z                     if response.status_code == 200:
+2025-05-23T17:04:42.4374370Z                         successful_requests += 1
+2025-05-23T17:04:42.4374835Z                     elif response.status_code == 429:
+2025-05-23T17:04:42.4375446Z                         rate_limited_requests += 1
+2025-05-23T17:04:42.4375875Z     
+2025-05-23T17:04:42.4376198Z                     # Small delay
+2025-05-23T17:04:42.4376601Z                     await asyncio.sleep(0.05)
+2025-05-23T17:04:42.4376993Z     
+2025-05-23T17:04:42.4377323Z                 print(f"\nAsync Redis Fixed Test Results:")
+2025-05-23T17:04:42.4377853Z                 print(f"Successful requests: {successful_requests}")
+2025-05-23T17:04:42.4378415Z                 print(f"Rate limited requests: {rate_limited_requests}")
+2025-05-23T17:04:42.4379054Z                 print(f"Total requests: {successful_requests + rate_limited_requests}")
+2025-05-23T17:04:42.4379580Z     
+2025-05-23T17:04:42.4379892Z                 # Verify that rate limiting is working
+2025-05-23T17:04:42.4380455Z >               assert successful_requests > 0, "Should have some successful requests"
+2025-05-23T17:04:42.4381138Z E               AssertionError: Should have some successful requests
+2025-05-23T17:04:42.4381630Z E               assert 0 > 0
+2025-05-23T17:04:42.4381863Z 
+2025-05-23T17:04:42.4382071Z tests/test_rate_limiter_async.py:114: AssertionError
+2025-05-23T17:04:42.4382642Z ----------------------------- Captured stdout call -----------------------------
+2025-05-23T17:04:42.4383022Z 
+2025-05-23T17:04:42.4383177Z Async Redis Fixed Test Results:
+2025-05-23T17:04:42.4383559Z Successful requests: 0
+2025-05-23T17:04:42.4383900Z Rate limited requests: 10
+2025-05-23T17:04:42.4384254Z Total requests: 10
+2025-05-23T17:04:42.4384696Z _________________________ test_redis_connection_basic __________________________
+2025-05-23T17:04:42.4385080Z 
+2025-05-23T17:04:42.4385223Z     @pytest.mark.asyncio
+2025-05-23T17:04:42.4385766Z     async def test_redis_connection_basic():
+2025-05-23T17:04:42.4386284Z         """Basic test to check if we can connect to Redis at all"""
+2025-05-23T17:04:42.4386759Z         try:
+2025-05-23T17:04:42.4387069Z             storage = get_redis_storage()
+2025-05-23T17:04:42.4387513Z             print(f"Storage type: {type(storage)}")
+2025-05-23T17:04:42.4388252Z             print(f"Storage URI: {getattr(storage, '_uri', 'unknown')}")
+2025-05-23T17:04:42.4388768Z             result = await storage.check()
+2025-05-23T17:04:42.4389207Z             print(f"Redis check result: {result}")
+2025-05-23T17:04:42.4389643Z >           assert result is True
+2025-05-23T17:04:42.4390022Z E           assert False is True
+2025-05-23T17:04:42.4390265Z 
+2025-05-23T17:04:42.4390440Z tests/test_redis_debug.py:60: AssertionError
+2025-05-23T17:04:42.4390970Z ----------------------------- Captured stdout call -----------------------------
+2025-05-23T17:04:42.4391608Z Storage type: <class 'limits.aio.storage.redis.RedisStorage'>
+2025-05-23T17:04:42.4392123Z Storage URI: unknown
+2025-05-23T17:04:42.4392456Z Redis check result: False
+2025-05-23T17:04:42.4392849Z Redis connection failed: assert False is True
+2025-05-23T17:04:42.4393412Z _________________________ test_redis_basic_operations __________________________
+2025-05-23T17:04:42.4393959Z 
+2025-05-23T17:04:42.4394146Z self = Connection<host=redis,port=6379,db=0>
+2025-05-23T17:04:42.4394431Z 
+2025-05-23T17:04:42.4394588Z     async def connect(self) -> None:
+2025-05-23T17:04:42.4394964Z         """
+2025-05-23T17:04:42.4395466Z         Establish a connnection to the redis server
+2025-05-23T17:04:42.4395948Z         and initiate any post connect callbacks
+2025-05-23T17:04:42.4396356Z         """
+2025-05-23T17:04:42.4396664Z         self._connection_error = None
+2025-05-23T17:04:42.4397036Z         try:
+2025-05-23T17:04:42.4397341Z >           await self._connect()
+2025-05-23T17:04:42.4397590Z 
+2025-05-23T17:04:42.4397859Z .venv/lib/python3.11/site-packages/coredis/connection.py:287: 
+2025-05-23T17:04:42.4398441Z _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+2025-05-23T17:04:42.4399061Z .venv/lib/python3.11/site-packages/coredis/connection.py:781: in _connect
+2025-05-23T17:04:42.4399640Z     transport, _ = await connection
+2025-05-23T17:04:42.4400365Z /opt/hostedtoolcache/Python/3.11.12/x64/lib/python3.11/asyncio/base_events.py:1046: in create_connection
+2025-05-23T17:04:42.4401125Z     infos = await self._ensure_resolved(
+2025-05-23T17:04:42.4401841Z /opt/hostedtoolcache/Python/3.11.12/x64/lib/python3.11/asyncio/base_events.py:1420: in _ensure_resolved
+2025-05-23T17:04:42.4402685Z     return await loop.getaddrinfo(host, port, family=family, type=type,
+2025-05-23T17:04:42.4403507Z /opt/hostedtoolcache/Python/3.11.12/x64/lib/python3.11/asyncio/base_events.py:868: in getaddrinfo
+2025-05-23T17:04:42.4404208Z     return await self.run_in_executor(
+2025-05-23T17:04:42.4404897Z /opt/hostedtoolcache/Python/3.11.12/x64/lib/python3.11/concurrent/futures/thread.py:58: in run
+2025-05-23T17:04:42.4405847Z     result = self.fn(*self.args, **self.kwargs)
+2025-05-23T17:04:42.4406327Z _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+2025-05-23T17:04:42.4406641Z 
+2025-05-23T17:04:42.4407054Z host = 'redis', port = 6379, family = 0, type = <SocketKind.SOCK_STREAM: 1>
+2025-05-23T17:04:42.4407621Z proto = 0, flags = 0
+2025-05-23T17:04:42.4407832Z 
+2025-05-23T17:04:42.4408090Z     def getaddrinfo(host, port, family=0, type=0, proto=0, flags=0):
+2025-05-23T17:04:42.4408694Z         """Resolve host and port into list of address info entries.
+2025-05-23T17:04:42.4409163Z     
+2025-05-23T17:04:42.4409619Z         Translate the host/port argument into a sequence of 5-tuples that contain
+2025-05-23T17:04:42.4410352Z         all the necessary arguments for creating a socket connected to that service.
+2025-05-23T17:04:42.4411053Z         host is a domain name, a string representation of an IPv4/v6 address or
+2025-05-23T17:04:42.4411746Z         None. port is a string service name such as 'http', a numeric port number or
+2025-05-23T17:04:42.4412423Z         None. By passing None as the value of host and port, you can pass NULL to
+2025-05-23T17:04:42.4412958Z         the underlying C API.
+2025-05-23T17:04:42.4413310Z     
+2025-05-23T17:04:42.4413765Z         The family, type and proto arguments can be optionally specified in order to
+2025-05-23T17:04:42.4414904Z         narrow the list of addresses returned. Passing zero as a value for each of
+2025-05-23T17:04:42.4415849Z         these arguments selects the full range of results.
+2025-05-23T17:04:42.4416290Z         """
+2025-05-23T17:04:42.4416737Z         # We override this function since we want to translate the numeric family
+2025-05-23T17:04:42.4417309Z         # and socket type values to enum constants.
+2025-05-23T17:04:42.4417725Z         addrlist = []
+2025-05-23T17:04:42.4418200Z >       for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+2025-05-23T17:04:42.4418893Z E       socket.gaierror: [Errno -3] Temporary failure in name resolution
+2025-05-23T17:04:42.4419301Z 
+2025-05-23T17:04:42.4419628Z /opt/hostedtoolcache/Python/3.11.12/x64/lib/python3.11/socket.py:974: gaierror
+2025-05-23T17:04:42.4420092Z 
+2025-05-23T17:04:42.4420441Z The above exception was the direct cause of the following exception:
+2025-05-23T17:04:42.4421015Z 
+2025-05-23T17:04:42.4421175Z     @pytest.mark.asyncio
+2025-05-23T17:04:42.4421563Z     async def test_redis_basic_operations():
+2025-05-23T17:04:42.4422010Z         """Test basic Redis operations"""
+2025-05-23T17:04:42.4422407Z         try:
+2025-05-23T17:04:42.4422716Z             storage = get_redis_storage()
+2025-05-23T17:04:42.4423099Z     
+2025-05-23T17:04:42.4423396Z             # Test basic increment
+2025-05-23T17:04:42.4423809Z             print("Testing basic increment...")
+2025-05-23T17:04:42.4424275Z >           result = await storage.incr("test_key", 60, 1)
+2025-05-23T17:04:42.4424582Z 
+2025-05-23T17:04:42.4424732Z tests/test_redis_debug.py:74: 
+2025-05-23T17:04:42.4425153Z _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+2025-05-23T17:04:42.4425973Z .venv/lib/python3.11/site-packages/limits/aio/storage/base.py:28: in inner
+2025-05-23T17:04:42.4426550Z     return await fn(*args, **kwargs)
+2025-05-23T17:04:42.4427184Z .venv/lib/python3.11/site-packages/limits/aio/storage/redis/__init__.py:163: in incr
+2025-05-23T17:04:42.4427890Z     return await self.bridge.incr(key, expiry, amount)
+2025-05-23T17:04:42.4428569Z .venv/lib/python3.11/site-packages/limits/aio/storage/redis/coredis.py:117: in incr
+2025-05-23T17:04:42.4429319Z     if (value := await self.get_connection().incrby(key, amount)) == amount:
+2025-05-23T17:04:42.4430072Z .venv/lib/python3.11/site-packages/coredis/commands/_wrappers.py:206: in wrapped
+2025-05-23T17:04:42.4430799Z     async with command_cache(callable, *args, **kwargs) as response:
+2025-05-23T17:04:42.4431536Z /opt/hostedtoolcache/Python/3.11.12/x64/lib/python3.11/contextlib.py:210: in __aenter__
+2025-05-23T17:04:42.4432184Z     return await anext(self.gen)
+2025-05-23T17:04:42.4432759Z .venv/lib/python3.11/site-packages/coredis/commands/_wrappers.py:103: in __call__
+2025-05-23T17:04:42.4433375Z     yield await func(*args, **kwargs)
+2025-05-23T17:04:42.4433937Z .venv/lib/python3.11/site-packages/coredis/commands/core.py:349: in incrby
+2025-05-23T17:04:42.4434532Z     return await self.execute_command(
+2025-05-23T17:04:42.4435148Z .venv/lib/python3.11/site-packages/coredis/client/basic.py:945: in execute_command
+2025-05-23T17:04:42.4435992Z     return await self.retry_policy.call_with_retries(
+2025-05-23T17:04:42.4436625Z .venv/lib/python3.11/site-packages/coredis/retry.py:71: in call_with_retries
+2025-05-23T17:04:42.4437184Z     raise last_error
+2025-05-23T17:04:42.4437692Z .venv/lib/python3.11/site-packages/coredis/retry.py:55: in call_with_retries
+2025-05-23T17:04:42.4438265Z     return await func()
+2025-05-23T17:04:42.4438809Z .venv/lib/python3.11/site-packages/coredis/client/basic.py:974: in _execute_command
+2025-05-23T17:04:42.4439461Z     request = await connection.create_request(
+2025-05-23T17:04:42.4440137Z .venv/lib/python3.11/site-packages/coredis/connection.py:610: in create_request
+2025-05-23T17:04:42.4440723Z     await self.connect()
+2025-05-23T17:04:42.4441118Z _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+2025-05-23T17:04:42.4441629Z 
+2025-05-23T17:04:42.4441806Z self = Connection<host=redis,port=6379,db=0>
+2025-05-23T17:04:42.4442097Z 
+2025-05-23T17:04:42.4442253Z     async def connect(self) -> None:
+2025-05-23T17:04:42.4442626Z         """
+2025-05-23T17:04:42.4442958Z         Establish a connnection to the redis server
+2025-05-23T17:04:42.4443425Z         and initiate any post connect callbacks
+2025-05-23T17:04:42.4443833Z         """
+2025-05-23T17:04:42.4444135Z         self._connection_error = None
+2025-05-23T17:04:42.4444517Z         try:
+2025-05-23T17:04:42.4444822Z             await self._connect()
+2025-05-23T17:04:42.4445420Z         except (asyncio.CancelledError, RedisError) as err:
+2025-05-23T17:04:42.4445923Z             self._connection_error = err
+2025-05-23T17:04:42.4446321Z             raise
+2025-05-23T17:04:42.4446639Z         except Exception as err:
+2025-05-23T17:04:42.4447028Z             self._connection_error = err
+2025-05-23T17:04:42.4447642Z >           raise ConnectionError(str(err)) from err
+2025-05-23T17:04:42.4448334Z E           coredis.exceptions.ConnectionError: [Errno -3] Temporary failure in name resolution
+2025-05-23T17:04:42.4448853Z 
+2025-05-23T17:04:42.4449180Z .venv/lib/python3.11/site-packages/coredis/connection.py:293: ConnectionError
+2025-05-23T17:04:42.4449878Z ----------------------------- Captured stdout call -----------------------------
+2025-05-23T17:04:42.4450395Z Testing basic increment...
+2025-05-23T17:04:42.4450939Z Redis basic operations failed: [Errno -3] Temporary failure in name resolution
+2025-05-23T17:04:42.4451643Z _______________________ test_redis_concurrent_operations _______________________
+2025-05-23T17:04:42.4452037Z 
+2025-05-23T17:04:42.4452215Z self = Connection<host=redis,port=6379,db=0>
+2025-05-23T17:04:42.4452497Z 
+2025-05-23T17:04:42.4452649Z     async def connect(self) -> None:
+2025-05-23T17:04:42.4453017Z         """
+2025-05-23T17:04:42.4453356Z         Establish a connnection to the redis server
+2025-05-23T17:04:42.4453831Z         and initiate any post connect callbacks
+2025-05-23T17:04:42.4454255Z         """
+2025-05-23T17:04:42.4454564Z         self._connection_error = None
+2025-05-23T17:04:42.4454936Z         try:
+2025-05-23T17:04:42.4455382Z >           await self._connect()
+2025-05-23T17:04:42.4455648Z 
+2025-05-23T17:04:42.4455910Z .venv/lib/python3.11/site-packages/coredis/connection.py:287: 
+2025-05-23T17:04:42.4456478Z _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+2025-05-23T17:04:42.4457093Z .venv/lib/python3.11/site-packages/coredis/connection.py:781: in _connect
+2025-05-23T17:04:42.4457669Z     transport, _ = await connection
+2025-05-23T17:04:42.4458390Z /opt/hostedtoolcache/Python/3.11.12/x64/lib/python3.11/asyncio/base_events.py:1046: in create_connection
+2025-05-23T17:04:42.4459125Z     infos = await self._ensure_resolved(
+2025-05-23T17:04:42.4459845Z /opt/hostedtoolcache/Python/3.11.12/x64/lib/python3.11/asyncio/base_events.py:1420: in _ensure_resolved
+2025-05-23T17:04:42.4460714Z     return await loop.getaddrinfo(host, port, family=family, type=type,
+2025-05-23T17:04:42.4461532Z /opt/hostedtoolcache/Python/3.11.12/x64/lib/python3.11/asyncio/base_events.py:868: in getaddrinfo
+2025-05-23T17:04:42.4462229Z     return await self.run_in_executor(
+2025-05-23T17:04:42.4462893Z /opt/hostedtoolcache/Python/3.11.12/x64/lib/python3.11/concurrent/futures/thread.py:58: in run
+2025-05-23T17:04:42.4463601Z     result = self.fn(*self.args, **self.kwargs)
+2025-05-23T17:04:42.4464082Z _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+2025-05-23T17:04:42.4464397Z 
+2025-05-23T17:04:42.4464670Z host = 'redis', port = 6379, family = 0, type = <SocketKind.SOCK_STREAM: 1>
+2025-05-23T17:04:42.4465190Z proto = 0, flags = 0
+2025-05-23T17:04:42.4465540Z 
+2025-05-23T17:04:42.4465798Z     def getaddrinfo(host, port, family=0, type=0, proto=0, flags=0):
+2025-05-23T17:04:42.4466403Z         """Resolve host and port into list of address info entries.
+2025-05-23T17:04:42.4466885Z     
+2025-05-23T17:04:42.4467562Z         Translate the host/port argument into a sequence of 5-tuples that contain
+2025-05-23T17:04:42.4468315Z         all the necessary arguments for creating a socket connected to that service.
+2025-05-23T17:04:42.4469067Z         host is a domain name, a string representation of an IPv4/v6 address or
+2025-05-23T17:04:42.4469803Z         None. port is a string service name such as 'http', a numeric port number or
+2025-05-23T17:04:42.4470495Z         None. By passing None as the value of host and port, you can pass NULL to
+2025-05-23T17:04:42.4471049Z         the underlying C API.
+2025-05-23T17:04:42.4471391Z     
+2025-05-23T17:04:42.4471838Z         The family, type and proto arguments can be optionally specified in order to
+2025-05-23T17:04:42.4472579Z         narrow the list of addresses returned. Passing zero as a value for each of
+2025-05-23T17:04:42.4473197Z         these arguments selects the full range of results.
+2025-05-23T17:04:42.4473804Z         """
+2025-05-23T17:04:42.4474278Z         # We override this function since we want to translate the numeric family
+2025-05-23T17:04:42.4474871Z         # and socket type values to enum constants.
+2025-05-23T17:04:42.4475463Z         addrlist = []
+2025-05-23T17:04:42.4475951Z >       for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+2025-05-23T17:04:42.4476643Z E       socket.gaierror: [Errno -3] Temporary failure in name resolution
+2025-05-23T17:04:42.4477041Z 
+2025-05-23T17:04:42.4477367Z /opt/hostedtoolcache/Python/3.11.12/x64/lib/python3.11/socket.py:974: gaierror
+2025-05-23T17:04:42.4477826Z 
+2025-05-23T17:04:42.4478099Z The above exception was the direct cause of the following exception:
+2025-05-23T17:04:42.4478507Z 
+2025-05-23T17:04:42.4478653Z     @pytest.mark.asyncio
+2025-05-23T17:04:42.4479060Z     async def test_redis_concurrent_operations():
+2025-05-23T17:04:42.4479640Z         """Test concurrent Redis operations to see if there's a deadlock"""
+2025-05-23T17:04:42.4480162Z         try:
+2025-05-23T17:04:42.4480492Z             storage = get_redis_storage()
+2025-05-23T17:04:42.4480884Z     
+2025-05-23T17:04:42.4481201Z             async def increment_task(task_id):
+2025-05-23T17:04:42.4481643Z                 try:
+2025-05-23T17:04:42.4482055Z                     print(f"Task {task_id} starting...")
+2025-05-23T17:04:42.4482633Z                     result = await storage.incr(f"concurrent_test_{task_id}", 60, 1)
+2025-05-23T17:04:42.4483245Z                     print(f"Task {task_id} completed with result: {result}")
+2025-05-23T17:04:42.4483729Z                     return result
+2025-05-23T17:04:42.4484119Z                 except Exception as e:
+2025-05-23T17:04:42.4484581Z                     print(f"Task {task_id} failed: {e}")
+2025-05-23T17:04:42.4485011Z                     raise
+2025-05-23T17:04:42.4485477Z     
+2025-05-23T17:04:42.4485803Z             print("Starting 5 concurrent tasks...")
+2025-05-23T17:04:42.4486274Z             tasks = [increment_task(i) for i in range(5)]
+2025-05-23T17:04:42.4486703Z     
+2025-05-23T17:04:42.4487034Z             # Use asyncio.wait_for to prevent hanging
+2025-05-23T17:04:42.4487628Z >           results = await asyncio.wait_for(asyncio.gather(*tasks), timeout=10.0)
+2025-05-23T17:04:42.4488053Z 
+2025-05-23T17:04:42.4488204Z tests/test_redis_debug.py:113: 
+2025-05-23T17:04:42.4488628Z _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+2025-05-23T17:04:42.4489322Z /opt/hostedtoolcache/Python/3.11.12/x64/lib/python3.11/asyncio/tasks.py:489: in wait_for
+2025-05-23T17:04:42.4489960Z     return fut.result()
+2025-05-23T17:04:42.4490379Z tests/test_redis_debug.py:102: in increment_task
+2025-05-23T17:04:42.4490934Z     result = await storage.incr(f"concurrent_test_{task_id}", 60, 1)
+2025-05-23T17:04:42.4491619Z .venv/lib/python3.11/site-packages/limits/aio/storage/base.py:28: in inner
+2025-05-23T17:04:42.4492200Z     return await fn(*args, **kwargs)
+2025-05-23T17:04:42.4492819Z .venv/lib/python3.11/site-packages/limits/aio/storage/redis/__init__.py:163: in incr
+2025-05-23T17:04:42.4493672Z     return await self.bridge.incr(key, expiry, amount)
+2025-05-23T17:04:42.4494339Z .venv/lib/python3.11/site-packages/limits/aio/storage/redis/coredis.py:117: in incr
+2025-05-23T17:04:42.4495093Z     if (value := await self.get_connection().incrby(key, amount)) == amount:
+2025-05-23T17:04:42.4495971Z .venv/lib/python3.11/site-packages/coredis/commands/_wrappers.py:206: in wrapped
+2025-05-23T17:04:42.4496699Z     async with command_cache(callable, *args, **kwargs) as response:
+2025-05-23T17:04:42.4497438Z /opt/hostedtoolcache/Python/3.11.12/x64/lib/python3.11/contextlib.py:210: in __aenter__
+2025-05-23T17:04:42.4498106Z     return await anext(self.gen)
+2025-05-23T17:04:42.4498719Z .venv/lib/python3.11/site-packages/coredis/commands/_wrappers.py:103: in __call__
+2025-05-23T17:04:42.4499360Z     yield await func(*args, **kwargs)
+2025-05-23T17:04:42.4499926Z .venv/lib/python3.11/site-packages/coredis/commands/core.py:349: in incrby
+2025-05-23T17:04:42.4500814Z     return await self.execute_command(
+2025-05-23T17:04:42.4501429Z .venv/lib/python3.11/site-packages/coredis/client/basic.py:945: in execute_command
+2025-05-23T17:04:42.4502090Z     return await self.retry_policy.call_with_retries(
+2025-05-23T17:04:42.4502715Z .venv/lib/python3.11/site-packages/coredis/retry.py:71: in call_with_retries
+2025-05-23T17:04:42.4503289Z     raise last_error
+2025-05-23T17:04:42.4503792Z .venv/lib/python3.11/site-packages/coredis/retry.py:55: in call_with_retries
+2025-05-23T17:04:42.4504363Z     return await func()
+2025-05-23T17:04:42.4504892Z .venv/lib/python3.11/site-packages/coredis/client/basic.py:974: in _execute_command
+2025-05-23T17:04:42.4505750Z     request = await connection.create_request(
+2025-05-23T17:04:42.4506388Z .venv/lib/python3.11/site-packages/coredis/connection.py:610: in create_request
+2025-05-23T17:04:42.4507008Z     await self.connect()
+2025-05-23T17:04:42.4507404Z _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+2025-05-23T17:04:42.4507759Z 
+2025-05-23T17:04:42.4507939Z self = Connection<host=redis,port=6379,db=0>
+2025-05-23T17:04:42.4508237Z 
+2025-05-23T17:04:42.4508391Z     async def connect(self) -> None:
+2025-05-23T17:04:42.4508776Z         """
+2025-05-23T17:04:42.4509116Z         Establish a connnection to the redis server
+2025-05-23T17:04:42.4509594Z         and initiate any post connect callbacks
+2025-05-23T17:04:42.4510010Z         """
+2025-05-23T17:04:42.4510329Z         self._connection_error = None
+2025-05-23T17:04:42.4510719Z         try:
+2025-05-23T17:04:42.4511031Z             await self._connect()
+2025-05-23T17:04:42.4511496Z         except (asyncio.CancelledError, RedisError) as err:
+2025-05-23T17:04:42.4511986Z             self._connection_error = err
+2025-05-23T17:04:42.4512378Z             raise
+2025-05-23T17:04:42.4512703Z         except Exception as err:
+2025-05-23T17:04:42.4513101Z             self._connection_error = err
+2025-05-23T17:04:42.4513542Z >           raise ConnectionError(str(err)) from err
+2025-05-23T17:04:42.4514250Z E           coredis.exceptions.ConnectionError: [Errno -3] Temporary failure in name resolution
+2025-05-23T17:04:42.4514787Z 
+2025-05-23T17:04:42.4515120Z .venv/lib/python3.11/site-packages/coredis/connection.py:293: ConnectionError
+2025-05-23T17:04:42.4515992Z ----------------------------- Captured stdout call -----------------------------
+2025-05-23T17:04:42.4516515Z Starting 5 concurrent tasks...
+2025-05-23T17:04:42.4516880Z Task 0 starting...
+2025-05-23T17:04:42.4517202Z Task 1 starting...
+2025-05-23T17:04:42.4517519Z Task 2 starting...
+2025-05-23T17:04:42.4517832Z Task 3 starting...
+2025-05-23T17:04:42.4518152Z Task 4 starting...
+2025-05-23T17:04:42.4518576Z Task 0 failed: [Errno -3] Temporary failure in name resolution
+2025-05-23T17:04:42.4519271Z Concurrent operations failed: [Errno -3] Temporary failure in name resolution
+2025-05-23T17:04:42.4519982Z --------------------------- Captured stdout teardown ---------------------------
+2025-05-23T17:04:42.4520614Z Task 1 failed: [Errno -3] Temporary failure in name resolution
+2025-05-23T17:04:42.4521419Z ---------------------------- Captured log teardown -----------------------------
+2025-05-23T17:04:42.4522495Z ERROR    asyncio:base_events.py:1785 an error occurred during closing of asynchronous generator <async_generator object CommandCache.__call__ at 0x7febbbc1e650>
+2025-05-23T17:04:42.4523625Z asyncgen: <async_generator object CommandCache.__call__ at 0x7febbbc1e650>
+2025-05-23T17:04:42.4524320Z RuntimeError: aclose(): asynchronous generator is already running
+2025-05-23T17:04:42.4525552Z ERROR    asyncio:base_events.py:1785 an error occurred during closing of asynchronous generator <async_generator object CommandCache.__call__ at 0x7febbbc1e260>
+2025-05-23T17:04:42.4526660Z asyncgen: <async_generator object CommandCache.__call__ at 0x7febbbc1e260>
+2025-05-23T17:04:42.4527348Z RuntimeError: aclose(): asynchronous generator is already running
+2025-05-23T17:04:42.4528417Z ERROR    asyncio:base_events.py:1785 an error occurred during closing of asynchronous generator <async_generator object CommandCache.__call__ at 0x7febbbc1de70>
+2025-05-23T17:04:42.4529707Z asyncgen: <async_generator object CommandCache.__call__ at 0x7febbbc1de70>
+2025-05-23T17:04:42.4530416Z RuntimeError: aclose(): asynchronous generator is already running
+2025-05-23T17:04:42.4530997Z ================================ tests coverage ================================
+2025-05-23T17:04:42.4531595Z _______________ coverage: platform linux, python 3.11.12-final-0 _______________
+2025-05-23T17:04:42.4532013Z 
+2025-05-23T17:04:42.4532212Z Name                                                   Stmts   Miss  Cover   Missing
+2025-05-23T17:04:42.4532756Z ------------------------------------------------------------------------------------
+2025-05-23T17:04:42.4533413Z src/propcorn_ratelimiter/__init__.py                       0      0   100%
+2025-05-23T17:04:42.4534154Z src/propcorn_ratelimiter/main.py                          34     10    71%   22-31, 55, 68-74, 85-86
+2025-05-23T17:04:42.4535022Z src/propcorn_ratelimiter/rate_limiter/limiter.py          58      9    84%   41, 48-49, 65, 71, 92, 106, 119-120
+2025-05-23T17:04:42.4536037Z src/propcorn_ratelimiter/weather/__init__.py               0      0   100%
+2025-05-23T17:04:42.4536779Z src/propcorn_ratelimiter/weather/geoip_enrichment.py       8      0   100%
+2025-05-23T17:04:42.4537555Z src/propcorn_ratelimiter/weather/weather_request.py        9      5    44%   23-34
+2025-05-23T17:04:42.4538262Z ------------------------------------------------------------------------------------
+2025-05-23T17:04:42.4538802Z TOTAL                                                    109     24    78%
+2025-05-23T17:04:42.4539320Z =========================== short test summary info ============================
+2025-05-23T17:04:42.4540330Z FAILED tests/test_rate_limiter_async.py::test_high_frequency_sliding_redis_async - AssertionError: Should have some successful requests
+2025-05-23T17:04:42.4541192Z assert 0 > 0
+2025-05-23T17:04:42.4541957Z FAILED tests/test_rate_limiter_async.py::test_high_frequency_fixed_redis_async - AssertionError: Should have some successful requests
+2025-05-23T17:04:42.4542812Z assert 0 > 0
+2025-05-23T17:04:42.4543318Z FAILED tests/test_redis_debug.py::test_redis_connection_basic - assert False is True
+2025-05-23T17:04:42.4544524Z FAILED tests/test_redis_debug.py::test_redis_basic_operations - coredis.exceptions.ConnectionError: [Errno -3] Temporary failure in name resolution
+2025-05-23T17:04:42.4546188Z FAILED tests/test_redis_debug.py::test_redis_concurrent_operations - coredis.exceptions.ConnectionError: [Errno -3] Temporary failure in name resolution
+2025-05-23T17:04:42.4547228Z ========================= 5 failed, 2 passed in 4.67s ==========================
+2025-05-23T17:04:42.5657021Z ⚠️ Redis async tests failed (expected in CI)

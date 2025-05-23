@@ -1,0 +1,70 @@
+﻿2025-05-23T17:07:26.8911792Z ##[group]Run actions/checkout@v4
+2025-05-23T17:07:26.8912743Z with:
+2025-05-23T17:07:26.8913259Z   repository: jrysztv/ratelimiter
+2025-05-23T17:07:26.8914026Z   token: ***
+2025-05-23T17:07:26.8914518Z   ssh-strict: true
+2025-05-23T17:07:26.8915011Z   ssh-user: git
+2025-05-23T17:07:26.8915530Z   persist-credentials: true
+2025-05-23T17:07:26.8916088Z   clean: true
+2025-05-23T17:07:26.8916607Z   sparse-checkout-cone-mode: true
+2025-05-23T17:07:26.8917389Z   fetch-depth: 1
+2025-05-23T17:07:26.8917884Z   fetch-tags: false
+2025-05-23T17:07:26.8918398Z   show-progress: true
+2025-05-23T17:07:26.8918906Z   lfs: false
+2025-05-23T17:07:26.8919383Z   submodules: false
+2025-05-23T17:07:26.8919890Z   set-safe-directory: true
+2025-05-23T17:07:26.8920667Z env:
+2025-05-23T17:07:26.8921157Z   PYTHON_VERSION: 3.11
+2025-05-23T17:07:26.8921683Z   POETRY_VERSION: 1.8.0
+2025-05-23T17:07:26.8922211Z ##[endgroup]
+2025-05-23T17:07:27.0239054Z Syncing repository: jrysztv/ratelimiter
+2025-05-23T17:07:27.0242423Z ##[group]Getting Git version info
+2025-05-23T17:07:27.0243397Z Working directory is '/home/runner/work/ratelimiter/ratelimiter'
+2025-05-23T17:07:27.0244654Z [command]/usr/bin/git version
+2025-05-23T17:07:27.0263595Z git version 2.49.0
+2025-05-23T17:07:27.0292853Z ##[endgroup]
+2025-05-23T17:07:27.0311072Z Temporarily overriding HOME='/home/runner/work/_temp/69013231-2cce-42f0-a9fb-471a1ba264a5' before making global git config changes
+2025-05-23T17:07:27.0313654Z Adding repository directory to the temporary git global config as a safe directory
+2025-05-23T17:07:27.0319447Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/ratelimiter/ratelimiter
+2025-05-23T17:07:27.0361343Z Deleting the contents of '/home/runner/work/ratelimiter/ratelimiter'
+2025-05-23T17:07:27.0368060Z ##[group]Initializing the repository
+2025-05-23T17:07:27.0369693Z [command]/usr/bin/git init /home/runner/work/ratelimiter/ratelimiter
+2025-05-23T17:07:27.0439275Z hint: Using 'master' as the name for the initial branch. This default branch name
+2025-05-23T17:07:27.0441384Z hint: is subject to change. To configure the initial branch name to use in all
+2025-05-23T17:07:27.0442904Z hint: of your new repositories, which will suppress this warning, call:
+2025-05-23T17:07:27.0443692Z hint:
+2025-05-23T17:07:27.0444291Z hint: 	git config --global init.defaultBranch <name>
+2025-05-23T17:07:27.0444974Z hint:
+2025-05-23T17:07:27.0445616Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2025-05-23T17:07:27.0446977Z hint: 'development'. The just-created branch can be renamed via this command:
+2025-05-23T17:07:27.0448197Z hint:
+2025-05-23T17:07:27.0448700Z hint: 	git branch -m <name>
+2025-05-23T17:07:27.0449560Z Initialized empty Git repository in /home/runner/work/ratelimiter/ratelimiter/.git/
+2025-05-23T17:07:27.0453276Z [command]/usr/bin/git remote add origin https://github.com/jrysztv/ratelimiter
+2025-05-23T17:07:27.0489624Z ##[endgroup]
+2025-05-23T17:07:27.0490731Z ##[group]Disabling automatic garbage collection
+2025-05-23T17:07:27.0494271Z [command]/usr/bin/git config --local gc.auto 0
+2025-05-23T17:07:27.0527514Z ##[endgroup]
+2025-05-23T17:07:27.0528438Z ##[group]Setting up auth
+2025-05-23T17:07:27.0535872Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-05-23T17:07:27.0572281Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-05-23T17:07:27.0848462Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-05-23T17:07:27.0881681Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-05-23T17:07:27.1123003Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2025-05-23T17:07:27.1161295Z ##[endgroup]
+2025-05-23T17:07:27.1163339Z ##[group]Fetching the repository
+2025-05-23T17:07:27.1172020Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +a9c52d8fcf185756ad8cce2ff85069afc6575bdd:refs/remotes/origin/main
+2025-05-23T17:07:27.7860160Z From https://github.com/jrysztv/ratelimiter
+2025-05-23T17:07:27.7862053Z  * [new ref]         a9c52d8fcf185756ad8cce2ff85069afc6575bdd -> origin/main
+2025-05-23T17:07:27.7887750Z ##[endgroup]
+2025-05-23T17:07:27.7889281Z ##[group]Determining the checkout info
+2025-05-23T17:07:27.7890954Z ##[endgroup]
+2025-05-23T17:07:27.7981799Z [command]/usr/bin/git sparse-checkout disable
+2025-05-23T17:07:27.7984988Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2025-05-23T17:07:27.7989155Z ##[group]Checking out the ref
+2025-05-23T17:07:27.7990717Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2025-05-23T17:07:27.8198004Z Switched to a new branch 'main'
+2025-05-23T17:07:27.8199470Z branch 'main' set up to track 'origin/main'.
+2025-05-23T17:07:27.8206875Z ##[endgroup]
+2025-05-23T17:07:27.8248322Z [command]/usr/bin/git log -1 --format=%H
+2025-05-23T17:07:27.8274159Z a9c52d8fcf185756ad8cce2ff85069afc6575bdd

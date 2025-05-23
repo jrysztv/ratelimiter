@@ -1,0 +1,24 @@
+﻿2025-05-23T17:04:14.2632326Z ##[group]Run actions/cache@v4
+2025-05-23T17:04:14.2632741Z with:
+2025-05-23T17:04:14.2633017Z   path: ~/.local
+2025-05-23T17:04:14.2633341Z   key: poetry-1.8.0-Linux
+2025-05-23T17:04:14.2633717Z   enableCrossOsArchive: false
+2025-05-23T17:04:14.2634109Z   fail-on-cache-miss: false
+2025-05-23T17:04:14.2634465Z   lookup-only: false
+2025-05-23T17:04:14.2634784Z   save-always: false
+2025-05-23T17:04:14.2635471Z env:
+2025-05-23T17:04:14.2635756Z   PYTHON_VERSION: 3.11
+2025-05-23T17:04:14.2636094Z   POETRY_VERSION: 1.8.0
+2025-05-23T17:04:14.2636518Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:14.2636946Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.12/x64/lib/pkgconfig
+2025-05-23T17:04:14.2637341Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:14.2637692Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:14.2638045Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:14.2638394Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.12/x64/lib
+2025-05-23T17:04:14.2638730Z ##[endgroup]
+2025-05-23T17:04:14.5375141Z Cache hit for: poetry-1.8.0-Linux
+2025-05-23T17:04:15.2133170Z Received 28673352 of 28673352 (100.0%), 47.4 MBs/sec
+2025-05-23T17:04:15.2134260Z Cache Size: ~27 MB (28673352 B)
+2025-05-23T17:04:15.2170110Z [command]/usr/bin/tar -xf /home/runner/work/_temp/f32919fd-542a-4c59-a0c1-3e890842eb0a/cache.tzst -P -C /home/runner/work/ratelimiter/ratelimiter --use-compress-program unzstd
+2025-05-23T17:04:15.5775973Z Cache restored successfully
+2025-05-23T17:04:15.5930352Z Cache restored from key: poetry-1.8.0-Linux

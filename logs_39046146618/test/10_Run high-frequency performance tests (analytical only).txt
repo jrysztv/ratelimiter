@@ -1,0 +1,211 @@
+﻿2025-05-23T17:04:27.1751127Z ##[group]Run # These tests show memory vs Redis performance characteristics
+2025-05-23T17:04:27.1751655Z [36;1m# These tests show memory vs Redis performance characteristics[0m
+2025-05-23T17:04:27.1752119Z [36;1mecho "🔬 Running High-Frequency Performance Analysis..."[0m
+2025-05-23T17:04:27.1752766Z [36;1mpoetry run pytest tests/test_rate_limiter.py -v -k "high_frequency" || echo "⚠️ Performance tests failed (expected in CI environments)"[0m
+2025-05-23T17:04:27.1804105Z shell: /usr/bin/bash -e {0}
+2025-05-23T17:04:27.1804356Z env:
+2025-05-23T17:04:27.1804546Z   PYTHON_VERSION: 3.11
+2025-05-23T17:04:27.1804778Z   POETRY_VERSION: 1.8.0
+2025-05-23T17:04:27.1805066Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:27.1805719Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.12/x64/lib/pkgconfig
+2025-05-23T17:04:27.1806157Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:27.1806541Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:27.1806952Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:27.1807329Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.12/x64/lib
+2025-05-23T17:04:27.1807665Z   VENV: .venv/bin/activate
+2025-05-23T17:04:27.1807895Z ##[endgroup]
+2025-05-23T17:04:27.1879575Z 🔬 Running High-Frequency Performance Analysis...
+2025-05-23T17:04:27.8285859Z /home/runner/work/ratelimiter/ratelimiter/.venv/lib/python3.11/site-packages/pytest_asyncio/plugin.py:217: PytestDeprecationWarning: The configuration option "asyncio_default_fixture_loop_scope" is unset.
+2025-05-23T17:04:27.8289315Z The event loop scope for asynchronous fixtures will default to the fixture caching scope. Future versions of pytest-asyncio will default the loop scope for asynchronous fixtures to function scope. Set the default fixture loop scope explicitly in order to avoid unexpected behavior in the future. Valid fixture loop scopes are: "function", "class", "module", "package", "session"
+2025-05-23T17:04:27.8291065Z 
+2025-05-23T17:04:27.8291408Z   warnings.warn(PytestDeprecationWarning(_DEFAULT_FIXTURE_LOOP_SCOPE_UNSET))
+2025-05-23T17:04:27.8515800Z ============================= test session starts ==============================
+2025-05-23T17:04:27.8516919Z platform linux -- Python 3.11.12, pytest-8.3.5, pluggy-1.6.0 -- /home/runner/work/ratelimiter/ratelimiter/.venv/bin/python
+2025-05-23T17:04:27.8517962Z cachedir: .pytest_cache
+2025-05-23T17:04:27.8518436Z rootdir: /home/runner/work/ratelimiter/ratelimiter
+2025-05-23T17:04:27.8518977Z configfile: pyproject.toml
+2025-05-23T17:04:27.8519447Z plugins: asyncio-0.26.0, anyio-4.9.0, cov-6.1.1
+2025-05-23T17:04:27.8520353Z asyncio: mode=Mode.AUTO, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+2025-05-23T17:04:28.4391006Z collecting ... collected 14 items / 10 deselected / 4 selected
+2025-05-23T17:04:28.4391548Z 
+2025-05-23T17:04:30.5201338Z tests/test_rate_limiter.py::test_high_frequency_sliding_memory[10/second-8-18] FAILED [ 25%]
+2025-05-23T17:04:32.8472291Z tests/test_rate_limiter.py::test_high_frequency_sliding_redis[10/second-8-18] PASSED [ 50%]
+2025-05-23T17:04:34.9038452Z tests/test_rate_limiter.py::test_high_frequency_fixed_memory[10/second-8-16] PASSED [ 75%]
+2025-05-23T17:04:36.9742205Z tests/test_rate_limiter.py::test_high_frequency_fixed_redis[10/second-8-14] PASSED [100%]
+2025-05-23T17:04:36.9742890Z 
+2025-05-23T17:04:36.9743110Z =================================== FAILURES ===================================
+2025-05-23T17:04:36.9743791Z ______________ test_high_frequency_sliding_memory[10/second-8-18] ______________
+2025-05-23T17:04:36.9744194Z 
+2025-05-23T17:04:36.9744445Z rate_limit_value = '10/second', lower = 8, higher = 18
+2025-05-23T17:04:36.9744862Z 
+2025-05-23T17:04:36.9745043Z     @pytest.mark.asyncio
+2025-05-23T17:04:36.9745987Z     @pytest.mark.parametrize("rate_limit_value,lower,higher", [("10/second", 8, 18)])
+2025-05-23T17:04:36.9746848Z     async def test_high_frequency_sliding_memory(
+2025-05-23T17:04:36.9747491Z         rate_limit_value: str, lower: int, higher: int
+2025-05-23T17:04:36.9748388Z     ):
+2025-05-23T17:04:36.9748723Z         """
+2025-05-23T17:04:36.9749198Z         Test sliding window rate limiting with MemoryStorage.
+2025-05-23T17:04:36.9749757Z         Makes requests at 30/second for 5 seconds and verifies proper rate limiting.
+2025-05-23T17:04:36.9750410Z         Note: MemoryStorage has slightly higher tolerance due to in-memory nature.
+2025-05-23T17:04:36.9750882Z         """
+2025-05-23T17:04:36.9751155Z >       await _test_high_frequency_rate_limiting(
+2025-05-23T17:04:36.9751523Z             rate_limit_value,
+2025-05-23T17:04:36.9751817Z             lower,
+2025-05-23T17:04:36.9752058Z             higher,
+2025-05-23T17:04:36.9752302Z             "sliding",
+2025-05-23T17:04:36.9752576Z             lambda: MemoryStorage(),
+2025-05-23T17:04:36.9752912Z             "test_key_sliding_memory",
+2025-05-23T17:04:36.9753256Z             "Test Client Sliding Memory",
+2025-05-23T17:04:36.9753631Z             "/test-high-frequency-sliding-memory",
+2025-05-23T17:04:36.9753987Z         )
+2025-05-23T17:04:36.9754118Z 
+2025-05-23T17:04:36.9754286Z tests/test_rate_limiter.py:192: 
+2025-05-23T17:04:36.9754653Z _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+2025-05-23T17:04:36.9754926Z 
+2025-05-23T17:04:36.9755583Z rate_limit_value = '10/second', lower = 8, higher = 18, strategy = 'sliding'
+2025-05-23T17:04:36.9756286Z get_storage_fn = <function test_high_frequency_sliding_memory.<locals>.<lambda> at 0x7f0f34eafce0>
+2025-05-23T17:04:36.9756877Z test_key = 'test_key_sliding_memory'
+2025-05-23T17:04:36.9757159Z test_key_name = 'Test Client Sliding Memory'
+2025-05-23T17:04:36.9757570Z endpoint_path = '/test-high-frequency-sliding-memory', setup_redis_env = False
+2025-05-23T17:04:36.9757884Z 
+2025-05-23T17:04:36.9758008Z     async def _test_high_frequency_rate_limiting(
+2025-05-23T17:04:36.9758293Z         rate_limit_value: str,
+2025-05-23T17:04:36.9758520Z         lower: int,
+2025-05-23T17:04:36.9758717Z         higher: int,
+2025-05-23T17:04:36.9758917Z         strategy: str,
+2025-05-23T17:04:36.9759135Z         get_storage_fn: Callable[[], Any],
+2025-05-23T17:04:36.9759388Z         test_key: str,
+2025-05-23T17:04:36.9759588Z         test_key_name: str,
+2025-05-23T17:04:36.9759808Z         endpoint_path: str,
+2025-05-23T17:04:36.9760039Z         setup_redis_env: bool = False,
+2025-05-23T17:04:36.9760275Z     ):
+2025-05-23T17:04:36.9760452Z         """
+2025-05-23T17:04:36.9760722Z         Shared implementation for high frequency rate limiting tests.
+2025-05-23T17:04:36.9761044Z     
+2025-05-23T17:04:36.9761218Z         Args:
+2025-05-23T17:04:36.9761470Z             rate_limit_value: The rate limit string (e.g. "10/second")
+2025-05-23T17:04:36.9761839Z             lower: Lower bound for expected requests in any window
+2025-05-23T17:04:36.9762199Z             higher: Upper bound for expected requests in any window
+2025-05-23T17:04:36.9762518Z             strategy: Rate limiting strategy to use
+2025-05-23T17:04:36.9762824Z             get_storage_fn: Function to get storage backend
+2025-05-23T17:04:36.9763138Z             test_key: API key to create for testing
+2025-05-23T17:04:36.9763421Z             test_key_name: Name for the API key
+2025-05-23T17:04:36.9763718Z             endpoint_path: Path for the test endpoint
+2025-05-23T17:04:36.9764079Z             setup_redis_env: Whether to set up Redis environment variables
+2025-05-23T17:04:36.9764391Z         """
+2025-05-23T17:04:36.9764616Z         # Create a new test key specifically for this test
+2025-05-23T17:04:36.9764914Z         API_KEYS[test_key] = {
+2025-05-23T17:04:36.9765142Z             "name": test_key_name,
+2025-05-23T17:04:36.9765715Z             "rate_limit": "5/minute",  # Default rate limit
+2025-05-23T17:04:36.9765989Z         }
+2025-05-23T17:04:36.9766156Z     
+2025-05-23T17:04:36.9766401Z         # Store original environment variables to restore them later
+2025-05-23T17:04:36.9766716Z         original_env = {}
+2025-05-23T17:04:36.9766934Z         if setup_redis_env:
+2025-05-23T17:04:36.9767416Z             for var in ["REDIS_HOST", "REDIS_PORT", "REDIS_DB", "REDIS_URI"]:
+2025-05-23T17:04:36.9767751Z                 if var in os.environ:
+2025-05-23T17:04:36.9768029Z                     original_env[var] = os.environ[var]
+2025-05-23T17:04:36.9768283Z     
+2025-05-23T17:04:36.9768450Z         try:
+2025-05-23T17:04:36.9768643Z             storage = get_storage_fn()
+2025-05-23T17:04:36.9768875Z     
+2025-05-23T17:04:36.9769126Z             # Parameters for the test - reduced for Docker compatibility
+2025-05-23T17:04:36.9769453Z             test_duration = 2  # seconds
+2025-05-23T17:04:36.9769780Z             target_request_rate = 30  # requests per second - less aggressive
+2025-05-23T17:04:36.9770154Z             total_requests = test_duration * target_request_rate
+2025-05-23T17:04:36.9770436Z     
+2025-05-23T17:04:36.9770626Z             @app.get(endpoint_path)
+2025-05-23T17:04:36.9770996Z             @rate_limit(strategy=strategy, rate=rate_limit_value, storage_backend=storage)
+2025-05-23T17:04:36.9771399Z             async def test_endpoint(request: Request):
+2025-05-23T17:04:36.9771685Z                 return {"message": "success"}
+2025-05-23T17:04:36.9771923Z     
+2025-05-23T17:04:36.9772116Z             successful_requests: List[float] = []
+2025-05-23T17:04:36.9772649Z             start_time = time.time()
+2025-05-23T17:04:36.9772878Z     
+2025-05-23T17:04:36.9773128Z             # Use async client for Redis tests to avoid deadlocks in Docker
+2025-05-23T17:04:36.9773471Z             use_async_client = setup_redis_env
+2025-05-23T17:04:36.9773722Z     
+2025-05-23T17:04:36.9773896Z             if use_async_client:
+2025-05-23T17:04:36.9774161Z                 # Import here to avoid circular imports
+2025-05-23T17:04:36.9774432Z                 import httpx
+2025-05-23T17:04:36.9774676Z                 from httpx import ASGITransport
+2025-05-23T17:04:36.9774927Z     
+2025-05-23T17:04:36.9775108Z                 async def make_request():
+2025-05-23T17:04:36.9775559Z                     try:
+2025-05-23T17:04:36.9775795Z                         async with httpx.AsyncClient(
+2025-05-23T17:04:36.9776148Z                             transport=ASGITransport(app=app), base_url="http://test"
+2025-05-23T17:04:36.9776495Z                         ) as async_client:
+2025-05-23T17:04:36.9776779Z                             response = await async_client.get(
+2025-05-23T17:04:36.9777097Z                                 endpoint_path, headers={"X-API-Key": test_key}
+2025-05-23T17:04:36.9777390Z                             )
+2025-05-23T17:04:36.9777636Z                             if response.status_code == 200:
+2025-05-23T17:04:36.9777941Z                                 successful_requests.append(time.time())
+2025-05-23T17:04:36.9778228Z                     except Exception:
+2025-05-23T17:04:36.9778472Z                         pass
+2025-05-23T17:04:36.9778685Z             else:
+2025-05-23T17:04:36.9778866Z     
+2025-05-23T17:04:36.9779052Z                 async def make_request():
+2025-05-23T17:04:36.9779302Z                     try:
+2025-05-23T17:04:36.9779526Z                         response = client.get(
+2025-05-23T17:04:36.9779820Z                             endpoint_path, headers={"X-API-Key": test_key}
+2025-05-23T17:04:36.9780105Z                         )
+2025-05-23T17:04:36.9780343Z                         if response.status_code == 200:
+2025-05-23T17:04:36.9780650Z                             successful_requests.append(time.time())
+2025-05-23T17:04:36.9780938Z                     except Exception:
+2025-05-23T17:04:36.9781175Z                         pass
+2025-05-23T17:04:36.9781382Z     
+2025-05-23T17:04:36.9781633Z             # Run requests with a smaller batch size to avoid timeout issues
+2025-05-23T17:04:36.9781955Z             batch_size = 10
+2025-05-23T17:04:36.9782212Z             for i in range(0, total_requests, batch_size):
+2025-05-23T17:04:36.9782485Z                 tasks = []
+2025-05-23T17:04:36.9782749Z                 for _ in range(min(batch_size, total_requests - i)):
+2025-05-23T17:04:36.9783432Z                     tasks.append(asyncio.create_task(make_request()))
+2025-05-23T17:04:36.9783776Z                     await asyncio.sleep(1 / target_request_rate)
+2025-05-23T17:04:36.9784046Z     
+2025-05-23T17:04:36.9784239Z                 await asyncio.gather(*tasks)
+2025-05-23T17:04:36.9784490Z     
+2025-05-23T17:04:36.9784668Z             end_time = time.time()
+2025-05-23T17:04:36.9784899Z     
+2025-05-23T17:04:36.9785097Z             actual_duration = end_time - start_time
+2025-05-23T17:04:36.9785676Z             actual_rate = len(successful_requests) / actual_duration
+2025-05-23T17:04:36.9785980Z     
+2025-05-23T17:04:36.9786158Z             window_rates = []
+2025-05-23T17:04:36.9786407Z             for i in range(int(actual_duration)):
+2025-05-23T17:04:36.9786695Z                 window_start = start_time + i
+2025-05-23T17:04:36.9786963Z                 window_end = window_start + 1
+2025-05-23T17:04:36.9787216Z                 window_requests = sum(
+2025-05-23T17:04:36.9787551Z                     1 for t in successful_requests if window_start <= t < window_end
+2025-05-23T17:04:36.9787863Z                 )
+2025-05-23T17:04:36.9788080Z                 window_rates.append(window_requests)
+2025-05-23T17:04:36.9788332Z     
+2025-05-23T17:04:36.9788559Z             expected_rate = int(rate_limit_value.split("/")[0])
+2025-05-23T17:04:36.9788976Z     
+2025-05-23T17:04:36.9789164Z             # Verify rate limiting is working
+2025-05-23T17:04:36.9789451Z             total_successful = len(successful_requests)
+2025-05-23T17:04:36.9789801Z             assert total_successful > 0, "No successful requests were made"
+2025-05-23T17:04:36.9790223Z >           assert total_successful <= expected_rate * actual_duration * 1.2, (
+2025-05-23T17:04:36.9790691Z                 f"Got {total_successful} successful requests, which exceeds the expected limit of "
+2025-05-23T17:04:36.9791192Z                 f"{expected_rate * actual_duration * 1.2} over {actual_duration:.1f} seconds"
+2025-05-23T17:04:36.9791547Z             )
+2025-05-23T17:04:36.9791959Z E           AssertionError: Got 25 successful requests, which exceeds the expected limit of 24.431333541870117 over 2.0 seconds
+2025-05-23T17:04:36.9792456Z E           assert 25 <= ((10 * 2.0359444618225098) * 1.2)
+2025-05-23T17:04:36.9792650Z 
+2025-05-23T17:04:36.9792772Z tests/test_rate_limiter.py:418: AssertionError
+2025-05-23T17:04:36.9793084Z ================================ tests coverage ================================
+2025-05-23T17:04:36.9793470Z _______________ coverage: platform linux, python 3.11.12-final-0 _______________
+2025-05-23T17:04:36.9793732Z 
+2025-05-23T17:04:36.9793862Z Name                                                   Stmts   Miss  Cover   Missing
+2025-05-23T17:04:36.9794215Z ------------------------------------------------------------------------------------
+2025-05-23T17:04:36.9794630Z src/propcorn_ratelimiter/__init__.py                       0      0   100%
+2025-05-23T17:04:36.9795079Z src/propcorn_ratelimiter/main.py                          34     34     0%   1-86
+2025-05-23T17:04:36.9795854Z src/propcorn_ratelimiter/rate_limiter/limiter.py          58      9    84%   41, 48-49, 65, 71, 92, 106, 119-120
+2025-05-23T17:04:36.9796390Z src/propcorn_ratelimiter/weather/__init__.py               0      0   100%
+2025-05-23T17:04:36.9796870Z src/propcorn_ratelimiter/weather/geoip_enrichment.py       8      8     0%   3-25
+2025-05-23T17:04:36.9797367Z src/propcorn_ratelimiter/weather/weather_request.py        9      9     0%   3-34
+2025-05-23T17:04:36.9797803Z ------------------------------------------------------------------------------------
+2025-05-23T17:04:36.9798137Z TOTAL                                                    109     60    45%
+2025-05-23T17:04:36.9798452Z =========================== short test summary info ============================
+2025-05-23T17:04:36.9799242Z FAILED tests/test_rate_limiter.py::test_high_frequency_sliding_memory[10/second-8-18] - AssertionError: Got 25 successful requests, which exceeds the expected limit of 24.431333541870117 over 2.0 seconds
+2025-05-23T17:04:36.9800116Z assert 25 <= ((10 * 2.0359444618225098) * 1.2)
+2025-05-23T17:04:36.9800440Z ================== 1 failed, 3 passed, 10 deselected in 9.13s ==================
+2025-05-23T17:04:37.0865623Z ⚠️ Performance tests failed (expected in CI environments)

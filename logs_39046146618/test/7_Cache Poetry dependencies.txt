@@ -1,0 +1,27 @@
+﻿2025-05-23T17:04:19.5721699Z ##[group]Run actions/cache@v4
+2025-05-23T17:04:19.5722021Z with:
+2025-05-23T17:04:19.5722245Z   path: .venv
+2025-05-23T17:04:19.5722735Z   key: poetry-deps-3.11-ab6e31c3392d0efedc4dd9b677d2ba5c91dc86024c6ec34f51d1c88a363cf83b
+2025-05-23T17:04:19.5723324Z   restore-keys: poetry-deps-3.11-
+
+2025-05-23T17:04:19.5723657Z   enableCrossOsArchive: false
+2025-05-23T17:04:19.5723967Z   fail-on-cache-miss: false
+2025-05-23T17:04:19.5724258Z   lookup-only: false
+2025-05-23T17:04:19.5724517Z   save-always: false
+2025-05-23T17:04:19.5724780Z env:
+2025-05-23T17:04:19.5725002Z   PYTHON_VERSION: 3.11
+2025-05-23T17:04:19.5725596Z   POETRY_VERSION: 1.8.0
+2025-05-23T17:04:19.5726080Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:19.5726630Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.12/x64/lib/pkgconfig
+2025-05-23T17:04:19.5727157Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:19.5727628Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:19.5728136Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:19.5728618Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.12/x64/lib
+2025-05-23T17:04:19.5729019Z   VENV: .venv/bin/activate
+2025-05-23T17:04:19.5729263Z ##[endgroup]
+2025-05-23T17:04:19.8194465Z Cache hit for: poetry-deps-3.11-ab6e31c3392d0efedc4dd9b677d2ba5c91dc86024c6ec34f51d1c88a363cf83b
+2025-05-23T17:04:20.5888648Z Received 46703206 of 46703206 (100.0%), 66.6 MBs/sec
+2025-05-23T17:04:20.5889386Z Cache Size: ~45 MB (46703206 B)
+2025-05-23T17:04:20.5923141Z [command]/usr/bin/tar -xf /home/runner/work/_temp/0a47d594-101c-440b-ad88-66952e323255/cache.tzst -P -C /home/runner/work/ratelimiter/ratelimiter --use-compress-program unzstd
+2025-05-23T17:04:20.9823713Z Cache restored successfully
+2025-05-23T17:04:20.9994815Z Cache restored from key: poetry-deps-3.11-ab6e31c3392d0efedc4dd9b677d2ba5c91dc86024c6ec34f51d1c88a363cf83b

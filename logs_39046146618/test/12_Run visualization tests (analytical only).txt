@@ -1,0 +1,47 @@
+﻿2025-05-23T17:04:42.5683246Z ##[group]Run # Generate performance visualizations and analysis data
+2025-05-23T17:04:42.5683746Z [36;1m# Generate performance visualizations and analysis data[0m
+2025-05-23T17:04:42.5684146Z [36;1mecho "📊 Running Visualization Analysis..."[0m
+2025-05-23T17:04:42.5684668Z [36;1mpoetry run pytest tests/test_visualization.py -v || echo "⚠️ Visualization tests failed (expected in CI)"[0m
+2025-05-23T17:04:42.5736926Z shell: /usr/bin/bash -e {0}
+2025-05-23T17:04:42.5737195Z env:
+2025-05-23T17:04:42.5737383Z   PYTHON_VERSION: 3.11
+2025-05-23T17:04:42.5737616Z   POETRY_VERSION: 1.8.0
+2025-05-23T17:04:42.5737905Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:42.5738338Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.12/x64/lib/pkgconfig
+2025-05-23T17:04:42.5738753Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:42.5739117Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:42.5739481Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:42.5739883Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.12/x64/lib
+2025-05-23T17:04:42.5740198Z   VENV: .venv/bin/activate
+2025-05-23T17:04:42.5740605Z ##[endgroup]
+2025-05-23T17:04:42.5811063Z 📊 Running Visualization Analysis...
+2025-05-23T17:04:43.2367859Z /home/runner/work/ratelimiter/ratelimiter/.venv/lib/python3.11/site-packages/pytest_asyncio/plugin.py:217: PytestDeprecationWarning: The configuration option "asyncio_default_fixture_loop_scope" is unset.
+2025-05-23T17:04:43.2370469Z The event loop scope for asynchronous fixtures will default to the fixture caching scope. Future versions of pytest-asyncio will default the loop scope for asynchronous fixtures to function scope. Set the default fixture loop scope explicitly in order to avoid unexpected behavior in the future. Valid fixture loop scopes are: "function", "class", "module", "package", "session"
+2025-05-23T17:04:43.2372087Z 
+2025-05-23T17:04:43.2372388Z   warnings.warn(PytestDeprecationWarning(_DEFAULT_FIXTURE_LOOP_SCOPE_UNSET))
+2025-05-23T17:04:43.2617872Z ============================= test session starts ==============================
+2025-05-23T17:04:43.2618850Z platform linux -- Python 3.11.12, pytest-8.3.5, pluggy-1.6.0 -- /home/runner/work/ratelimiter/ratelimiter/.venv/bin/python
+2025-05-23T17:04:43.2619599Z cachedir: .pytest_cache
+2025-05-23T17:04:43.2619985Z rootdir: /home/runner/work/ratelimiter/ratelimiter
+2025-05-23T17:04:43.2620447Z configfile: pyproject.toml
+2025-05-23T17:04:43.2620839Z plugins: asyncio-0.26.0, anyio-4.9.0, cov-6.1.1
+2025-05-23T17:04:43.2621569Z asyncio: mode=Mode.AUTO, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+2025-05-23T17:04:46.0440975Z collecting ... collected 2 items
+2025-05-23T17:04:46.0441302Z 
+2025-05-23T17:04:55.9074753Z tests/test_visualization.py::test_visualize_sliding_window PASSED        [ 50%]
+2025-05-23T17:05:05.4921207Z tests/test_visualization.py::test_visualize_fixed_window PASSED          [100%]
+2025-05-23T17:05:05.4921823Z 
+2025-05-23T17:05:05.4922020Z ================================ tests coverage ================================
+2025-05-23T17:05:05.4922641Z _______________ coverage: platform linux, python 3.11.12-final-0 _______________
+2025-05-23T17:05:05.4923087Z 
+2025-05-23T17:05:05.4923275Z Name                                                   Stmts   Miss  Cover   Missing
+2025-05-23T17:05:05.4923810Z ------------------------------------------------------------------------------------
+2025-05-23T17:05:05.4924459Z src/propcorn_ratelimiter/__init__.py                       0      0   100%
+2025-05-23T17:05:05.4925160Z src/propcorn_ratelimiter/main.py                          34     34     0%   1-86
+2025-05-23T17:05:05.4926190Z src/propcorn_ratelimiter/rate_limiter/limiter.py          58      9    84%   41, 48-49, 65, 71, 92, 106, 119-120
+2025-05-23T17:05:05.4927012Z src/propcorn_ratelimiter/weather/__init__.py               0      0   100%
+2025-05-23T17:05:05.4927749Z src/propcorn_ratelimiter/weather/geoip_enrichment.py       8      8     0%   3-25
+2025-05-23T17:05:05.4928835Z src/propcorn_ratelimiter/weather/weather_request.py        9      9     0%   3-34
+2025-05-23T17:05:05.4929510Z ------------------------------------------------------------------------------------
+2025-05-23T17:05:05.4930020Z TOTAL                                                    109     60    45%
+2025-05-23T17:05:05.4930474Z ============================== 2 passed in 22.24s ==============================

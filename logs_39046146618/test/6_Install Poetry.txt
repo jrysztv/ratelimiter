@@ -1,0 +1,51 @@
+﻿2025-05-23T17:04:15.6092959Z ##[group]Run snok/install-poetry@v1
+2025-05-23T17:04:15.6093273Z with:
+2025-05-23T17:04:15.6093462Z   version: 1.8.0
+2025-05-23T17:04:15.6093673Z   virtualenvs-create: true
+2025-05-23T17:04:15.6093924Z   virtualenvs-in-project: true
+2025-05-23T17:04:15.6094197Z   virtualenvs-path: {cache-dir}/virtualenvs
+2025-05-23T17:04:15.6094485Z   installer-parallel: true
+2025-05-23T17:04:15.6094705Z env:
+2025-05-23T17:04:15.6094878Z   PYTHON_VERSION: 3.11
+2025-05-23T17:04:15.6095085Z   POETRY_VERSION: 1.8.0
+2025-05-23T17:04:15.6095656Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:15.6096087Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.12/x64/lib/pkgconfig
+2025-05-23T17:04:15.6096486Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:15.6096860Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:15.6097217Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:15.6097577Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.12/x64/lib
+2025-05-23T17:04:15.6097911Z ##[endgroup]
+2025-05-23T17:04:15.6174409Z ##[group]Run $GITHUB_ACTION_PATH/main.sh
+2025-05-23T17:04:15.6174766Z [36;1m$GITHUB_ACTION_PATH/main.sh[0m
+2025-05-23T17:04:15.6230560Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2025-05-23T17:04:15.6230902Z env:
+2025-05-23T17:04:15.6231084Z   PYTHON_VERSION: 3.11
+2025-05-23T17:04:15.6231303Z   POETRY_VERSION: 1.8.0
+2025-05-23T17:04:15.6231570Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:15.6231980Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.12/x64/lib/pkgconfig
+2025-05-23T17:04:15.6232373Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:15.6232722Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:15.6233115Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.12/x64
+2025-05-23T17:04:15.6233479Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.12/x64/lib
+2025-05-23T17:04:15.6233771Z   VERSION: 1.8.0
+2025-05-23T17:04:15.6233985Z   VIRTUALENVS_CREATE: true
+2025-05-23T17:04:15.6234209Z   VIRTUALENVS_IN_PROJECT: true
+2025-05-23T17:04:15.6234463Z   VIRTUALENVS_PATH: {cache-dir}/virtualenvs
+2025-05-23T17:04:15.6234721Z   INSTALLER_PARALLEL: true
+2025-05-23T17:04:15.6234934Z   INSTALLATION_ARGUMENTS: 
+2025-05-23T17:04:15.6235140Z   POETRY_PLUGINS: 
+2025-05-23T17:04:15.6235489Z ##[endgroup]
+2025-05-23T17:04:16.7070891Z 
+2025-05-23T17:04:16.7072101Z [33mSetting Poetry installation path as /home/runner/.local[0m
+2025-05-23T17:04:16.7072882Z 
+2025-05-23T17:04:16.7073235Z [33mInstalling Poetry 👷[0m
+2025-05-23T17:04:16.7073665Z 
+2025-05-23T17:04:16.8982063Z Retrieving Poetry metadata
+2025-05-23T17:04:16.8982375Z 
+2025-05-23T17:04:16.8982555Z The latest version (1.8.0) is already installed.
+2025-05-23T17:04:19.4877228Z 
+2025-05-23T17:04:19.4878194Z [33mInstallation completed. Configuring settings 🛠[0m
+2025-05-23T17:04:19.4878654Z 
+2025-05-23T17:04:19.4878843Z [33mDone ✅[0m
+2025-05-23T17:04:19.4879042Z 
+2025-05-23T17:04:19.4880411Z [33mIf you are creating a venv in your project, you can activate it by running 'source .venv/bin/activate'. If you're running this in an OS matrix, you can use 'source $VENV' instead, as an OS agnostic option[0m

@@ -1,0 +1,52 @@
+﻿2025-05-23T17:07:28.4854257Z ##[group]Run # Get the current public IP of the GitHub Actions runner
+2025-05-23T17:07:28.4856496Z [36;1m# Get the current public IP of the GitHub Actions runner[0m
+2025-05-23T17:07:28.4859057Z [36;1mRUNNER_IP=$(curl -s https://checkip.amazonaws.com)[0m
+2025-05-23T17:07:28.4860771Z [36;1mecho "Runner IP: $RUNNER_IP"[0m
+2025-05-23T17:07:28.4862308Z [36;1mecho "runner-ip=$RUNNER_IP" >> $GITHUB_OUTPUT[0m
+2025-05-23T17:07:28.4863812Z [36;1m[0m
+2025-05-23T17:07:28.4864914Z [36;1m# Add SSH rule for current runner IP[0m
+2025-05-23T17:07:28.4866519Z [36;1maws ec2 authorize-security-group-ingress \[0m
+2025-05-23T17:07:28.4868791Z [36;1m  --group-id *** \[0m
+2025-05-23T17:07:28.4870086Z [36;1m  --protocol tcp \[0m
+2025-05-23T17:07:28.4871307Z [36;1m  --port 22 \[0m
+2025-05-23T17:07:28.4872497Z [36;1m  --cidr ${RUNNER_IP}/32 \[0m
+2025-05-23T17:07:28.4875780Z [36;1m  --tag-specifications 'ResourceType=security-group-rule,Tags=[{Key=Name,Value=github-actions-temp},{Key=CreatedBy,Value=github-actions}]' || echo "Rule may already exist"[0m
+2025-05-23T17:07:28.4879305Z [36;1m[0m
+2025-05-23T17:07:28.4880540Z [36;1mecho "✅ Added SSH access for IP: ${RUNNER_IP}/32"[0m
+2025-05-23T17:07:28.5034307Z shell: /usr/bin/bash -e {0}
+2025-05-23T17:07:28.5035562Z env:
+2025-05-23T17:07:28.5036549Z   PYTHON_VERSION: 3.11
+2025-05-23T17:07:28.5037933Z   POETRY_VERSION: 1.8.0
+2025-05-23T17:07:28.5039270Z   AWS_DEFAULT_REGION: ***
+2025-05-23T17:07:28.5040498Z   AWS_REGION: ***
+2025-05-23T17:07:28.5041684Z   AWS_ACCESS_KEY_ID: ***
+2025-05-23T17:07:28.5043230Z   AWS_SECRET_ACCESS_KEY: ***
+2025-05-23T17:07:28.5044412Z ##[endgroup]
+2025-05-23T17:07:28.6963324Z Runner IP: 135.119.66.156
+2025-05-23T17:07:34.4091234Z {
+2025-05-23T17:07:34.4092505Z     "Return": true,
+2025-05-23T17:07:34.4093220Z     "SecurityGroupRules": [
+2025-05-23T17:07:34.4094466Z         {
+2025-05-23T17:07:34.4095014Z             "SecurityGroupRuleId": "sgr-04cec3053bec89e45",
+2025-05-23T17:07:34.4095800Z             "GroupId": "***",
+2025-05-23T17:07:34.4096440Z             "GroupOwnerId": "841162696091",
+2025-05-23T17:07:34.4097119Z             "IsEgress": false,
+2025-05-23T17:07:34.4097939Z             "IpProtocol": "tcp",
+2025-05-23T17:07:34.4098443Z             "FromPort": 22,
+2025-05-23T17:07:34.4098895Z             "ToPort": 22,
+2025-05-23T17:07:34.4099383Z             "CidrIpv4": "135.119.66.156/32",
+2025-05-23T17:07:34.4099947Z             "Tags": [
+2025-05-23T17:07:34.4100350Z                 {
+2025-05-23T17:07:34.4100794Z                     "Key": "CreatedBy",
+2025-05-23T17:07:34.4101388Z                     "Value": "github-actions"
+2025-05-23T17:07:34.4101951Z                 },
+2025-05-23T17:07:34.4102377Z                 {
+2025-05-23T17:07:34.4102797Z                     "Key": "Name",
+2025-05-23T17:07:34.4103340Z                     "Value": "github-actions-temp"
+2025-05-23T17:07:34.4103863Z                 }
+2025-05-23T17:07:34.4104310Z             ],
+2025-05-23T17:07:34.4105184Z             "SecurityGroupRuleArn": "arn:aws:ec2:***:841162696091:security-group-rule/sgr-04cec3053bec89e45"
+2025-05-23T17:07:34.4106121Z         }
+2025-05-23T17:07:34.4108378Z     ]
+2025-05-23T17:07:34.4108657Z }
+2025-05-23T17:07:34.5422473Z ✅ Added SSH access for IP: 135.119.66.156/32
