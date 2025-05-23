@@ -111,17 +111,17 @@ jobs:
     - name: Test Docker image with Nginx
       run: |
         # Test the nginx setup
-        docker-compose -f docker-compose.prod-nginx.yml build
-        docker-compose -f docker-compose.prod-nginx.yml up -d
+        docker compose -f docker-compose.prod-nginx.yml build
+        docker compose -f docker-compose.prod-nginx.yml up -d
         
         # Wait for services to start
         sleep 20
         
         # Test health endpoint through Nginx (port 80)
-        curl -f http://localhost/health || (docker-compose -f docker-compose.prod-nginx.yml logs && exit 1)
+        curl -f http://localhost/health || (docker compose -f docker-compose.prod-nginx.yml logs && exit 1)
         
         # Clean up
-        docker-compose -f docker-compose.prod-nginx.yml down
+        docker compose -f docker-compose.prod-nginx.yml down
         
   deploy:
     needs: [test, build]
