@@ -177,46 +177,109 @@ API_KEYS = {
 
 Each strategy uses Redis for distributed storage, ensuring rate limits work across multiple server instances.
 
-### 🧮 Technical Implementation Details
+### 🧮 How to Use the Rate Limit Decorator
 
-**Fixed Window Algorithm:**
+**Basic Usage - Use API Key's Default Rate:**
 ```python
-# Pseudo-code for fixed window
-def is_allowed_fixed(key, limit, window_seconds):
-    current_window = int(time.time() // window_seconds)
-    count = redis.get(f"{key}:{current_window}") or 0
-    
-    if count < limit:
-        redis.incr(f"{key}:{current_window}")
-        redis.expire(f"{key}:{current_window}", window_seconds)
-        return True
-    return False
+from fastapi import FastAPI, Request
+from propcorn_ratelimiter.rate_limiter.limiter import rate_limit
+
+app = FastAPI()
+
+@app.get("/api/data")
+@rate_limit(strategy="sliding")  # Uses API key's configured rate limit
+async def get_data(request: Request):
+    return {"data": "some data"}
 ```
 
-**Sliding Window Algorithm:**
+**Custom Rate Limit Override:**
 ```python
-# Pseudo-code for sliding window  
-def is_allowed_sliding(key, limit, window_seconds):
-    now = time.time()
-    cutoff = now - window_seconds
-    
-    # Remove old requests outside the window
-    redis.zremrangebyscore(key, 0, cutoff)
-    
-    # Count current requests in window
-    count = redis.zcard(key)
-    
-    if count < limit:
-        redis.zadd(key, {str(uuid4()): now})
-        redis.expire(key, window_seconds)
-        return True
-    return False
+@app.get("/weather")
+@rate_limit(strategy="sliding", rate="5/minute")  # Override with custom limit
+async def weather_endpoint(request: Request):
+    # Your endpoint logic here
+    return {"weather": "sunny"}
 ```
 
-**Why Redis vs Memory?**
-- **Persistence**: Redis survives application restarts, memory doesn't
-- **Distribution**: Redis works across multiple app instances, memory is per-process
-- **Consistency**: Redis provides atomic operations, memory can have race conditions
+**Different Strategies:**
+```python
+# Fixed window - resets at exact intervals
+@app.get("/api/fixed")
+@rate_limit(strategy="fixed", rate="10/minute")
+async def fixed_endpoint(request: Request):
+    return {"message": "fixed window"}
+
+# Sliding window - smooth rate limiting  
+@app.get("/api/sliding")
+@rate_limit(strategy="sliding", rate="10/minute") 
+async def sliding_endpoint(request: Request):
+    return {"message": "sliding window"}
+
+# Moving window - hybrid approach
+@app.get("/api/moving")
+@rate_limit(strategy="moving", rate="10/minute")
+async def moving_endpoint(request: Request):
+    return {"message": "moving window"}
+```
+
+**Rate Limit Formats:**
+```python
+# Different time units supported
+@rate_limit(rate="5/minute")    # 5 requests per minute
+@rate_limit(rate="100/hour")    # 100 requests per hour  
+@rate_limit(rate="10/second")   # 10 requests per second
+@rate_limit(rate="1000/day")    # 1000 requests per day
+```
+
+**API Key Configuration:**
+```python
+# In your application setup
+API_KEYS = {
+    "basic_user": {"name": "Basic Plan", "rate_limit": "100/hour"},
+    "premium_user": {"name": "Premium Plan", "rate_limit": "1000/hour"},
+    "enterprise": {"name": "Enterprise", "rate_limit": "10000/hour"}
+}
+```
+
+**Client Usage:**
+```bash
+# Include API key in request headers
+curl -H "X-API-Key: basic_user" http://your-api.com/weather
+
+# Rate limit exceeded response (HTTP 429)
+{
+  "detail": {
+    "error": "Rate limit exceeded",
+    "reset_time": 1234567890,
+    "remaining": 0
+  }
+}
+```
+
+**Testing with Custom Storage:**
+```python
+from limits.aio.storage import MemoryStorage
+
+# For testing, inject memory storage
+@app.get("/test")
+@rate_limit(strategy="sliding", rate="2/minute", storage_backend=MemoryStorage())
+async def test_endpoint(request: Request):
+    return {"message": "test"}
+```
+
+### 🎯 Redis vs Memory Storage
+
+**Production (Redis):**
+- ✅ **Persistence**: Survives application restarts
+- ✅ **Distribution**: Works across multiple app instances  
+- ✅ **Consistency**: Atomic operations prevent race conditions
+- ✅ **Scalability**: Handles high concurrency reliably
+
+**Development/Testing (Memory):**
+- ✅ **Simple setup**: No external dependencies
+- ✅ **Fast tests**: In-memory operations  
+- ❌ **Lost on restart**: Counter resets when app restarts
+- ❌ **Single instance**: Doesn't work with load balancers
 
 ## 🚀 Production Setup
 
