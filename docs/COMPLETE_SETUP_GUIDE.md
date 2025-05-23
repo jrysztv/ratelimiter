@@ -86,7 +86,7 @@ cd YOUR-REPO
 
 ```bash
 # Required secrets:
-EC2_SSH_KEY     = [Complete contents of your .pem file]
+EC2_SSH_KEY_B64 = [Base64 encoded contents of your .pem file]
 EC2_HOST        = [Your EC2 public IP address]
 EC2_USERNAME    = ubuntu
 EC2_APP_PATH    = /opt/ratelimiter
@@ -94,23 +94,30 @@ EC2_APP_PATH    = /opt/ratelimiter
 
 ### 2.3 SSH Key Secret Format
 
-**CRITICAL**: The SSH key must be copied exactly as-is:
+**NEW APPROACH**: Use base64 encoding for better reliability:
 
 ```bash
-# Display your key content:
-cat ~/.ssh/your-key.pem
+# Encode your SSH key to base64 (run in Git Bash):
+base64 -w 0 ~/.ssh/your-key.pem
 
-# Copy EVERYTHING including these lines:
------BEGIN RSA PRIVATE KEY-----
-[all the key content]
------END RSA PRIVATE KEY-----
+# Copy the entire base64 string output
+# This avoids line break and encoding issues
 ```
 
-**Common Mistakes:**
+**CRITICAL**: The SSH key must be base64 encoded:
+
+```bash
+# In GitHub secrets, use the base64 string from above
+# Name the secret: EC2_SSH_KEY_B64
+```
+
+**Common Mistakes with old approach:**
 - ❌ Missing BEGIN/END lines
-- ❌ Extra spaces or newlines
+- ❌ Extra spaces or newlines  
 - ❌ Windows line endings (CRLF)
 - ❌ Partial key content
+
+**New base64 approach avoids all these issues!**
 
 ## 🚀 Phase 3: Deployment Pipeline
 
